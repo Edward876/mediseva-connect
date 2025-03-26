@@ -11,7 +11,6 @@ import {
   Calendar,
   ShieldCheck,
   PhoneCall,
-  Menu as MenuIcon
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -19,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -34,7 +34,7 @@ export default function Header() {
   const { pathname } = useLocation();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-border shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
       <div className="max-container flex items-center justify-between h-16 px-4 sm:px-6">
         <div className="flex items-center">
           <Link 
@@ -70,6 +70,7 @@ export default function Header() {
 
         {/* Desktop buttons */}
         <div className="hidden md:flex items-center space-x-3">
+          <ThemeToggle />
           <Link to="/emergency-service">
             <Button variant="outline" size="sm" className="border-danger text-danger hover:bg-danger/10 hover:text-danger space-x-1">
               <PhoneCall className="h-4 w-4" />
@@ -123,21 +124,24 @@ export default function Header() {
         </div>
 
         {/* Mobile menu button */}
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none"
-        >
-          {isMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
+        <div className="flex items-center space-x-3 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white border-b border-border animate-fade-in">
+        <div className="md:hidden bg-background border-b border-border animate-fade-in">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navItems.map((item) => (
               <Link
