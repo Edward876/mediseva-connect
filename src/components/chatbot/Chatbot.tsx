@@ -32,8 +32,16 @@ const symptoms = [
   { id: 20, text: "bleeding", specialty: "emergency medicine" },
 ];
 
-// Initial welcome message
-const initialMessages = [
+// Define the Message interface properly
+interface Message {
+  id: number;
+  content: string;
+  sender: "user" | "bot";
+  timestamp: Date;
+}
+
+// Initial welcome message with proper typing
+const initialMessages: Message[] = [
   {
     id: 1,
     content: "Hello, I'm MediBot! I can help you identify which specialist you might need based on your symptoms. What symptoms are you experiencing?",
@@ -41,13 +49,6 @@ const initialMessages = [
     timestamp: new Date(),
   },
 ];
-
-interface Message {
-  id: number;
-  content: string;
-  sender: "user" | "bot";
-  timestamp: Date;
-}
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
