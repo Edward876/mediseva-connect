@@ -4,7 +4,6 @@ import { MessagesSquare, X, Bot, Send } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { initialMessages } from "./utils/messageProcessor";
 
 // Define Message type directly
 interface Message {
@@ -14,6 +13,43 @@ interface Message {
   timestamp: Date;
 }
 
+// Initial welcome message
+const initialMessages: Message[] = [
+  {
+    id: 1,
+    content: "Hello! I'm MediBot, your medical assistant. How can I help you today?",
+    sender: "bot",
+    timestamp: new Date(),
+  },
+];
+
+// Create a separate API utility file that will be imported only on the client side
+const analyzeSymptoms = async (symptoms: string): Promise<string> => {
+  // Only try to use the client in browser environment
+  if (typeof window === "undefined") {
+    return "Sorry, this feature is only available in the browser.";
+  }
+
+  try {
+    // Safely import the Gradio client only in the browser
+    const gradioModule = await import("@gradio/client").catch(() => null);
+    
+    if (!gradioModule) {
+      return "Sorry, I'm having trouble connecting to my medical knowledge base. Please try again later.";
+    }
+    
+    const client = await gradioModule.Client.connect("Shinichi876/Medical-bot");
+    const result = await client.predict("/analyze", { 
+      symptoms: symptoms 
+    });
+    
+    return result.data as string;
+  } catch (error) {
+    console.error("Error analyzing symptoms:", error);
+    return "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later or contact a healthcare professional directly.";
+  }
+};
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -21,6 +57,12 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  // Check if we're in the browser
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
@@ -39,26 +81,9 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const analyzeSymptomsWithAPI = async (symptoms: string) => {
-    try {
-      // Dynamically import the client only when needed
-      const { Client } = await import('@gradio/client');
-      
-      const client = await Client.connect("Shinichi876/Medical-bot");
-      const result = await client.predict("/analyze", { 
-        symptoms: symptoms, 
-      });
-      
-      return result.data as string;
-    } catch (error) {
-      console.error("Error calling Medical-bot API:", error);
-      return "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later or contact a healthcare professional directly.";
-    }
-  };
-
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim() === "") return;
+    if (input.trim() === "" || !isBrowser) return;
     
     const userMessage: Message = {
       id: messages.length + 1,
@@ -70,10 +95,10 @@ export default function Chatbot() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsTyping(true);
-    
+
     try {
-      // Call the Medical-bot API
-      const response = await analyzeSymptomsWithAPI(input);
+      // Simpler implementation that doesn't rely directly on imports
+      const response = await analyzeSymptoms(input);
       
       const botResponse: Message = {
         id: messages.length + 2,
@@ -84,7 +109,6 @@ export default function Chatbot() {
       
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
-      // Handle error gracefully
       const errorMessage: Message = {
         id: messages.length + 2,
         content: "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later.",
@@ -102,6 +126,11 @@ export default function Chatbot() {
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
+
+  // Don't render if not in browser
+  if (!isBrowser) {
+    return null;
+  }
 
   return (
     <>
@@ -134,7 +163,7 @@ export default function Chatbot() {
             </div>
           </CardHeader>
           
-          {/* Message list - Directly implemented */}
+          {/* Message list */}
           <CardContent className="flex-grow p-4 overflow-y-auto">
             <div className="space-y-4">
               {messages.map((message) => (
@@ -179,7 +208,7 @@ export default function Chatbot() {
             </div>
           </CardContent>
           
-          {/* Message input - Directly implemented */}
+          {/* Message input */}
           <CardFooter className="p-3 border-t dark:border-border">
             <form onSubmit={handleSendMessage} className="flex w-full gap-2">
               <Input
