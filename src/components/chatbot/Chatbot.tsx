@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { MessagesSquare, X, Bot, Send } from "lucide-react";
+import { MessagesSquare, X, Bot, Send, RefreshCw } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -37,55 +37,91 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [clientLoaded, setClientLoaded] = useState(false);
-  const [clientLoading, setClientLoading] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState("disconnected"); // disconnected, connecting, connected, failed
   const gradioClientRef = useRef<any>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Load the Gradio client at runtime
   useEffect(() => {
-    if (typeof window === 'undefined' || clientLoaded || clientLoading) return;
+    if (typeof window === 'undefined' || connectionStatus === "connected" || connectionStatus === "connecting") return;
     
     const loadGradioClient = async () => {
-      setClientLoading(true);
+      setConnectionStatus("connecting");
       
       try {
-        // Create script element
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/@gradio/client@2.10.0/dist/index.min.js';
-        script.async = true;
+        console.log("Starting to load Gradio client...");
         
-        // Create a promise to wait for script to load
-        const scriptLoadPromise = new Promise((resolve, reject) => {
-          script.onload = resolve;
-          script.onerror = reject;
-        });
-        
-        // Add script to document
-        document.body.appendChild(script);
-        
-        // Wait for script to load
-        await scriptLoadPromise;
-        console.log('Gradio client loaded successfully');
+        // Check if script is already loaded
+        if (!window.gradioClient) {
+          // Create script element
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@gradio/client@2.10.0/dist/index.min.js';
+          script.async = true;
+          
+          // Create a promise to wait for script to load
+          const scriptLoadPromise = new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = (e) => {
+              console.error("Script load error:", e);
+              reject(new Error("Failed to load Gradio client script"));
+            };
+          });
+          
+          // Add script to document
+          document.body.appendChild(script);
+          
+          // Wait for script to load
+          await scriptLoadPromise;
+          console.log('Gradio client script loaded successfully');
+        } else {
+          console.log('Gradio client script already loaded');
+        }
         
         // Wait a bit to ensure the script is fully initialized
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 300));
         
         // Initialize the client
         if (window.gradioClient) {
-          const client = await window.gradioClient.Client.connect("Shinichi876/Medical-bot");
-          gradioClientRef.current = client;
-          setClientLoaded(true);
-          console.log('Connected to Gradio API');
+          console.log("Attempting to connect to Gradio API...");
+          try {
+            const client = await window.gradioClient.Client.connect("Shinichi876/Medical-bot", {
+              hf_token: null, // Set to your token if it's a private space
+              status_callback: (status) => {
+                console.log("Connection status:", status);
+              }
+            });
+            
+            gradioClientRef.current = client;
+            setConnectionStatus("connected");
+            console.log('Successfully connected to Gradio API');
+            
+            // Test the connection with a simple query
+            try {
+              const testResult = await client.predict("/analyze", { 
+                symptoms: "Test connection" 
+              });
+              console.log("Test query result:", testResult);
+            } catch (testError) {
+              console.error("Test query failed:", testError);
+            }
+          } catch (connectionError) {
+            console.error("Failed to connect to API:", connectionError);
+            setConnectionStatus("failed");
+            throw connectionError;
+          }
+        } else {
+          console.error("window.gradioClient is not available after script load");
+          setConnectionStatus("failed");
+          throw new Error("Gradio client not available");
         }
       } catch (error) {
-        console.error('Failed to load Gradio client:', error);
-      } finally {
-        setClientLoading(false);
+        console.error('Error in loadGradioClient:', error);
+        setConnectionStatus("failed");
       }
     };
     
     loadGradioClient();
-  }, [clientLoaded, clientLoading]);
+  }, [connectionStatus, retryCount]);
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
@@ -104,27 +140,43 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleRetryConnection = () => {
+    setConnectionStatus("disconnected");
+    setRetryCount(prev => prev + 1);
+  };
+
   const analyzeSymptomsWithAPI = async (symptoms: string): Promise<string> => {
-    try {
-      // Check if client is loaded
-      if (!gradioClientRef.current) {
-        // If the client isn't loaded yet, try to initialize it
-        if (window.gradioClient) {
-          gradioClientRef.current = await window.gradioClient.Client.connect("Shinichi876/Medical-bot");
-        } else {
-          return "I'm sorry, my medical knowledge base isn't connected yet. Please try again in a moment.";
-        }
+    if (connectionStatus !== "connected") {
+      // If not connected, try to connect again
+      if (connectionStatus !== "connecting") {
+        handleRetryConnection();
+        return "I'm still connecting to my medical knowledge base. Please try again in a moment.";
       }
+      return "I'm connecting to my medical knowledge base. Please try again in a moment.";
+    }
+    
+    try {
+      console.log("Sending symptoms to API:", symptoms);
       
       // Make API call
       const result = await gradioClientRef.current.predict("/analyze", { 
         symptoms: symptoms 
       });
       
+      console.log("API response:", result);
+      
+      if (!result.data) {
+        throw new Error("API returned empty response");
+      }
+      
       return result.data;
     } catch (error) {
       console.error("Error analyzing symptoms:", error);
-      return "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later or contact a healthcare professional directly.";
+      
+      // If we get an error, try reconnecting for future requests
+      setConnectionStatus("disconnected");
+      
+      return "I'm sorry, I couldn't analyze your symptoms properly. This might be due to a connection issue. Please try again in a moment.";
     }
   };
 
@@ -197,15 +249,31 @@ export default function Chatbot() {
         )}
       >
         <Card className="border-0 shadow-xl overflow-hidden h-[500px] flex flex-col dark:bg-card">
-          <CardHeader className="bg-mediseva-600 dark:bg-mediseva-700 text-white p-4 flex flex-row items-center space-x-2">
-            <Bot className="h-6 w-6" />
-            <div>
-              <h3 className="font-semibold">MediBot</h3>
-              <p className="text-xs text-mediseva-100">
-                Symptom checker assistant
-                {!clientLoaded && clientLoading && " (connecting...)"}
-              </p>
+          <CardHeader className="bg-mediseva-600 dark:bg-mediseva-700 text-white p-4 flex flex-row items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Bot className="h-6 w-6" />
+              <div>
+                <h3 className="font-semibold">MediBot</h3>
+                <p className="text-xs text-mediseva-100">
+                  {connectionStatus === "connected" && "Symptom checker assistant"}
+                  {connectionStatus === "connecting" && "Connecting to medical database..."}
+                  {connectionStatus === "failed" && "Connection failed"}
+                  {connectionStatus === "disconnected" && "Initializing..."}
+                </p>
+              </div>
             </div>
+            
+            {connectionStatus === "failed" && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleRetryConnection}
+                title="Retry connection"
+                className="h-8 w-8 rounded-full text-mediseva-100 hover:text-white hover:bg-mediseva-500"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+            )}
           </CardHeader>
           
           {/* Message list */}
@@ -248,6 +316,23 @@ export default function Chatbot() {
                 </div>
               )}
               
+              {connectionStatus === "failed" && (
+                <div className="flex items-center justify-center p-3">
+                  <div className="text-center text-muted-foreground">
+                    <p>Connection to medical database failed</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={handleRetryConnection} 
+                      className="mt-2"
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Retry Connection
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
               {/* Empty div for auto-scrolling */}
               <div ref={messagesEndRef} />
             </div>
@@ -262,11 +347,12 @@ export default function Chatbot() {
                 placeholder="Type your symptoms here..."
                 className="flex-grow focus-visible:ring-mediseva-500"
                 ref={inputRef}
+                disabled={connectionStatus === "failed"}
               />
               <Button 
                 type="submit" 
                 size="icon" 
-                disabled={input.trim() === ""}
+                disabled={input.trim() === "" || connectionStatus === "failed"}
                 className="shrink-0 bg-mediseva-600 hover:bg-mediseva-700"
               >
                 <Send className="h-4 w-4" />
