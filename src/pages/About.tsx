@@ -1,8 +1,7 @@
-
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, Award, Users, Heart, Globe, Lightbulb, Clock, User, Mail, Phone } from "lucide-react";
+import { ShieldCheck, Award, Users, Heart, Globe, Lightbulb, Clock, User, Mail, Phone, MapPin } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
