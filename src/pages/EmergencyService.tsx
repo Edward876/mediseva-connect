@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -51,11 +50,11 @@ export default function EmergencyService() {
       <Header />
       <main className="flex-grow">
         {/* Emergency Hero */}
-        <section className="bg-red-50 border-b border-red-100">
+        <section className="bg-red-50 dark:bg-red-950/30 border-b border-red-100 dark:border-red-900/50">
           <div className="max-container py-12 md:py-16">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
-                <div className="inline-flex items-center bg-red-100 text-red-700 px-4 py-2 rounded-full mb-6">
+                <div className="inline-flex items-center bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400 px-4 py-2 rounded-full mb-6">
                   <AlertTriangle className="h-5 w-5 mr-2" />
                   <span className="font-medium">Emergency Services</span>
                 </div>
@@ -66,11 +65,11 @@ export default function EmergencyService() {
                   If you are experiencing a medical emergency, please call emergency services immediately or go to your nearest emergency room.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Button size="lg" className="bg-red-600 hover:bg-red-700">
+                  <Button size="lg" className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white">
                     <PhoneCall className="mr-2 h-5 w-5" />
                     Call Emergency
                   </Button>
-                  <Button variant="outline" size="lg">
+                  <Button variant="outline" size="lg" className="dark:border-red-700 dark:text-red-400 dark:hover:bg-red-900/20">
                     <Ambulance className="mr-2 h-5 w-5" />
                     Request Ambulance
                   </Button>
@@ -88,7 +87,7 @@ export default function EmergencyService() {
         </section>
 
         {/* Emergency Contact Information */}
-        <section className="py-12">
+        <section className="py-12 bg-background">
           <div className="max-container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Emergency Locations Near You</h2>
@@ -136,7 +135,7 @@ export default function EmergencyService() {
         </section>
         
         {/* What is an Emergency */}
-        <section className="py-12 bg-muted/30">
+        <section className="py-12 bg-muted/30 dark:bg-muted/10">
           <div className="max-container">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-2xl font-bold mb-6 flex items-center">
@@ -164,8 +163,8 @@ export default function EmergencyService() {
                   <li>Unusual abdominal pain</li>
                 </ul>
                 
-                <div className="bg-red-50 p-4 rounded-md border border-red-100 mt-6">
-                  <p className="text-red-700 font-medium flex items-start">
+                <div className="bg-red-50 dark:bg-red-900/30 p-4 rounded-md border border-red-100 dark:border-red-900/50 mt-6">
+                  <p className="text-red-700 dark:text-red-400 font-medium flex items-start">
                     <AlertTriangle className="h-5 w-5 mr-2 shrink-0 mt-0.5" />
                     <span>
                       If you are experiencing a life-threatening emergency, call emergency services (911) immediately or go to the nearest emergency room.
@@ -185,10 +184,10 @@ export default function EmergencyService() {
               For non-emergency situations, our healthcare professionals are available to provide guidance and support.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button variant="outline" className="border-white hover:bg-white/20">
+              <Button variant="outline" className="border-primary-foreground hover:bg-primary-foreground/20">
                 Chat with a Doctor
               </Button>
-              <Button className="bg-white text-primary hover:bg-white/90">
+              <Button className="bg-primary-foreground text-primary hover:bg-primary-foreground/90">
                 Schedule a Consultation
               </Button>
             </div>
