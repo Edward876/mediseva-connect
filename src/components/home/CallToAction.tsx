@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function CallToAction() {
   return (
-    <section className="section-padding bg-gradient-to-br from-mediseva-600 to-mediseva-800">
+    <section className="section-padding bg-gradient-to-br from-mediseva-600 to-mediseva-800 dark:from-mediseva-800 dark:to-mediseva-950">
       <div className="max-container">
         <div className="max-w-3xl mx-auto text-center text-white space-y-6">
           <h2 className="text-3xl md:text-4xl font-display font-bold">
@@ -17,13 +17,13 @@ export default function CallToAction() {
           </p>
           <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/find-doctors">
-              <Button size="lg" className="bg-white text-mediseva-700 hover:bg-mediseva-50 w-full sm:w-auto">
+              <Button size="lg" className="bg-white text-mediseva-700 hover:bg-mediseva-50 w-full sm:w-auto dark:bg-white dark:text-mediseva-800 dark:hover:bg-gray-100">
                 Find a Doctor Now
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link to="/register">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20 w-full sm:w-auto dark:border-white dark:text-white">
                 Create an Account
               </Button>
             </Link>
