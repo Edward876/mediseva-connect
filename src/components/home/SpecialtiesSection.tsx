@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, Brain, Eye, Bone, User, Baby, Pill, Thermometer, Stethoscope, Tooth } from "lucide-react";
+import { Heart, Brain, Eye, Bone, User, Baby, Pill, Thermometer, Stethoscope, Scissors } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -58,7 +58,7 @@ const specialties = [
   {
     id: "dentistry",
     name: "Dentistry",
-    icon: Tooth,
+    icon: Scissors,
     description: "Oral health care, treatments, and procedures.",
     color: "text-sky-500",
     bgColor: "bg-sky-50",
