@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { MessagesSquare, X, Bot } from "lucide-react";
@@ -7,7 +6,8 @@ import { cn } from "@/lib/utils";
 import { Message } from "./types";
 import { MessageList } from "./components/MessageList";
 import { MessageInput } from "./components/MessageInput";
-import { initialMessages, processInput } from "./utils/messageProcessor";
+import { initialMessages } from "./utils/messageProcessor";
+import { Client } from "@gradio/client";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,26 +34,60 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const analyzeSymptomsWithAPI = async (symptoms: string) => {
+    try {
+      const client = await Client.connect("Shinichi876/Medical-bot");
+      const result = await client.predict("/analyze", { 
+        symptoms: symptoms, 
+      });
+      
+      return result.data as string;
+    } catch (error) {
+      console.error("Error calling Medical-bot API:", error);
+      return "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later or contact a healthcare professional directly.";
+    }
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() === "") return;
-
+    
     const userMessage: Message = {
       id: messages.length + 1,
       content: input,
       sender: "user",
       timestamp: new Date(),
     };
+    
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsTyping(true);
-
-    // Simulate bot processing and response
-    setTimeout(() => {
-      const botResponse = processInput(input, messages.length);
+    
+    try {
+      // Call the Medical-bot API
+      const response = await analyzeSymptomsWithAPI(input);
+      
+      const botResponse: Message = {
+        id: messages.length + 2,
+        content: response,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      
       setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      // Handle error gracefully
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        content: "I'm sorry, I couldn't analyze your symptoms at the moment. Please try again later.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -68,7 +102,7 @@ export default function Chatbot() {
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessagesSquare className="h-6 w-6" />}
       </Button>
-
+      
       {/* Chatbot window */}
       <div
         className={cn(
@@ -78,8 +112,8 @@ export default function Chatbot() {
             : "scale-90 opacity-0 pointer-events-none"
         )}
       >
-        <Card className="border-0 shadow-xl overflow-hidden h-[500px] flex flex-col">
-          <CardHeader className="bg-mediseva-600 text-white p-4 flex flex-row items-center space-x-2">
+        <Card className="border-0 shadow-xl overflow-hidden h-[500px] flex flex-col dark:bg-card">
+          <CardHeader className="bg-mediseva-600 dark:bg-mediseva-700 text-white p-4 flex flex-row items-center space-x-2">
             <Bot className="h-6 w-6" />
             <div>
               <h3 className="font-semibold">MediBot</h3>
@@ -95,7 +129,7 @@ export default function Chatbot() {
             />
           </CardContent>
           
-          <CardFooter className="p-3 border-t">
+          <CardFooter className="p-3 border-t dark:border-border">
             <MessageInput 
               input={input}
               setInput={setInput}
