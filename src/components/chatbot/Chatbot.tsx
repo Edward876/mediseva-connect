@@ -5,9 +5,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { initialMessages } from "./utils/messageProcessor";
-import { Client } from "@gradio/client";
 
-// Define Message type directly if not importing
+// Define Message type directly
 interface Message {
   id: number;
   content: string;
@@ -42,6 +41,9 @@ export default function Chatbot() {
 
   const analyzeSymptomsWithAPI = async (symptoms: string) => {
     try {
+      // Dynamically import the client only when needed
+      const { Client } = await import('@gradio/client');
+      
       const client = await Client.connect("Shinichi876/Medical-bot");
       const result = await client.predict("/analyze", { 
         symptoms: symptoms, 
@@ -132,7 +134,7 @@ export default function Chatbot() {
             </div>
           </CardHeader>
           
-          {/* Message list - Directly implemented instead of using MessageList component */}
+          {/* Message list - Directly implemented */}
           <CardContent className="flex-grow p-4 overflow-y-auto">
             <div className="space-y-4">
               {messages.map((message) => (
@@ -177,7 +179,7 @@ export default function Chatbot() {
             </div>
           </CardContent>
           
-          {/* Message input - Directly implemented instead of using MessageInput component */}
+          {/* Message input - Directly implemented */}
           <CardFooter className="p-3 border-t dark:border-border">
             <form onSubmit={handleSendMessage} className="flex w-full gap-2">
               <Input
