@@ -1,3 +1,4 @@
+
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Message } from "../types";
@@ -23,6 +24,24 @@ export const MessageList: React.FC<MessageListProps> = ({
   const getScrollAreaHeight = () => {
     if (isMinimized) return "h-[70px]";
     return isExpanded ? "h-[70vh]" : "h-auto";
+  };
+
+  // Function to safely render markdown content
+  const renderMessageContent = (content: string) => {
+    try {
+      // Check if content contains complex markdown that might cause issues
+      if (content.includes('###') || content.includes('####')) {
+        // For complex markdown, fallback to simpler rendering
+        return <div className="whitespace-pre-wrap">{content}</div>;
+      } else {
+        // For simple markdown, use ReactMarkdown
+        return <ReactMarkdown>{content}</ReactMarkdown>;
+      }
+    } catch (error) {
+      console.error("Error rendering markdown:", error);
+      // Fallback to plain text if ReactMarkdown fails
+      return <div className="whitespace-pre-wrap">{content}</div>;
+    }
   };
 
   return (
@@ -56,7 +75,7 @@ export const MessageList: React.FC<MessageListProps> = ({
               
               {message.sender === "bot" ? (
                 <div className="text-sm markdown-content">
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                  {renderMessageContent(message.content)}
                 </div>
               ) : (
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>

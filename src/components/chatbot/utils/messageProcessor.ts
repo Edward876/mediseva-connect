@@ -46,6 +46,7 @@ export const processInput = (userInput: string, messagesLength: number): Message
       timestamp: new Date(),
     };
   } else {
+    // Ensure response doesn't contain complex markdown that might break rendering
     return {
       id: messagesLength + 2,
       content: "I'm not sure I understand your symptoms. Could you please describe what you're experiencing in more detail? For example, do you have pain, fever, cough, etc.?",
