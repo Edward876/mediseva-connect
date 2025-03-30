@@ -21,12 +21,12 @@ const fallbackResponse = "I'm currently having trouble connecting to my medical 
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [connectionStatus, setConnectionStatus] = useState("connecting"); // connecting, connected, failed
+  const [connectionStatus, setConnectionStatus] = useState<"connecting" | "connected" | "failed">("connecting"); // connecting, connected, failed
   const gradioClientRef = useRef<any>(null);
   const [retryCount, setRetryCount] = useState(0);
 
@@ -75,7 +75,7 @@ export default function Chatbot() {
           try {
             const client = await window.gradioClient.Client.connect("Shinichi876/Medical-bot", {
               hf_token: null, // Set to your token if it's a private space
-              status_callback: (status) => {
+              status_callback: (status: any) => {
                 console.log("Connection status:", status);
               }
             });
