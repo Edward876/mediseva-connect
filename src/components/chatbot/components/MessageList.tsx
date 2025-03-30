@@ -23,20 +23,17 @@ export const MessageList: React.FC<MessageListProps> = ({
 }) => {
   const getScrollAreaHeight = () => {
     if (isMinimized) return "h-[70px]";
-    return isExpanded ? "h-[70vh]" : "h-auto";
+    return isExpanded ? "h-[calc(70vh-100px)]" : "h-[400px]";
   };
 
-  // Function to safely render markdown content
+  // Function to safely render content
   const renderMessageContent = (content: string) => {
     try {
-      // Simple check if content is very complex - just show as plain text
-      if (
-        content.includes('###') || 
-        content.includes('####') ||
-        (content.match(/\*\*/g) || []).length > 10 ||  // Too many bold elements
-        content.length > 1000  // Very long content
-      ) {
-        // For complex content, use plain text with preserved whitespace
+      // For complex markdown that could cause issues, just render as plain text
+      if (content.includes('###') || 
+          content.includes('####') ||
+          (content.match(/\*\*/g) || []).length > 10 ||
+          content.length > 500) {
         return (
           <div className="whitespace-pre-wrap text-sm">
             {content}
@@ -44,36 +41,42 @@ export const MessageList: React.FC<MessageListProps> = ({
         );
       }
       
-      // For simpler markdown, use ReactMarkdown with careful components
+      // For simpler markdown, try ReactMarkdown with restricted components
       return (
         <ReactMarkdown
           components={{
-            // Disable potentially problematic elements
-            h1: ({node, ...props}) => <strong className="text-base" {...props} />,
-            h2: ({node, ...props}) => <strong className="text-base" {...props} />,
-            h3: ({node, ...props}) => <strong className="text-base" {...props} />,
-            h4: ({node, ...props}) => <strong className="text-sm" {...props} />,
-            h5: ({node, ...props}) => <strong className="text-sm" {...props} />,
-            h6: ({node, ...props}) => <strong className="text-sm" {...props} />,
+            // Map heading elements to simple text elements to avoid rendering issues
+            h1: ({node, ...props}) => <p className="font-bold text-base my-2" {...props} />,
+            h2: ({node, ...props}) => <p className="font-bold text-base my-2" {...props} />,
+            h3: ({node, ...props}) => <p className="font-bold text-sm my-1" {...props} />,
+            h4: ({node, ...props}) => <p className="font-bold text-sm my-1" {...props} />,
+            h5: ({node, ...props}) => <p className="font-semibold text-sm my-1" {...props} />,
+            h6: ({node, ...props}) => <p className="font-semibold text-sm my-1" {...props} />,
             // Keep paragraphs simple
-            p: ({node, ...props}) => <p className="mb-2" {...props} />
+            p: ({node, ...props}) => <p className="mb-2 text-sm" {...props} />,
+            // Simplify lists
+            ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2" {...props} />,
+            ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2" {...props} />,
+            // Basic formatting
+            strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+            em: ({node, ...props}) => <em className="italic" {...props} />
           }}
         >
           {content}
         </ReactMarkdown>
       );
     } catch (error) {
-      console.error("Error rendering markdown:", error);
+      console.error("Error rendering content:", error);
       
-      // Show an error toast once (but don't overwhelm the user)
+      // Show a toast once if rendering fails
       toast({
         title: "Display issue",
         description: "Had trouble displaying formatted content. Showing plain text instead.",
         variant: "destructive",
       });
       
-      // Always provide a reliable fallback
-      return <div className="whitespace-pre-wrap">{content}</div>;
+      // Fallback to plain text
+      return <div className="whitespace-pre-wrap text-sm">{content}</div>;
     }
   };
 
@@ -106,13 +109,12 @@ export const MessageList: React.FC<MessageListProps> = ({
                 </div>
               )}
               
-              {message.sender === "bot" ? (
-                <div className="text-sm markdown-content">
-                  {renderMessageContent(message.content)}
-                </div>
-              ) : (
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-              )}
+              <div className="text-sm">
+                {message.sender === "bot" 
+                  ? renderMessageContent(message.content) 
+                  : <p className="whitespace-pre-wrap">{message.content}</p>
+                }
+              </div>
               
               <p className="text-[10px] opacity-70 mt-1 text-right">
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

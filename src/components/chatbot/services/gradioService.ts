@@ -38,8 +38,19 @@ export class GradioService {
   }
   
   // Sanitize markdown content to ensure it's safe for rendering
-  private sanitizeMarkdown(markdown: string): string {
+  private sanitizeMarkdown(markdown: string | any): string {
     try {
+      // Check if the response is an array and get the first item
+      if (Array.isArray(markdown)) {
+        markdown = markdown[0];
+      }
+      
+      // Ensure markdown is a string
+      if (typeof markdown !== 'string') {
+        console.error("Non-string response received:", markdown);
+        return "The response format was unexpected. Please try again later.";
+      }
+      
       // Replace problematic markdown patterns with simpler versions
       let sanitized = markdown;
       
@@ -56,7 +67,10 @@ export class GradioService {
     } catch (error) {
       console.error("Error sanitizing markdown:", error);
       // If sanitization fails, return plain text without markdown
-      return markdown.replace(/[#*_`~]/g, '');
+      if (typeof markdown === 'string') {
+        return markdown.replace(/[#*_`~]/g, '');
+      }
+      return "Failed to process the response. Please try again later.";
     }
   }
   
@@ -74,7 +88,8 @@ export class GradioService {
         throw new Error("API returned empty response");
       }
       
-      // Sanitize the markdown before returning it
+      // Handle the specific structure of the API response
+      // The response is typically an array with the first element being the markdown content
       return this.sanitizeMarkdown(result.data);
     } catch (error) {
       console.error("Error analyzing symptoms:", error);

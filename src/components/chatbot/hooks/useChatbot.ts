@@ -79,7 +79,6 @@ export const useChatbot = () => {
       
       const botResponse: Message = {
         id: messages.length + 2,
-        // Ensure the response is sanitized before rendering
         content: response,
         sender: "bot",
         timestamp: new Date(),
