@@ -18,16 +18,20 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   inputRef
 }) => {
   return (
-    <form onSubmit={handleSendMessage} className="flex w-full space-x-2">
+    <form onSubmit={handleSendMessage} className="flex w-full gap-2">
       <Input
         ref={inputRef}
-        type="text"
-        placeholder="Type your symptoms..."
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        className="flex-grow"
+        placeholder="Type your symptoms here..."
+        className="flex-grow focus-visible:ring-mediseva-500"
       />
-      <Button type="submit" size="icon" disabled={input.trim() === ""}>
+      <Button 
+        type="submit" 
+        size="icon" 
+        disabled={input.trim() === ""}
+        className="shrink-0 bg-mediseva-600 hover:bg-mediseva-700"
+      >
         <Send className="h-4 w-4" />
       </Button>
     </form>
