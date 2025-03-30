@@ -37,6 +37,29 @@ export class GradioService {
     }
   }
   
+  // Sanitize markdown content to ensure it's safe for rendering
+  private sanitizeMarkdown(markdown: string): string {
+    try {
+      // Replace problematic markdown patterns with simpler versions
+      let sanitized = markdown;
+      
+      // Convert ### headings to bold text
+      sanitized = sanitized.replace(/### #{1,2} (.*?)$/gm, '**$1**');
+      
+      // Convert #### headings to bold text
+      sanitized = sanitized.replace(/#### (.*?)$/gm, '**$1:**');
+      
+      // Remove any HTML-like tags that might be in the content
+      sanitized = sanitized.replace(/<[^>]*>/g, '');
+      
+      return sanitized;
+    } catch (error) {
+      console.error("Error sanitizing markdown:", error);
+      // If sanitization fails, return plain text without markdown
+      return markdown.replace(/[#*_`~]/g, '');
+    }
+  }
+  
   // Analyze symptoms through the API
   async analyzeSymptoms(symptoms: string): Promise<string> {
     try {
@@ -51,7 +74,8 @@ export class GradioService {
         throw new Error("API returned empty response");
       }
       
-      return result.data;
+      // Sanitize the markdown before returning it
+      return this.sanitizeMarkdown(result.data);
     } catch (error) {
       console.error("Error analyzing symptoms:", error);
       throw error;

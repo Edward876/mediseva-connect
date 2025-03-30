@@ -1,10 +1,10 @@
-
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Message } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReactMarkdown from "react-markdown";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "@/components/ui/use-toast";
 
 interface MessageListProps {
   messages: Message[];
@@ -29,17 +29,50 @@ export const MessageList: React.FC<MessageListProps> = ({
   // Function to safely render markdown content
   const renderMessageContent = (content: string) => {
     try {
-      // Check if content contains complex markdown that might cause issues
-      if (content.includes('###') || content.includes('####')) {
-        // For complex markdown, fallback to simpler rendering
-        return <div className="whitespace-pre-wrap">{content}</div>;
-      } else {
-        // For simple markdown, use ReactMarkdown
-        return <ReactMarkdown>{content}</ReactMarkdown>;
+      // Simple check if content is very complex - just show as plain text
+      if (
+        content.includes('###') || 
+        content.includes('####') ||
+        (content.match(/\*\*/g) || []).length > 10 ||  // Too many bold elements
+        content.length > 1000  // Very long content
+      ) {
+        // For complex content, use plain text with preserved whitespace
+        return (
+          <div className="whitespace-pre-wrap text-sm">
+            {content}
+          </div>
+        );
       }
+      
+      // For simpler markdown, use ReactMarkdown with careful components
+      return (
+        <ReactMarkdown
+          components={{
+            // Disable potentially problematic elements
+            h1: ({node, ...props}) => <strong className="text-base" {...props} />,
+            h2: ({node, ...props}) => <strong className="text-base" {...props} />,
+            h3: ({node, ...props}) => <strong className="text-base" {...props} />,
+            h4: ({node, ...props}) => <strong className="text-sm" {...props} />,
+            h5: ({node, ...props}) => <strong className="text-sm" {...props} />,
+            h6: ({node, ...props}) => <strong className="text-sm" {...props} />,
+            // Keep paragraphs simple
+            p: ({node, ...props}) => <p className="mb-2" {...props} />
+          }}
+        >
+          {content}
+        </ReactMarkdown>
+      );
     } catch (error) {
       console.error("Error rendering markdown:", error);
-      // Fallback to plain text if ReactMarkdown fails
+      
+      // Show an error toast once (but don't overwhelm the user)
+      toast({
+        title: "Display issue",
+        description: "Had trouble displaying formatted content. Showing plain text instead.",
+        variant: "destructive",
+      });
+      
+      // Always provide a reliable fallback
       return <div className="whitespace-pre-wrap">{content}</div>;
     }
   };

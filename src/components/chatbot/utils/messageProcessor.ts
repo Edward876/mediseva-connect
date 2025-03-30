@@ -2,6 +2,25 @@
 import { Message } from "../types";
 import { symptoms } from "../data/symptoms";
 
+// Function to safely sanitize content that might contain complex markdown
+const sanitizeContent = (content: string): string => {
+  try {
+    // Remove heading markers without losing content
+    let sanitized = content.replace(/^#+\s+/gm, "**");
+    sanitized = sanitized.replace(/\n#+\s+/gm, "\n**");
+    
+    // Limit length if extremely long
+    if (sanitized.length > 2000) {
+      sanitized = sanitized.substring(0, 2000) + "...";
+    }
+    
+    return sanitized;
+  } catch (e) {
+    console.error("Error sanitizing content:", e);
+    return content;
+  }
+};
+
 export const processInput = (userInput: string, messagesLength: number): Message => {
   const lowercaseInput = userInput.toLowerCase();
   
@@ -65,3 +84,6 @@ export const initialMessages: Message[] = [
     timestamp: new Date(),
   },
 ];
+
+// Export the sanitize function for use in other files
+export { sanitizeContent };

@@ -2,7 +2,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { gradioService } from '../services/gradioService';
 import { Message } from '../types';
-import { initialMessages } from '../utils/messageProcessor';
+import { initialMessages, sanitizeContent } from '../utils/messageProcessor';
+import { toast } from '@/components/ui/use-toast';
 
 // Fallback response when API is not available
 const FALLBACK_RESPONSE = "I'm currently having trouble connecting to my medical database. Your query has been received, and I'll respond properly once the connection is restored. In the meantime, if you're experiencing medical concerns, please consult with a healthcare professional.";
@@ -58,12 +59,27 @@ export const useChatbot = () => {
     
     try {
       // Use the API or fallback
-      const response = connectionStatus === "connected" 
-        ? await gradioService.analyzeSymptoms(messageText)
-        : FALLBACK_RESPONSE;
+      let response;
+      if (connectionStatus === "connected") {
+        try {
+          response = await gradioService.analyzeSymptoms(messageText);
+        } catch (apiError) {
+          console.error("API error:", apiError);
+          toast({
+            title: "Connection issue",
+            description: "There was a problem getting a response. Using fallback mode.",
+            variant: "destructive",
+          });
+          response = FALLBACK_RESPONSE;
+          setConnectionStatus("failed");
+        }
+      } else {
+        response = FALLBACK_RESPONSE;
+      }
       
       const botResponse: Message = {
         id: messages.length + 2,
+        // Ensure the response is sanitized before rendering
         content: response,
         sender: "bot",
         timestamp: new Date(),
