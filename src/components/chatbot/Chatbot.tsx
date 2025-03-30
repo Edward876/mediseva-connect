@@ -23,8 +23,10 @@ export default function Chatbot() {
     setIsOpen(!isOpen);
     // Reset expanded and minimized state when closing
     if (isOpen) {
-      setIsExpanded(false);
-      setIsMinimized(false);
+      setTimeout(() => {
+        setIsExpanded(false);
+        setIsMinimized(false);
+      }, 300); // Match transition duration
     }
   };
 

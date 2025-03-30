@@ -8,7 +8,6 @@ import { MessageInput } from "./MessageInput";
 import { ConnectionStatusDisplay } from "./ConnectionStatus";
 import { Message } from "../types";
 import { ConnectionStatus } from "../hooks/useChatbot";
-import ReactMarkdown from "react-markdown";
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -56,11 +55,11 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   const getWindowClasses = () => {
     if (!isOpen) return "scale-90 opacity-0 pointer-events-none";
     
-    if (isMinimized) return "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px] h-[100px] overflow-hidden";
+    if (isMinimized) return "bottom-24 right-20 w-[calc(100%-5rem)] sm:w-[300px] h-[100px] overflow-hidden";
     
     return isExpanded 
-      ? "top-0 left-0 right-0 bottom-0 m-4" 
-      : "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px]";
+      ? "bottom-24 right-20 w-[calc(100%-5rem)] sm:w-[600px] md:w-[700px] max-w-[80%]" 
+      : "bottom-24 right-20 w-[calc(100%-5rem)] sm:w-[400px]";
   };
 
   return (
@@ -73,7 +72,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
       <Card 
         className={cn(
           "border-0 shadow-xl overflow-hidden flex flex-col dark:bg-card",
-          isExpanded ? "h-full" : "h-[500px]",
+          isExpanded ? "h-[70vh]" : "h-[500px]",
           isMinimized ? "h-[100px]" : ""
         )}
       >
