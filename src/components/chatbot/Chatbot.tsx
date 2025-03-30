@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { MessageList } from "./components/MessageList";
 import { MessageInput } from "./components/MessageInput";
 import { initialMessages } from "./utils/messageProcessor";
+import { Message } from "./types";
 
 // Add global type for runtime-loaded gradio client
 declare global {
@@ -156,7 +157,7 @@ export default function Chatbot() {
     e.preventDefault();
     if (input.trim() === "") return;
     
-    const userMessage = {
+    const userMessage: Message = {
       id: messages.length + 1,
       content: input,
       sender: "user",
@@ -171,7 +172,7 @@ export default function Chatbot() {
       // Use the API or fallback
       const response = await analyzeSymptomsWithAPI(input);
       
-      const botResponse = {
+      const botResponse: Message = {
         id: messages.length + 2,
         content: response,
         sender: "bot",
@@ -180,7 +181,7 @@ export default function Chatbot() {
       
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
-      const errorMessage = {
+      const errorMessage: Message = {
         id: messages.length + 2,
         content: "I'm sorry, I couldn't process your message. Please try again.",
         sender: "bot",
