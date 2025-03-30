@@ -8,10 +8,12 @@ import { MessageInput } from "./MessageInput";
 import { ConnectionStatusDisplay } from "./ConnectionStatus";
 import { Message } from "../types";
 import { ConnectionStatus } from "../hooks/useChatbot";
+import ReactMarkdown from "react-markdown";
 
 interface ChatWindowProps {
   isOpen: boolean;
   isExpanded: boolean;
+  isMinimized: boolean;
   messages: Message[];
   input: string;
   setInput: (value: string) => void;
@@ -24,6 +26,7 @@ interface ChatWindowProps {
 export const ChatWindow: React.FC<ChatWindowProps> = ({ 
   isOpen, 
   isExpanded,
+  isMinimized,
   messages, 
   input, 
   setInput, 
@@ -49,22 +52,29 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
     }
   }, [isOpen]);
   
+  // Determine chat window visibility and size
+  const getWindowClasses = () => {
+    if (!isOpen) return "scale-90 opacity-0 pointer-events-none";
+    
+    if (isMinimized) return "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px] h-[100px] overflow-hidden";
+    
+    return isExpanded 
+      ? "top-0 left-0 right-0 bottom-0 m-4" 
+      : "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px]";
+  };
+
   return (
     <div
       className={cn(
         "fixed z-50 transition-all duration-300 transform origin-bottom-right",
-        isOpen
-          ? "scale-100 opacity-100"
-          : "scale-90 opacity-0 pointer-events-none",
-        isExpanded 
-          ? "top-0 left-0 right-0 bottom-0 m-4" 
-          : "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px]"
+        getWindowClasses()
       )}
     >
       <Card 
         className={cn(
           "border-0 shadow-xl overflow-hidden flex flex-col dark:bg-card",
-          isExpanded ? "h-full" : "h-[500px]"
+          isExpanded ? "h-full" : "h-[500px]",
+          isMinimized ? "h-[100px]" : ""
         )}
       >
         <CardHeader className="bg-mediseva-600 dark:bg-mediseva-700 text-white p-4 flex flex-row items-center justify-between">
@@ -93,18 +103,21 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
             isTyping={isTyping}
             messagesEndRef={messagesEndRef}
             isExpanded={isExpanded}
+            isMinimized={isMinimized}
           />
         </CardContent>
         
-        {/* Message input */}
-        <CardFooter className="p-3 border-t dark:border-border">
-          <MessageInput
-            input={input}
-            setInput={setInput}
-            handleSendMessage={handleSendMessage}
-            inputRef={inputRef}
-          />
-        </CardFooter>
+        {/* Message input - Hide when minimized */}
+        {!isMinimized && (
+          <CardFooter className="p-3 border-t dark:border-border">
+            <MessageInput
+              input={input}
+              setInput={setInput}
+              handleSendMessage={handleSendMessage}
+              inputRef={inputRef}
+            />
+          </CardFooter>
+        )}
       </Card>
     </div>
   );

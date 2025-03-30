@@ -7,6 +7,7 @@ import { ChatWindow } from "./components/ChatWindow";
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
   
   const { 
     messages, 
@@ -20,14 +21,21 @@ export default function Chatbot() {
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
-    // Reset expanded state when closing
+    // Reset expanded and minimized state when closing
     if (isOpen) {
       setIsExpanded(false);
+      setIsMinimized(false);
     }
   };
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
+    // Reset minimized state when expanding/collapsing
+    setIsMinimized(false);
+  };
+
+  const toggleMinimize = () => {
+    setIsMinimized(!isMinimized);
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -37,18 +45,19 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Chatbot toggle button */}
       <ChatbotToggle 
         isOpen={isOpen} 
         toggleChatbot={toggleChatbot} 
         isExpanded={isExpanded}
         toggleExpand={toggleExpand}
+        isMinimized={isMinimized}
+        toggleMinimize={toggleMinimize}
       />
       
-      {/* Chatbot window */}
       <ChatWindow
         isOpen={isOpen}
         isExpanded={isExpanded}
+        isMinimized={isMinimized}
         messages={messages}
         input={input}
         setInput={setInput}

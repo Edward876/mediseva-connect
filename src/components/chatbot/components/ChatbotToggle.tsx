@@ -9,13 +9,17 @@ interface ChatbotToggleProps {
   toggleChatbot: () => void;
   isExpanded: boolean;
   toggleExpand: () => void;
+  isMinimized: boolean;
+  toggleMinimize: () => void;
 }
 
 export const ChatbotToggle: React.FC<ChatbotToggleProps> = ({ 
   isOpen, 
   toggleChatbot,
   isExpanded,
-  toggleExpand
+  toggleExpand,
+  isMinimized,
+  toggleMinimize
 }) => {
   return (
     <>
@@ -30,13 +34,25 @@ export const ChatbotToggle: React.FC<ChatbotToggleProps> = ({
       </Button>
       
       {isOpen && (
-        <Button
-          onClick={toggleExpand}
-          className="fixed bottom-6 right-24 rounded-full w-10 h-10 shadow-lg z-50 bg-gray-200 hover:bg-gray-300 p-0"
-          aria-label={isExpanded ? "Minimize chat" : "Maximize chat"}
-        >
-          {isExpanded ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
-        </Button>
+        <div className="fixed bottom-6 right-24 flex space-x-2">
+          <Button
+            onClick={toggleExpand}
+            className="rounded-full w-10 h-10 shadow-lg z-50 bg-gray-200 hover:bg-gray-300 p-0"
+            aria-label={isExpanded ? "Minimize chat" : "Maximize chat"}
+          >
+            {isExpanded ? <Minimize2 className="h-5 w-5" /> : <Maximize2 className="h-5 w-5" />}
+          </Button>
+          
+          {isExpanded && (
+            <Button
+              onClick={toggleMinimize}
+              className="rounded-full w-10 h-10 shadow-lg z-50 bg-gray-200 hover:bg-gray-300 p-0"
+              aria-label={isMinimized ? "Restore chat" : "Minimize chat"}
+            >
+              {isMinimized ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
+            </Button>
+          )}
+        </div>
       )}
     </>
   );
