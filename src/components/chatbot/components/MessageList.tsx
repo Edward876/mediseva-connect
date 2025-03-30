@@ -1,4 +1,3 @@
-
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Message } from "../types";
@@ -11,16 +10,23 @@ interface MessageListProps {
   isTyping: boolean;
   messagesEndRef: React.RefObject<HTMLDivElement>;
   isExpanded: boolean;
+  isMinimized: boolean;
 }
 
 export const MessageList: React.FC<MessageListProps> = ({ 
   messages, 
   isTyping, 
   messagesEndRef,
-  isExpanded
+  isExpanded,
+  isMinimized
 }) => {
+  const getScrollAreaHeight = () => {
+    if (isMinimized) return "h-[70px]";
+    return isExpanded ? "h-[70vh]" : "h-auto";
+  };
+
   return (
-    <ScrollArea className={cn("p-4", isExpanded ? "h-[70vh]" : "h-auto")}>
+    <ScrollArea className={cn("p-4", getScrollAreaHeight())}>
       <div className="space-y-4">
         {messages.map((message) => (
           <div
