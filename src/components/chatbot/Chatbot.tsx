@@ -6,6 +6,8 @@ import { ChatWindow } from "./components/ChatWindow";
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  
   const { 
     messages, 
     input, 
@@ -18,6 +20,14 @@ export default function Chatbot() {
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
+    // Reset expanded state when closing
+    if (isOpen) {
+      setIsExpanded(false);
+    }
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -28,11 +38,17 @@ export default function Chatbot() {
   return (
     <>
       {/* Chatbot toggle button */}
-      <ChatbotToggle isOpen={isOpen} toggleChatbot={toggleChatbot} />
+      <ChatbotToggle 
+        isOpen={isOpen} 
+        toggleChatbot={toggleChatbot} 
+        isExpanded={isExpanded}
+        toggleExpand={toggleExpand}
+      />
       
       {/* Chatbot window */}
       <ChatWindow
         isOpen={isOpen}
+        isExpanded={isExpanded}
         messages={messages}
         input={input}
         setInput={setInput}

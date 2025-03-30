@@ -11,6 +11,7 @@ import { ConnectionStatus } from "../hooks/useChatbot";
 
 interface ChatWindowProps {
   isOpen: boolean;
+  isExpanded: boolean;
   messages: Message[];
   input: string;
   setInput: (value: string) => void;
@@ -22,6 +23,7 @@ interface ChatWindowProps {
 
 export const ChatWindow: React.FC<ChatWindowProps> = ({ 
   isOpen, 
+  isExpanded,
   messages, 
   input, 
   setInput, 
@@ -50,13 +52,21 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
   return (
     <div
       className={cn(
-        "fixed bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px] z-50 transition-all duration-300 transform origin-bottom-right",
+        "fixed z-50 transition-all duration-300 transform origin-bottom-right",
         isOpen
           ? "scale-100 opacity-100"
-          : "scale-90 opacity-0 pointer-events-none"
+          : "scale-90 opacity-0 pointer-events-none",
+        isExpanded 
+          ? "top-0 left-0 right-0 bottom-0 m-4" 
+          : "bottom-24 right-6 w-[calc(100%-3rem)] sm:w-[400px]"
       )}
     >
-      <Card className="border-0 shadow-xl overflow-hidden h-[500px] flex flex-col dark:bg-card">
+      <Card 
+        className={cn(
+          "border-0 shadow-xl overflow-hidden flex flex-col dark:bg-card",
+          isExpanded ? "h-full" : "h-[500px]"
+        )}
+      >
         <CardHeader className="bg-mediseva-600 dark:bg-mediseva-700 text-white p-4 flex flex-row items-center justify-between">
           <div className="flex items-center space-x-2">
             <Bot className="h-6 w-6" />
@@ -77,11 +87,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({
         </CardHeader>
         
         {/* Message list */}
-        <CardContent className="flex-grow p-0 overflow-y-auto">
+        <CardContent className="flex-grow p-0 overflow-hidden">
           <MessageList 
             messages={messages}
             isTyping={isTyping}
             messagesEndRef={messagesEndRef}
+            isExpanded={isExpanded}
           />
         </CardContent>
         
