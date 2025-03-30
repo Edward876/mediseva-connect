@@ -37,38 +37,44 @@ export class GradioService {
     }
   }
   
-  // Sanitize markdown content to ensure it's safe for rendering
-  private sanitizeMarkdown(markdown: string | any): string {
+  // Process and prepare markdown for rendering
+  private processMarkdown(content: string | any): string {
     try {
-      // Check if the response is an array and get the first item
-      if (Array.isArray(markdown)) {
-        markdown = markdown[0];
+      // Handle array responses
+      if (Array.isArray(content)) {
+        content = content[0];
       }
       
-      // Ensure markdown is a string
-      if (typeof markdown !== 'string') {
-        console.error("Non-string response received:", markdown);
+      // Handle non-string responses
+      if (typeof content !== 'string') {
+        console.error("Non-string response received:", content);
         return "The response format was unexpected. Please try again later.";
       }
       
-      // Replace problematic markdown patterns with simpler versions
-      let sanitized = markdown;
+      // Clean up markdown formatting for better rendering
+      let processed = content;
       
-      // Convert ### headings to bold text
-      sanitized = sanitized.replace(/### #{1,2} (.*?)$/gm, '**$1**');
+      // Fix markdown headings with double hash symbols
+      processed = processed.replace(/### ##\s+/g, "## ");
       
-      // Convert #### headings to bold text
-      sanitized = sanitized.replace(/#### (.*?)$/gm, '**$1:**');
+      // Replace triple hash headings with double hash for better hierarchy
+      processed = processed.replace(/###\s+/g, "## ");
       
-      // Remove any HTML-like tags that might be in the content
-      sanitized = sanitized.replace(/<[^>]*>/g, '');
+      // Convert #### headings to bold text with colon
+      processed = processed.replace(/####\s+([^:]+)(?!:)/gm, "**$1:**");
       
-      return sanitized;
+      // Remove any invalid HTML-like tags
+      processed = processed.replace(/<(?!\/?(strong|em|code|pre|blockquote|ul|ol|li|p))[^>]*>/g, '');
+      
+      // Ensure proper spacing for list items
+      processed = processed.replace(/\n(\s*)-\s+/g, '\n$1- ');
+      
+      return processed;
     } catch (error) {
-      console.error("Error sanitizing markdown:", error);
-      // If sanitization fails, return plain text without markdown
-      if (typeof markdown === 'string') {
-        return markdown.replace(/[#*_`~]/g, '');
+      console.error("Error processing markdown:", error);
+      if (typeof content === 'string') {
+        // Return plain text if processing fails
+        return content;
       }
       return "Failed to process the response. Please try again later.";
     }
@@ -88,9 +94,8 @@ export class GradioService {
         throw new Error("API returned empty response");
       }
       
-      // Handle the specific structure of the API response
-      // The response is typically an array with the first element being the markdown content
-      return this.sanitizeMarkdown(result.data);
+      // Process the markdown to make it renderable
+      return this.processMarkdown(result.data);
     } catch (error) {
       console.error("Error analyzing symptoms:", error);
       throw error;

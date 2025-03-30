@@ -18,6 +18,9 @@ import DoctorLogin from "./pages/DoctorLogin";
 import DoctorRegister from "./pages/DoctorRegister";
 import InternshipApplication from "./pages/InternshipApplication";
 
+// Add typography styles for markdown
+import './styles/markdown.css';
+
 // Create a query client
 const queryClient = new QueryClient();
 

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { gradioService } from '../services/gradioService';
 import { Message } from '../types';
-import { initialMessages, sanitizeContent } from '../utils/messageProcessor';
+import { initialMessages } from '../utils/messageProcessor';
 import { toast } from '@/components/ui/use-toast';
 
 // Fallback response when API is not available
@@ -63,6 +63,7 @@ export const useChatbot = () => {
       if (connectionStatus === "connected") {
         try {
           response = await gradioService.analyzeSymptoms(messageText);
+          console.log("Processed response:", response);
         } catch (apiError) {
           console.error("API error:", apiError);
           toast({

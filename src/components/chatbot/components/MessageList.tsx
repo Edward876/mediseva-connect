@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Message } from "../types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,54 +22,53 @@ export const MessageList: React.FC<MessageListProps> = ({
   isExpanded,
   isMinimized
 }) => {
+  const [renderingErrors, setRenderingErrors] = useState<Record<number, boolean>>({});
+  
   const getScrollAreaHeight = () => {
     if (isMinimized) return "h-[70px]";
     return isExpanded ? "h-[calc(70vh-100px)]" : "h-[400px]";
   };
 
-  // Function to safely render content
-  const renderMessageContent = (content: string) => {
+  // Function to safely render markdown content
+  const renderMarkdown = (content: string, messageId: number) => {
+    // If we've already had an error with this message, use fallback
+    if (renderingErrors[messageId]) {
+      return <div className="whitespace-pre-wrap text-sm">{content}</div>;
+    }
+    
     try {
-      // For complex markdown that could cause issues, just render as plain text
-      if (content.includes('###') || 
-          content.includes('####') ||
-          (content.match(/\*\*/g) || []).length > 10 ||
-          content.length > 500) {
-        return (
-          <div className="whitespace-pre-wrap text-sm">
-            {content}
-          </div>
-        );
-      }
-      
-      // For simpler markdown, try ReactMarkdown with restricted components
       return (
         <ReactMarkdown
+          className="markdown-content"
           components={{
-            // Map heading elements to simple text elements to avoid rendering issues
-            h1: ({node, ...props}) => <p className="font-bold text-base my-2" {...props} />,
-            h2: ({node, ...props}) => <p className="font-bold text-base my-2" {...props} />,
-            h3: ({node, ...props}) => <p className="font-bold text-sm my-1" {...props} />,
-            h4: ({node, ...props}) => <p className="font-bold text-sm my-1" {...props} />,
-            h5: ({node, ...props}) => <p className="font-semibold text-sm my-1" {...props} />,
-            h6: ({node, ...props}) => <p className="font-semibold text-sm my-1" {...props} />,
-            // Keep paragraphs simple
-            p: ({node, ...props}) => <p className="mb-2 text-sm" {...props} />,
-            // Simplify lists
-            ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2" {...props} />,
-            ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2" {...props} />,
-            // Basic formatting
+            h1: ({node, ...props}) => <h3 className="text-lg font-bold my-3" {...props} />,
+            h2: ({node, ...props}) => <h4 className="text-base font-bold my-2" {...props} />,
+            h3: ({node, ...props}) => <h5 className="text-sm font-bold my-2" {...props} />,
+            h4: ({node, ...props}) => <h6 className="text-sm font-semibold my-1" {...props} />,
+            h5: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
+            h6: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
+            p: ({node, ...props}) => <p className="text-sm mb-2" {...props} />,
+            ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 text-sm" {...props} />,
+            ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 text-sm" {...props} />,
+            li: ({node, ...props}) => <li className="mb-1" {...props} />,
             strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
-            em: ({node, ...props}) => <em className="italic" {...props} />
+            em: ({node, ...props}) => <em className="italic" {...props} />,
+            hr: () => <hr className="my-3 border-t border-gray-300" />,
+            blockquote: ({node, ...props}) => (
+              <blockquote className="border-l-4 border-gray-300 pl-2 italic my-2" {...props} />
+            ),
           }}
         >
           {content}
         </ReactMarkdown>
       );
     } catch (error) {
-      console.error("Error rendering content:", error);
+      console.error("Error rendering markdown for message", messageId, ":", error);
       
-      // Show a toast once if rendering fails
+      // Record this message ID as having a rendering error
+      setRenderingErrors(prev => ({...prev, [messageId]: true}));
+      
+      // Show toast only once
       toast({
         title: "Display issue",
         description: "Had trouble displaying formatted content. Showing plain text instead.",
@@ -93,7 +93,7 @@ export const MessageList: React.FC<MessageListProps> = ({
           >
             <div
               className={cn(
-                "max-w-[80%] rounded-lg p-3",
+                "max-w-[90%] rounded-lg p-3",
                 message.sender === "user"
                   ? "bg-mediseva-600 text-white rounded-tr-none"
                   : "bg-muted rounded-tl-none"
@@ -109,10 +109,12 @@ export const MessageList: React.FC<MessageListProps> = ({
                 </div>
               )}
               
-              <div className="text-sm">
+              <div className={cn(
+                message.sender === "bot" ? "prose prose-sm dark:prose-invert max-w-none" : ""
+              )}>
                 {message.sender === "bot" 
-                  ? renderMessageContent(message.content) 
-                  : <p className="whitespace-pre-wrap">{message.content}</p>
+                  ? renderMarkdown(message.content, message.id)
+                  : <p className="whitespace-pre-wrap text-sm">{message.content}</p>
                 }
               </div>
               
