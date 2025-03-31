@@ -24,6 +24,26 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+// Simple mock doctor data for demonstration
+const mockDoctors = [
+  { 
+    email: "doctor@example.com", 
+    password: "doctor123", 
+    role: "doctor", 
+    name: "Dr. Sarah Johnson",
+    specialty: "Cardiology",
+    hospital: "City Heart Institute",
+  },
+  { 
+    email: "neurologist@example.com", 
+    password: "neuro123", 
+    role: "doctor", 
+    name: "Dr. Michael Chen",
+    specialty: "Neurology",
+    hospital: "Central Medical Center",
+  },
+];
+
 export default function DoctorLogin() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -45,13 +65,37 @@ export default function DoctorLogin() {
     
     // Simulate login - this would be replaced with actual authentication
     setTimeout(() => {
-      console.log("Doctor Login values:", values);
-      toast({
-        title: "Login successful",
-        description: "Welcome back, Doctor",
-      });
-      setIsLoading(false);
-      navigate("/"); // Redirect to doctor dashboard after login
+      const doctor = mockDoctors.find(
+        (doc) => doc.email === values.email && doc.password === values.password
+      );
+      
+      if (doctor) {
+        console.log("Doctor Login successful:", doctor);
+        // Save doctor data to localStorage for persistence
+        localStorage.setItem("mediseva_user", JSON.stringify({
+          email: doctor.email,
+          name: doctor.name,
+          role: doctor.role,
+          specialty: doctor.specialty,
+          hospital: doctor.hospital,
+          isLoggedIn: true
+        }));
+        
+        toast({
+          title: "Login successful",
+          description: `Welcome back, ${doctor.name}`,
+        });
+        setIsLoading(false);
+        navigate("/"); // Redirect to doctor dashboard after login
+      } else {
+        console.log("Login failed: Invalid credentials");
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+      }
     }, 1000);
   }
 

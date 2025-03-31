@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Search, PhoneCall, Stethoscope, Award } from "lucide-react";
 import {
@@ -29,6 +29,7 @@ const specialties = [
 export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +43,7 @@ export default function HeroSection() {
     }
     
     // Navigate to the find doctors page with the search parameters
-    window.location.href = `/find-doctors?${searchParams.toString()}`;
+    navigate(`/find-doctors?${searchParams.toString()}`);
   };
 
   return (

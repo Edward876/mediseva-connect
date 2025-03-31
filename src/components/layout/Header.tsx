@@ -1,66 +1,75 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { 
-  Menu,
-  X,
-  User,
-  UserPlus, 
-  Calendar,
-  ShieldCheck,
-  PhoneCall,
-} from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { isAuthenticated, getCurrentUser } from "@/utils/auth";
+import UserInfo from "@/components/auth/UserInfo";
 
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "Find Doctors", path: "/find-doctors" },
-  { name: "Appointments", path: "/appointments" },
-  { name: "Emergency", path: "/emergency" },
-  { name: "Internships", path: "/internships" },
-  { name: "About", path: "/about" },
+const mainNav = [
+  { name: "Home", href: "/" },
+  { name: "Find Doctors", href: "/find-doctors" },
+  { name: "Appointments", href: "/appointments" },
+  { name: "Emergency", href: "/emergency-service" },
+  { name: "Internships", href: "/internships" },
+  { name: "About", href: "/about" },
 ];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const { pathname } = useLocation();
-
+  
+  useEffect(() => {
+    const checkAuth = () => {
+      const isLoggedIn = isAuthenticated();
+      setUserLoggedIn(isLoggedIn);
+      
+      if (isLoggedIn) {
+        const user = getCurrentUser();
+        setUserRole(user?.role || null);
+      } else {
+        setUserRole(null);
+      }
+    };
+    
+    checkAuth();
+    
+    // Listen for storage events to update the auth state
+    window.addEventListener('storage', checkAuth);
+    
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
+  
+  // Close mobile menu when navigating
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+  
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
-      <div className="max-container flex items-center justify-between h-16 px-4 sm:px-6">
+    <header className="border-b sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="max-container flex h-16 items-center justify-between p-4">
         <div className="flex items-center">
-          <Link 
-            to="/" 
-            className="flex items-center gap-2 transition-all duration-200 hover:opacity-80"
-          >
-            <div className="relative flex h-10 w-10 rounded-full bg-gradient-to-br from-mediseva-500 to-mediseva-700 items-center justify-center">
-              <ShieldCheck className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-display font-semibold text-xl sm:text-2xl text-foreground">
-              Mediseva
-            </span>
+          <Link to="/" className="flex items-center">
+            <span className="text-2xl font-bold text-primary mr-1">Medi</span>
+            <span className="text-2xl font-bold">seva</span>
           </Link>
         </div>
 
         {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          {navItems.map((item) => (
+        <nav className="mx-6 hidden items-center space-x-4 md:flex flex-1 justify-center">
+          {mainNav.map((item) => (
             <Link
-              key={item.name}
-              to={item.path}
+              key={item.href}
+              to={item.href}
               className={cn(
-                "px-3 py-2 text-sm font-medium rounded-md transition-all duration-200",
-                pathname === item.path
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                "text-sm font-medium transition-colors hover:text-primary",
+                pathname === item.href
+                  ? "text-foreground"
+                  : "text-muted-foreground"
               )}
             >
               {item.name}
@@ -68,125 +77,97 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Desktop buttons */}
-        <div className="hidden md:flex items-center space-x-3">
+        <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          <Link to="/emergency-service">
-            <Button variant="outline" size="sm" className="border-danger text-danger hover:bg-danger/10 hover:text-danger space-x-1">
-              <PhoneCall className="h-4 w-4" />
-              <span>Emergency</span>
-            </Button>
-          </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" variant="outline" className="space-x-1">
-                <User className="h-4 w-4" />
-                <span>Sign in</span>
+          
+          {userLoggedIn ? (
+            <UserInfo />
+          ) : (
+            <div className="flex gap-2">
+              <Link to="/login">
+                <Button variant="outline" size="sm">
+                  Login
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm">Sign Up</Button>
+              </Link>
+            </div>
+          )}
+          
+          {/* Doctor/Patient Login Link */}
+          {!userLoggedIn && (
+            <Link to="/doctor-login">
+              <Button variant="link" size="sm" className="text-muted-foreground">
+                For Doctors
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem asChild>
-                <Link to="/login" className="flex items-center cursor-pointer w-full">
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Patient Login</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/doctor-login" className="flex items-center cursor-pointer w-full">
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  <span>Doctor Login</span>
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" className="space-x-1">
-                <UserPlus className="h-4 w-4" />
-                <span>Register</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem asChild>
-                <Link to="/register" className="flex items-center cursor-pointer w-full">
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Patient Registration</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/doctor-register" className="flex items-center cursor-pointer w-full">
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                  <span>Doctor Registration</span>
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex items-center space-x-3 md:hidden">
+        <div className="flex md:hidden gap-2">
           <ThemeToggle />
-          <button
+          <Button
+            variant="outline"
+            size="icon"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="inline-flex items-center justify-center p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary focus:outline-none"
           >
             {isMenuOpen ? (
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             ) : (
-              <Menu className="h-6 w-6" />
+              <Menu className="h-5 w-5" />
             )}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-background border-b border-border animate-fade-in">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={cn(
-                  "block px-3 py-2 rounded-md text-base font-medium transition-colors",
-                  pathname === item.path
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="pt-4 pb-2 border-t border-border grid grid-cols-2 gap-2">
-              <Link to="/emergency-service" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full border-danger text-danger hover:bg-danger/10 hover:text-danger justify-start">
-                  <PhoneCall className="h-4 w-4 mr-2" />
-                  <span>Emergency</span>
-                </Button>
-              </Link>
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full justify-start">
-                  <User className="h-4 w-4 mr-2" />
-                  <span>Sign in</span>
-                </Button>
-              </Link>
-              <Link to="/doctor-login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full justify-start">
-                  <ShieldCheck className="h-4 w-4 mr-2" />
-                  <span>Doctor Login</span>
-                </Button>
-              </Link>
-              <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full justify-start">
-                  <UserPlus className="h-4 w-4 mr-2" />
-                  <span>Register</span>
-                </Button>
-              </Link>
+      <div
+        className={`md:hidden border-t ${isMenuOpen ? "block" : "hidden"} px-4 py-2`}
+      >
+        <nav className="flex flex-col space-y-3 py-3">
+          {mainNav.map((item) => (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary px-2 py-1.5",
+                pathname === item.href
+                  ? "bg-muted rounded-md"
+                  : "text-muted-foreground"
+              )}
+            >
+              {item.name}
+            </Link>
+          ))}
+          
+          {userLoggedIn ? (
+            <div className="pt-2 border-t">
+              <UserInfo />
             </div>
-          </div>
-        </div>
-      )}
+          ) : (
+            <>
+              <hr className="my-1" />
+              <div className="flex flex-col space-y-2 pt-1">
+                <Link to="/login" className="w-full">
+                  <Button variant="outline" className="w-full">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/register" className="w-full">
+                  <Button className="w-full">Sign Up</Button>
+                </Link>
+                <Link to="/doctor-login" className="w-full">
+                  <Button variant="link" className="text-muted-foreground w-full">
+                    For Doctors
+                  </Button>
+                </Link>
+              </div>
+            </>
+          )}
+        </nav>
+      </div>
     </header>
   );
 }

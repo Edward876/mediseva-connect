@@ -1,8 +1,7 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Heart, Brain, Eye, Bone, User, Baby, Pill, Thermometer, Stethoscope, Scissors } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Brain, Eye, Bone, User, Baby, Scissors, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -74,11 +73,13 @@ const specialties = [
 ];
 
 export default function SpecialtiesSection() {
-  const handleSpecialtyClick = (specialtyId: string) => {
+  const navigate = useNavigate();
+
+  const handleSpecialtyClick = (specialtyId: string, specialtyName: string) => {
     // Create a URL with the specialty parameter
     const searchParams = new URLSearchParams();
     searchParams.append("specialty", specialtyId);
-    window.location.href = `/find-doctors?${searchParams.toString()}`;
+    navigate(`/find-doctors?${searchParams.toString()}`);
   };
 
   return (
@@ -95,7 +96,7 @@ export default function SpecialtiesSection() {
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {specialties.map((specialty, index) => (
+        {specialties.map((specialty) => (
           <Card key={specialty.id} className="border-0 shadow-sm hover:shadow-md transition-all duration-200">
             <CardContent className="p-6">
               <div className="flex flex-col items-center text-center space-y-4">
@@ -108,7 +109,7 @@ export default function SpecialtiesSection() {
                   variant="outline" 
                   size="sm" 
                   className="mt-2"
-                  onClick={() => handleSpecialtyClick(specialty.id)}
+                  onClick={() => handleSpecialtyClick(specialty.id, specialty.name)}
                 >
                   Find Doctors
                 </Button>

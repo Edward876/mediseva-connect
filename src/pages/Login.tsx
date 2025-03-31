@@ -25,6 +25,12 @@ const formSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
+// Simple mock user data for demonstration
+const mockUsers = [
+  { email: "patient@example.com", password: "password123", role: "patient", name: "John Doe" },
+  { email: "test@example.com", password: "password123", role: "patient", name: "Test User" },
+];
+
 export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,15 +50,37 @@ export default function Login() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // Simulate login - this would be replaced with actual authentication
+    // Simulate login with mock data (would be replaced with actual authentication)
     setTimeout(() => {
-      console.log("Login values:", values);
-      toast({
-        title: "Login successful",
-        description: "Welcome back to Mediseva",
-      });
-      setIsLoading(false);
-      navigate("/"); // Redirect to home after login
+      const user = mockUsers.find(
+        (user) => user.email === values.email && user.password === values.password
+      );
+      
+      if (user) {
+        console.log("Login successful:", user);
+        // Save user data to localStorage for persistence
+        localStorage.setItem("mediseva_user", JSON.stringify({
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          isLoggedIn: true
+        }));
+        
+        toast({
+          title: "Login successful",
+          description: `Welcome back, ${user.name}`,
+        });
+        setIsLoading(false);
+        navigate("/"); // Redirect to home after login
+      } else {
+        console.log("Login failed: Invalid credentials");
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password. Please try again.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+      }
     }, 1000);
   }
 
