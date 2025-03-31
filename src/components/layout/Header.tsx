@@ -39,11 +39,11 @@ export default function Header() {
         <div className="flex items-center">
           <Link 
             to="/" 
-            className="flex items-center space-x-2 transition-all duration-200 hover:opacity-80"
+            className="flex items-center gap-2 transition-all duration-200 hover:opacity-80"
           >
-            <span className="relative flex h-10 w-10 rounded-full bg-gradient-to-br from-mediseva-500 to-mediseva-700 items-center justify-center">
+            <div className="relative flex h-10 w-10 rounded-full bg-gradient-to-br from-mediseva-500 to-mediseva-700 items-center justify-center">
               <ShieldCheck className="h-5 w-5 text-white" />
-            </span>
+            </div>
             <span className="font-display font-semibold text-xl sm:text-2xl text-foreground">
               Mediseva
             </span>

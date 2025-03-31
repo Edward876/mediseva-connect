@@ -30,6 +30,21 @@ export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("");
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Create the URL with correctly formatted parameters
+    const searchParams = new URLSearchParams();
+    if (specialty) {
+      searchParams.append("specialty", specialty.toLowerCase());
+    }
+    if (searchQuery) {
+      searchParams.append("query", searchQuery);
+    }
+    
+    // Navigate to the find doctors page with the search parameters
+    window.location.href = `/find-doctors?${searchParams.toString()}`;
+  };
+
   return (
     <section className="relative overflow-hidden">
       {/* Decorative elements */}
@@ -87,7 +102,7 @@ export default function HeroSection() {
               <h2 className="text-lg font-semibold">Find Your Doctor Now</h2>
               <Card className="shadow-lg border-0">
                 <CardContent className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-7 gap-3">
+                  <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-7 gap-3">
                     <div className="md:col-span-3">
                       <Select value={specialty} onValueChange={setSpecialty}>
                         <SelectTrigger className="w-full">
@@ -111,14 +126,12 @@ export default function HeroSection() {
                       />
                     </div>
                     <div className="md:col-span-1">
-                      <Button className="w-full" asChild>
-                        <Link to={`/find-doctors?specialty=${specialty}&query=${searchQuery}`}>
-                          <Search className="mr-1 h-4 w-4" />
-                          Search
-                        </Link>
+                      <Button type="submit" className="w-full">
+                        <Search className="mr-1 h-4 w-4" />
+                        Search
                       </Button>
                     </div>
-                  </div>
+                  </form>
                 </CardContent>
               </Card>
             </div>

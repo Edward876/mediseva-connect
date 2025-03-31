@@ -74,6 +74,13 @@ const specialties = [
 ];
 
 export default function SpecialtiesSection() {
+  const handleSpecialtyClick = (specialtyId: string) => {
+    // Create a URL with the specialty parameter
+    const searchParams = new URLSearchParams();
+    searchParams.append("specialty", specialtyId);
+    window.location.href = `/find-doctors?${searchParams.toString()}`;
+  };
+
   return (
     <section className="section-padding max-container">
       <div className="text-center max-w-2xl mx-auto mb-12">
@@ -97,10 +104,13 @@ export default function SpecialtiesSection() {
                 </div>
                 <h3 className="font-semibold text-lg">{specialty.name}</h3>
                 <p className="text-sm text-muted-foreground">{specialty.description}</p>
-                <Button variant="outline" size="sm" asChild className="mt-2">
-                  <Link to={`/find-doctors?specialty=${specialty.id}`}>
-                    Find Doctors
-                  </Link>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="mt-2"
+                  onClick={() => handleSpecialtyClick(specialty.id)}
+                >
+                  Find Doctors
                 </Button>
               </div>
             </CardContent>
