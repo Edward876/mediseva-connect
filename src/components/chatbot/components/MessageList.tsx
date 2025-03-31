@@ -38,29 +38,30 @@ export const MessageList: React.FC<MessageListProps> = ({
     
     try {
       return (
-        <ReactMarkdown
-          className="markdown-content"
-          components={{
-            h1: ({node, ...props}) => <h3 className="text-lg font-bold my-3" {...props} />,
-            h2: ({node, ...props}) => <h4 className="text-base font-bold my-2" {...props} />,
-            h3: ({node, ...props}) => <h5 className="text-sm font-bold my-2" {...props} />,
-            h4: ({node, ...props}) => <h6 className="text-sm font-semibold my-1" {...props} />,
-            h5: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
-            h6: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
-            p: ({node, ...props}) => <p className="text-sm mb-2" {...props} />,
-            ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 text-sm" {...props} />,
-            ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 text-sm" {...props} />,
-            li: ({node, ...props}) => <li className="mb-1" {...props} />,
-            strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
-            em: ({node, ...props}) => <em className="italic" {...props} />,
-            hr: () => <hr className="my-3 border-t border-gray-300" />,
-            blockquote: ({node, ...props}) => (
-              <blockquote className="border-l-4 border-gray-300 pl-2 italic my-2" {...props} />
-            ),
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+        <div className="markdown-content">
+          <ReactMarkdown
+            components={{
+              h1: ({node, ...props}) => <h3 className="text-lg font-bold my-3" {...props} />,
+              h2: ({node, ...props}) => <h4 className="text-base font-bold my-2" {...props} />,
+              h3: ({node, ...props}) => <h5 className="text-sm font-bold my-2" {...props} />,
+              h4: ({node, ...props}) => <h6 className="text-sm font-semibold my-1" {...props} />,
+              h5: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
+              h6: ({node, ...props}) => <p className="text-sm font-semibold my-1" {...props} />,
+              p: ({node, ...props}) => <p className="text-sm mb-2" {...props} />,
+              ul: ({node, ...props}) => <ul className="list-disc pl-5 mb-2 text-sm" {...props} />,
+              ol: ({node, ...props}) => <ol className="list-decimal pl-5 mb-2 text-sm" {...props} />,
+              li: ({node, ...props}) => <li className="mb-1" {...props} />,
+              strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+              em: ({node, ...props}) => <em className="italic" {...props} />,
+              hr: () => <hr className="my-3 border-t border-gray-300" />,
+              blockquote: ({node, ...props}) => (
+                <blockquote className="border-l-4 border-gray-300 pl-2 italic my-2" {...props} />
+              ),
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
       );
     } catch (error) {
       console.error("Error rendering markdown for message", messageId, ":", error);
