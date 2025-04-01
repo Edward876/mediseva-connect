@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -26,6 +25,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Mail, User, KeyRound, Phone, ArrowLeft, FileText, Building } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { addUser } from "@/utils/localStorageService";
 
 const specialties = [
   "Cardiology",
@@ -88,15 +88,47 @@ export default function DoctorRegister() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // Simulate registration - would be replaced with actual API call
+    // Register using the encrypted storage
     setTimeout(() => {
-      console.log("Doctor Registration values:", values);
-      toast({
-        title: "Registration submitted",
-        description: "Your account request will be reviewed by our team",
-      });
-      setIsLoading(false);
-      navigate("/doctor-login"); // Redirect to login after registration
+      try {
+        // Create a new doctor user object
+        const newUser = addUser({
+          name: values.fullName,
+          email: values.email,
+          phone: values.phone,
+          password: values.password,
+          role: "doctor",
+          specialty: values.specialty,
+          hospital: values.hospital,
+          medicalLicense: values.medicalLicense
+        });
+        
+        console.log("Doctor Registration successful:", newUser);
+        toast({
+          title: "Registration successful",
+          description: "Your doctor account has been created. You can now log in.",
+        });
+        navigate("/doctor-login"); // Redirect to login after registration
+      } catch (error) {
+        console.error("Registration error:", error);
+        
+        // Check for specific error
+        if (error instanceof Error && error.message === 'User with this email already exists') {
+          toast({
+            title: "Registration failed",
+            description: "An account with this email already exists.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Registration error",
+            description: "An error occurred during registration. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }, 1000);
   }
 

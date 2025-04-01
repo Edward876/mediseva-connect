@@ -1,7 +1,9 @@
 
-// Simple auth utility for the application
+// Enhanced auth utility for the application
+import { setCurrentUser } from './localStorageService';
 
 export interface User {
+  id: string;
   email: string;
   name: string;
   role: string;

@@ -19,17 +19,12 @@ import { toast } from "@/components/ui/use-toast";
 import { Mail, KeyRound, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { findUserByCredentials, setCurrentUser } from "@/utils/localStorageService";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
-
-// Simple mock user data for demonstration
-const mockUsers = [
-  { email: "patient@example.com", password: "password123", role: "patient", name: "John Doe" },
-  { email: "test@example.com", password: "password123", role: "patient", name: "Test User" },
-];
 
 export default function Login() {
   const navigate = useNavigate();
@@ -50,35 +45,44 @@ export default function Login() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // Simulate login with mock data (would be replaced with actual authentication)
+    // Attempt to login with encrypted storage
     setTimeout(() => {
-      const user = mockUsers.find(
-        (user) => user.email === values.email && user.password === values.password
-      );
-      
-      if (user) {
-        console.log("Login successful:", user);
-        // Save user data to localStorage for persistence
-        localStorage.setItem("mediseva_user", JSON.stringify({
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          isLoggedIn: true
-        }));
+      try {
+        const user = findUserByCredentials(values.email, values.password);
         
+        if (user && user.role === 'patient') {
+          console.log("Login successful:", user);
+          
+          // Set the current user in session
+          setCurrentUser(user);
+          
+          toast({
+            title: "Login successful",
+            description: `Welcome back, ${user.name}`,
+          });
+          navigate("/"); // Redirect to home after login
+        } else if (user && user.role !== 'patient') {
+          toast({
+            title: "Login failed",
+            description: "Please use the doctor login page for doctor accounts.",
+            variant: "destructive",
+          });
+        } else {
+          console.log("Login failed: Invalid credentials");
+          toast({
+            title: "Login failed",
+            description: "Invalid email or password. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Login error:", error);
         toast({
-          title: "Login successful",
-          description: `Welcome back, ${user.name}`,
-        });
-        setIsLoading(false);
-        navigate("/"); // Redirect to home after login
-      } else {
-        console.log("Login failed: Invalid credentials");
-        toast({
-          title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          title: "Login error",
+          description: "An error occurred during login. Please try again.",
           variant: "destructive",
         });
+      } finally {
         setIsLoading(false);
       }
     }, 1000);

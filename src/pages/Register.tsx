@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/use-toast";
 import { Mail, User, KeyRound, Phone, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { addUser } from "@/utils/localStorageService";
 
 const formSchema = z
   .object({
@@ -59,15 +60,44 @@ export default function Register() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // Simulate registration - would be replaced with actual API call
+    // Register using the encrypted storage
     setTimeout(() => {
-      console.log("Registration values:", values);
-      toast({
-        title: "Registration successful",
-        description: "Your account has been created",
-      });
-      setIsLoading(false);
-      navigate("/login"); // Redirect to login after registration
+      try {
+        // Create a new user object
+        const newUser = addUser({
+          name: values.fullName,
+          email: values.email,
+          phone: values.phone,
+          password: values.password,
+          role: "patient"
+        });
+        
+        console.log("Registration successful:", newUser);
+        toast({
+          title: "Registration successful",
+          description: "Your account has been created. You can now log in.",
+        });
+        navigate("/login"); // Redirect to login after registration
+      } catch (error) {
+        console.error("Registration error:", error);
+        
+        // Check for specific error
+        if (error instanceof Error && error.message === 'User with this email already exists') {
+          toast({
+            title: "Registration failed",
+            description: "An account with this email already exists.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Registration error",
+            description: "An error occurred during registration. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }, 1000);
   }
 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -18,31 +17,12 @@ import { toast } from "@/components/ui/use-toast";
 import { Mail, KeyRound, ArrowLeft, ShieldCheck } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { findUserByCredentials, setCurrentUser } from "@/utils/localStorageService";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
-
-// Simple mock doctor data for demonstration
-const mockDoctors = [
-  { 
-    email: "doctor@example.com", 
-    password: "doctor123", 
-    role: "doctor", 
-    name: "Dr. Sarah Johnson",
-    specialty: "Cardiology",
-    hospital: "City Heart Institute",
-  },
-  { 
-    email: "neurologist@example.com", 
-    password: "neuro123", 
-    role: "doctor", 
-    name: "Dr. Michael Chen",
-    specialty: "Neurology",
-    hospital: "Central Medical Center",
-  },
-];
 
 export default function DoctorLogin() {
   const navigate = useNavigate();
@@ -63,37 +43,44 @@ export default function DoctorLogin() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     
-    // Simulate login - this would be replaced with actual authentication
+    // Attempt to login with encrypted storage
     setTimeout(() => {
-      const doctor = mockDoctors.find(
-        (doc) => doc.email === values.email && doc.password === values.password
-      );
-      
-      if (doctor) {
-        console.log("Doctor Login successful:", doctor);
-        // Save doctor data to localStorage for persistence
-        localStorage.setItem("mediseva_user", JSON.stringify({
-          email: doctor.email,
-          name: doctor.name,
-          role: doctor.role,
-          specialty: doctor.specialty,
-          hospital: doctor.hospital,
-          isLoggedIn: true
-        }));
+      try {
+        const user = findUserByCredentials(values.email, values.password);
         
+        if (user && user.role === 'doctor') {
+          console.log("Doctor Login successful:", user);
+          
+          // Set the current user in session
+          setCurrentUser(user);
+          
+          toast({
+            title: "Login successful",
+            description: `Welcome back, ${user.name}`,
+          });
+          navigate("/"); // Redirect to home after login
+        } else if (user && user.role !== 'doctor') {
+          toast({
+            title: "Login failed",
+            description: "Please use the patient login page for patient accounts.",
+            variant: "destructive",
+          });
+        } else {
+          console.log("Login failed: Invalid credentials");
+          toast({
+            title: "Login failed",
+            description: "Invalid email or password. Please try again.",
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Login error:", error);
         toast({
-          title: "Login successful",
-          description: `Welcome back, ${doctor.name}`,
-        });
-        setIsLoading(false);
-        navigate("/"); // Redirect to doctor dashboard after login
-      } else {
-        console.log("Login failed: Invalid credentials");
-        toast({
-          title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          title: "Login error",
+          description: "An error occurred during login. Please try again.",
           variant: "destructive",
         });
+      } finally {
         setIsLoading(false);
       }
     }, 1000);
