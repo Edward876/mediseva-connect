@@ -34,7 +34,7 @@ export default function HeroSection() {
   const [doctorCount, setDoctorCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, isLoaded } = useLanguage();
 
   useEffect(() => {
     // Load user and doctor counts from localStorage
@@ -60,6 +60,26 @@ export default function HeroSection() {
     // Navigate to the find doctors page with the search parameters
     navigate(`/find-doctors?${searchParams.toString()}`);
   };
+
+  // If translations aren't loaded yet, show a simpler version to prevent translation keys from showing
+  if (!isLoaded) {
+    return (
+      <section className="relative overflow-hidden">
+        <div className="max-container py-16 md:py-24 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8 max-w-xl">
+              <div className="h-32 animate-pulse bg-muted rounded-lg"></div>
+            </div>
+            <div className="relative order-first lg:order-last">
+              <div className="aspect-square relative z-10 max-w-md mx-auto">
+                <div className="h-full w-full bg-muted rounded-2xl animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative overflow-hidden">

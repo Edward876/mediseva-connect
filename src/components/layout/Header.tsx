@@ -5,11 +5,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import UserInfo from "@/components/auth/UserInfo";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Menu, X, LogIn, UserPlus } from "lucide-react";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { isAuthenticated } from "@/utils/auth";
+import { useIsMobile } from "@/hooks/use-mobile"; // Fixed import
 
 export default function Header() {
   const location = useLocation();
