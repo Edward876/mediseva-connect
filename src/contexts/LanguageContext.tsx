@@ -1,518 +1,360 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type Language = 'en' | 'hi' | 'mr' | 'gu' | 'ra' | 'bn';
-
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (lang: Language) => void;
+interface LanguageContextType {
+  language: string;
+  setLanguage: (lang: string) => void;
   t: (key: string) => string;
-};
+}
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType>({
+  language: "en",
+  setLanguage: () => {},
+  t: (key: string) => key,
+});
 
-export const translations: Record<Language, Record<string, string>> = {
-  en: {
-    // General
-    "app.title": "Mediseva",
-    "app.slogan": "Healthcare Platform",
-    
-    // Navigation
-    "nav.home": "Home",
-    "nav.findDoctors": "Find Doctors",
-    "nav.appointments": "Appointments",
-    "nav.emergency": "Emergency",
-    "nav.internships": "Internships",
-    "nav.about": "About",
-    "nav.login": "Login",
-    "nav.register": "Register",
-    
-    // Find Doctors Page
-    "doctors.title": "Find the Right Doctor",
-    "doctors.subtitle": "Search from our network of qualified healthcare professionals",
-    "doctors.searchPlaceholder": "Search by doctor name, specialty, or hospital...",
-    "doctors.selectSpecialty": "Select specialty",
-    "doctors.selectState": "Select state",
-    "doctors.selectCity": "Select city",
-    "doctors.search": "Search Doctors",
-    "doctors.found": "Doctors Found",
-    "doctors.doctor": "Doctor",
-    "doctors.doctors": "Doctors",
-    "doctors.filters": "Filters",
-    "doctors.viewProfile": "View Profile",
-    "doctors.bookAppointment": "Book Appointment",
-    "doctors.noResults": "No doctors found matching your criteria",
-    "doctors.clearFilters": "Clear Filters",
-    
-    // Auth
-    "auth.profile": "Profile",
-    "auth.myAppointments": "My Appointments",
-    "auth.settings": "Settings",
-    "auth.logout": "Log out",
-    "auth.logoutSuccess": "You have been successfully logged out.",
-    "auth.loginSuccess": "Welcome back",
-    
-    // Login Page
-    "login.title": "Patient Login",
-    "login.subtitle": "Welcome back! Please sign in to your account",
-    "login.email": "Email",
-    "login.password": "Password",
-    "login.forgotPassword": "Forgot password?",
-    "login.signIn": "Sign in",
-    "login.signingIn": "Signing in...",
-    "login.noAccount": "Don't have an account?",
-    "login.register": "Register now",
-    "login.backToHome": "Back to Home",
-    
-    // Register Page
-    "register.title": "Create Patient Account",
-    "register.subtitle": "Join Mediseva to access quality healthcare services",
-    "register.fullName": "Full Name",
-    "register.email": "Email",
-    "register.phone": "Phone Number",
-    "register.password": "Password",
-    "register.confirmPassword": "Confirm Password",
-    "register.terms": "I agree to the",
-    "register.termsLink": "Terms of Service",
-    "register.and": "and",
-    "register.privacyLink": "Privacy Policy",
-    "register.createAccount": "Create Account",
-    "register.creatingAccount": "Creating Account...",
-    "register.haveAccount": "Already have an account?",
-    "register.signIn": "Sign in",
-    "register.backToHome": "Back to Home",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  },
-  hi: {
-    // General
-    "app.title": "मेडीसेवा",
-    "app.slogan": "स्वास्थ्य सेवा प्लेटफार्म",
-    
-    // Navigation
-    "nav.home": "होम",
-    "nav.findDoctors": "डॉक्टर खोजें",
-    "nav.appointments": "अपॉइंटमेंट",
-    "nav.emergency": "आपातकाल",
-    "nav.internships": "इंटर्नशिप",
-    "nav.about": "हमारे बारे में",
-    "nav.login": "लॉग इन",
-    "nav.register": "रजिस्टर",
-    
-    // Find Doctors Page
-    "doctors.title": "सही डॉक्टर खोजें",
-    "doctors.subtitle": "योग्य स्वास्थ्य पेशेवरों के हमारे नेटवर्क से खोजें",
-    "doctors.searchPlaceholder": "डॉक्टर के नाम, विशेषज्ञता या अस्पताल से खोजें...",
-    "doctors.selectSpecialty": "विशेषज्ञता चुनें",
-    "doctors.selectState": "राज्य चुनें",
-    "doctors.selectCity": "शहर चुनें",
-    "doctors.search": "डॉक्टर खोजें",
-    "doctors.found": "डॉक्टर मिले",
-    "doctors.doctor": "डॉक्टर",
-    "doctors.doctors": "डॉक्टर्स",
-    "doctors.filters": "फ़िल्टर्स",
-    "doctors.viewProfile": "प्रोफ़ाइल देखें",
-    "doctors.bookAppointment": "अपॉइंटमेंट बुक करें",
-    "doctors.noResults": "आपके मापदंडों से मेल खाने वाले कोई डॉक्टर नहीं मिले",
-    "doctors.clearFilters": "फ़िल्टर्स साफ़ करें",
-    
-    // Auth
-    "auth.profile": "प्रोफाइल",
-    "auth.myAppointments": "मेरे अपॉइंटमेंट",
-    "auth.settings": "सेटिंग्स",
-    "auth.logout": "लॉग आउट",
-    "auth.logoutSuccess": "आप सफलतापूर्वक लॉग आउट हो गए हैं।",
-    "auth.loginSuccess": "वापसी पर स्वागत है",
-    
-    // Login Page
-    "login.title": "रोगी लॉगिन",
-    "login.subtitle": "वापसी पर स्वागत है! कृपया अपने खाते में साइन इन करें",
-    "login.email": "ईमेल",
-    "login.password": "पासवर्ड",
-    "login.forgotPassword": "पासवर्ड भूल गए?",
-    "login.signIn": "साइन इन",
-    "login.signingIn": "साइन इन हो रहा है...",
-    "login.noAccount": "खाता नहीं है?",
-    "login.register": "अभी रजिस्टर करें",
-    "login.backToHome": "होम पेज पर वापस जाएँ",
-    
-    // Register Page
-    "register.title": "रोगी खाता बनाएँ",
-    "register.subtitle": "गुणवत्तापूर्ण स्वास्थ्य सेवाओं का उपयोग करने के लिए मेडीसेवा से जुड़ें",
-    "register.fullName": "पूरा नाम",
-    "register.email": "ईमेल",
-    "register.phone": "फोन नंबर",
-    "register.password": "पासवर्ड",
-    "register.confirmPassword": "पासवर्ड की पुष्टि",
-    "register.terms": "मैं सहमत हूँ",
-    "register.termsLink": "सेवा की शर्तें",
-    "register.and": "और",
-    "register.privacyLink": "गोपनीयता नीति",
-    "register.createAccount": "खाता बनाएँ",
-    "register.creatingAccount": "खाता बना रहा है...",
-    "register.haveAccount": "पहले से ही खाता है?",
-    "register.signIn": "साइन इन",
-    "register.backToHome": "होम पेज पर वापस जाएँ",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  },
-  mr: {
-    // General
-    "app.title": "मेडीसेवा",
-    "app.slogan": "आरोग्य सेवा प्लॅटफॉर्म",
-    
-    // Navigation
-    "nav.home": "मुख्यपृष्ठ",
-    "nav.findDoctors": "डॉक्टर शोधा",
-    "nav.appointments": "अपॉइंटमेंट",
-    "nav.emergency": "आपत्कालीन",
-    "nav.internships": "इंटर्नशिप",
-    "nav.about": "आमच्याबद्दल",
-    "nav.login": "लॉग इन",
-    "nav.register": "नोंदणी करा",
-    
-    // Find Doctors Page
-    "doctors.title": "योग्य डॉक्टर शोधा",
-    "doctors.subtitle": "आमच्या प्रशिक्षित आरोग्य व्यावसायिकांच्या नेटवर्कमधून शोधा",
-    "doctors.searchPlaceholder": "डॉक्टरचे नाव, विशेषज्ञता किंवा रुग्णालयानुसार शोधा...",
-    "doctors.selectSpecialty": "विशेषज्ञता निवडा",
-    "doctors.selectState": "राज्य निवडा",
-    "doctors.selectCity": "शहर निवडा",
-    "doctors.search": "डॉक्टर शोधा",
-    "doctors.found": "डॉक्टर सापडले",
-    "doctors.doctor": "डॉक्टर",
-    "doctors.doctors": "डॉक्टर्स",
-    "doctors.filters": "फिल्टर्स",
-    "doctors.viewProfile": "प्रोफाईल पहा",
-    "doctors.bookAppointment": "अपॉइंटमेंट बुक करा",
-    "doctors.noResults": "तुमच्या निकषांशी जुळणारे कोणतेही डॉक्टर सापडले नाहीत",
-    "doctors.clearFilters": "फिल्टर्स साफ करा",
-    
-    // Auth
-    "auth.profile": "प्रोफाईल",
-    "auth.myAppointments": "माझ्या अपॉइंटमेंट",
-    "auth.settings": "सेटिंग्ज",
-    "auth.logout": "लॉग आउट",
-    "auth.logoutSuccess": "आपण यशस्वीरित्या लॉग आउट केले आहे.",
-    "auth.loginSuccess": "पुन्हा स्वागत आहे",
-    
-    // Login Page
-    "login.title": "रुग्ण लॉगिन",
-    "login.subtitle": "पुन्हा स्वागत आहे! कृपया आपल्या खात्यात साइन इन करा",
-    "login.email": "ईमेल",
-    "login.password": "पासवर्ड",
-    "login.forgotPassword": "पासवर्ड विसरलात?",
-    "login.signIn": "साइन इन",
-    "login.signingIn": "साइन इन होत आहे...",
-    "login.noAccount": "खाते नाही?",
-    "login.register": "आता नोंदणी करा",
-    "login.backToHome": "मुख्यपृष्ठावर परत जा",
-    
-    // Register Page
-    "register.title": "रुग्ण खाते तयार करा",
-    "register.subtitle": "दर्जेदार आरोग्य सेवा मिळवण्यासाठी मेडीसेवामध्ये सामील व्हा",
-    "register.fullName": "पूर्ण नाव",
-    "register.email": "ईमेल",
-    "register.phone": "फोन नंबर",
-    "register.password": "पासवर्ड",
-    "register.confirmPassword": "पासवर्डची पुष्टी करा",
-    "register.terms": "मी सहमत आहे",
-    "register.termsLink": "सेवा अटी",
-    "register.and": "आणि",
-    "register.privacyLink": "गोपनीयता धोरण",
-    "register.createAccount": "खाते तयार करा",
-    "register.creatingAccount": "खाते तयार करत आहे...",
-    "register.haveAccount": "आधीपासून खाते आहे?",
-    "register.signIn": "साइन इन",
-    "register.backToHome": "मुख्यपृष्ठावर परत जा",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  },
-  gu: {
-    // General
-    "app.title": "મેડીસેવા",
-    "app.slogan": "આરોગ્ય સેવા પ્લેટફોર્મ",
-    
-    // Navigation
-    "nav.home": "હોમ",
-    "nav.findDoctors": "ડોક્ટર શોધો",
-    "nav.appointments": "એપોઇન્ટમેન્ટ",
-    "nav.emergency": "ઇમરજન્સી",
-    "nav.internships": "ઇન્ટર્નશીપ",
-    "nav.about": "અમારા વિશે",
-    "nav.login": "લોગિન",
-    "nav.register": "રજિસ્ટર",
-    
-    // Find Doctors Page
-    "doctors.title": "યોગ્ય ડોક્ટર શોધો",
-    "doctors.subtitle": "અમારા કુશળ આરોગ્ય વ્યાવસાયિકોના નેટવર્કમાંથી શોધો",
-    "doctors.searchPlaceholder": "ડોક્ટરનું નામ, વિશેષતા અથવા હોસ્પિટલ દ્વારા શોધો...",
-    "doctors.selectSpecialty": "વિશેષતા પસંદ કરો",
-    "doctors.selectState": "રાજ્ય પસંદ કરો",
-    "doctors.selectCity": "શહેર પસંદ કરો",
-    "doctors.search": "ડોક્ટર શોધો",
-    "doctors.found": "ડોક્ટર મળ્યા",
-    "doctors.doctor": "ડોક્ટર",
-    "doctors.doctors": "ડોક્ટર્સ",
-    "doctors.filters": "ફિલ્ટર્સ",
-    "doctors.viewProfile": "પ્રોફાઇલ જુઓ",
-    "doctors.bookAppointment": "એપોઇન્ટમેન્ટ બુક કરો",
-    "doctors.noResults": "તમારા માપદંડોને અનુરૂપ કોઈ ડોક્ટર મળ્યા નથી",
-    "doctors.clearFilters": "ફિલ્ટર્સ સાફ કરો",
-    
-    // Auth
-    "auth.profile": "પ્રોફાઇલ",
-    "auth.myAppointments": "મારી એપોઇન્ટમેન્ટ",
-    "auth.settings": "સેટિંગ્સ",
-    "auth.logout": "લોગ આઉટ",
-    "auth.logoutSuccess": "તમે સફળતાપૂર્વક લોગ આઉટ થયા છો.",
-    "auth.loginSuccess": "પાછા આવ્યા તે માટે આપનું સ્વાગત છે",
-    
-    // Login Page
-    "login.title": "દર્દી લોગિન",
-    "login.subtitle": "પાછા આવ્યા તે માટે આપનું સ્વાગત છે! કૃપા કરીને તમારા એકાઉન્ટમાં સાઇન ઇન કરો",
-    "login.email": "ઈમેલ",
-    "login.password": "પાસવર્ડ",
-    "login.forgotPassword": "પાસવર્ડ ભૂલી ગયા?",
-    "login.signIn": "સાઇન ઇન",
-    "login.signingIn": "સાઇન ઇન થઈ રહ્યું છે...",
-    "login.noAccount": "એકાઉન્ટ નથી?",
-    "login.register": "અત્યારે રજિસ્ટર કરો",
-    "login.backToHome": "હોમ પેજ પર પાછા જાઓ",
-    
-    // Register Page
-    "register.title": "દર્દી એકાઉન્ટ બનાવો",
-    "register.subtitle": "ગુણવત્તાપૂર્ણ આરોગ્ય સેવાઓનો ઉપયોગ કરવા માટે મેડીસેવામાં જોડાઓ",
-    "register.fullName": "પૂરું નામ",
-    "register.email": "ઈમેલ",
-    "register.phone": "ફોન નંબર",
-    "register.password": "પાસવર્ડ",
-    "register.confirmPassword": "પાસવર્ડની પુષ્ટિ કરો",
-    "register.terms": "હું સંમત છું",
-    "register.termsLink": "સેવાની શરતો",
-    "register.and": "અને",
-    "register.privacyLink": "ગોપનીયતા નીતિ",
-    "register.createAccount": "એકાઉન્ટ બનાવો",
-    "register.creatingAccount": "એકાઉન્ટ બની રહ્યું છે...",
-    "register.haveAccount": "પહેલાથી જ એકાઉન્ટ છે?",
-    "register.signIn": "સાઇન ઇન",
-    "register.backToHome": "હોમ પેજ પર પાછા જાઓ",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  },
-  ra: {
-    // General
-    "app.title": "मेडीसेवा",
-    "app.slogan": "स्वास्थ्य सेवा प्लेटफॉर्म",
-    
-    // Navigation
-    "nav.home": "होम",
-    "nav.findDoctors": "डॉक्टर खोजो",
-    "nav.appointments": "अपॉइंटमेंट",
-    "nav.emergency": "इमरजेंसी",
-    "nav.internships": "इंटर्नशिप",
-    "nav.about": "म्हारे बारे में",
-    "nav.login": "लॉग इन",
-    "nav.register": "रजिस्टर",
-    
-    // Find Doctors Page
-    "doctors.title": "सही डॉक्टर खोजो",
-    "doctors.subtitle": "म्हारे योग्य स्वास्थ्य पेशेवरां रे नेटवर्क में से खोजो",
-    "doctors.searchPlaceholder": "डॉक्टर रे नाम, विशेषज्ञता या अस्पताल से खोजो...",
-    "doctors.selectSpecialty": "विशेषज्ञता चुणो",
-    "doctors.selectState": "राज्य चुणो",
-    "doctors.selectCity": "शहर चुणो",
-    "doctors.search": "डॉक्टर खोजो",
-    "doctors.found": "डॉक्टर मिल्या",
-    "doctors.doctor": "डॉक्टर",
-    "doctors.doctors": "डॉक्टर्स",
-    "doctors.filters": "फ़िल्टर्स",
-    "doctors.viewProfile": "प्रोफ़ाइल देखो",
-    "doctors.bookAppointment": "अपॉइंटमेंट बुक करो",
-    "doctors.noResults": "थांरे मापदंडां से मेल खाने वाला कोई डॉक्टर कोनी मिल्या",
-    "doctors.clearFilters": "फ़िल्टर्स साफ़ करो",
-    
-    // Auth
-    "auth.profile": "प्रोफाइल",
-    "auth.myAppointments": "म्हारा अपॉइंटमेंट",
-    "auth.settings": "सेटिंग",
-    "auth.logout": "लॉग आउट",
-    "auth.logoutSuccess": "थे सफलतापूर्वक लॉग आउट हो गया हो।",
-    "auth.loginSuccess": "वापसी पर स्वागत है",
-    
-    // Login Page
-    "login.title": "मरीज लॉगिन",
-    "login.subtitle": "वापसी पर स्वागत है! कृपया थांरे खाते में साइन इन करो",
-    "login.email": "ईमेल",
-    "login.password": "पासवर्ड",
-    "login.forgotPassword": "पासवर्ड भूल गया?",
-    "login.signIn": "साइन इन",
-    "login.signingIn": "साइन इन हो रिया है...",
-    "login.noAccount": "खातो नहीं है?",
-    "login.register": "अभी रजिस्टर करो",
-    "login.backToHome": "होम पेज पर पाछा जावो",
-    
-    // Register Page
-    "register.title": "मरीज खातो बणावो",
-    "register.subtitle": "बढ़िया स्वास्थ्य सेवावां को उपयोग करबा सारू मेडीसेवा से जुड़ो",
-    "register.fullName": "पूरो नाम",
-    "register.email": "ईमेल",
-    "register.phone": "फोन नंबर",
-    "register.password": "पासवर्ड",
-    "register.confirmPassword": "पासवर्ड की पुष्टि",
-    "register.terms": "मैं सहमत हूं",
-    "register.termsLink": "सेवा की शर्तां",
-    "register.and": "और",
-    "register.privacyLink": "गोपनीयता नीति",
-    "register.createAccount": "खातो बणावो",
-    "register.creatingAccount": "खातो बण रियो है...",
-    "register.haveAccount": "पहले से ही खातो है?",
-    "register.signIn": "साइन इन",
-    "register.backToHome": "होम पेज पर पाछा जावो",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  },
-  bn: {
-    // General
-    "app.title": "মেডিসেবা",
-    "app.slogan": "স্বাস্থ্যসেবা প্ল্যাটফর্ম",
-    
-    // Navigation
-    "nav.home": "হোম",
-    "nav.findDoctors": "ডাক্তার খুঁজুন",
-    "nav.appointments": "অ্যাপয়েন্টমেন্ট",
-    "nav.emergency": "জরুরি সেবা",
-    "nav.internships": "ইন্টার্নশিপ",
-    "nav.about": "আমাদের সম্পর্কে",
-    "nav.login": "লগইন",
-    "nav.register": "রেজিস্টার",
-    
-    // Find Doctors Page
-    "doctors.title": "সঠিক ডাক্তার খুঁজুন",
-    "doctors.subtitle": "আমাদের যোগ্য স্বাস্থ্য পেশাদারদের নেটওয়ার্ক থেকে অনুসন্ধান করুন",
-    "doctors.searchPlaceholder": "ডাক্তারের নাম, বিশেষজ্ঞতা বা হাসপাতাল দ্বারা অনুসন্ধান করুন...",
-    "doctors.selectSpecialty": "বিশেষজ্ঞতা নির্বাচন করুন",
-    "doctors.selectState": "রাজ্য নির্বাচন করুন",
-    "doctors.selectCity": "শহর নির্বাচন করুন",
-    "doctors.search": "ডাক্তার খুঁজুন",
-    "doctors.found": "ডাক্তার পাওয়া গেছে",
-    "doctors.doctor": "ডাক্তার",
-    "doctors.doctors": "ডাক্তারগণ",
-    "doctors.filters": "ফিল্টার",
-    "doctors.viewProfile": "প্রোফাইল দেখুন",
-    "doctors.bookAppointment": "অ্যাপয়েন্টমেন্ট বুক করুন",
-    "doctors.noResults": "আপনার মানদণ্ড অনুযায়ী কোনো ডাক্তার পাওয়া যায়নি",
-    "doctors.clearFilters": "ফিল্টার পরিষ্কার করুন",
-    
-    // Auth
-    "auth.profile": "প্রোফাইল",
-    "auth.myAppointments": "আমার অ্যাপয়েন্টমেন্ট",
-    "auth.settings": "সেটিংস",
-    "auth.logout": "লগ আউট",
-    "auth.logoutSuccess": "আপনি সফলভাবে লগ আউট হয়েছেন।",
-    "auth.loginSuccess": "ফিরে আসার জন্য স্বাগতম",
-    
-    // Login Page
-    "login.title": "রোগী লগইন",
-    "login.subtitle": "ফিরে আসার জন্য স্বাগতম! অনুগ্রহ করে আপনার অ্যাকাউন্টে সাইন ইন করুন",
-    "login.email": "ইমেইল",
-    "login.password": "পাসওয়ার্ড",
-    "login.forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
-    "login.signIn": "সাইন ইন",
-    "login.signingIn": "সাইন ইন হচ্ছে...",
-    "login.noAccount": "অ্যাকাউন্ট নেই?",
-    "login.register": "এখনই রেজিস্টার করুন",
-    "login.backToHome": "হোম পেজে ফিরে যান",
-    
-    // Register Page
-    "register.title": "রোগী অ্যাকাউন্ট তৈরি করুন",
-    "register.subtitle": "মানসম্পন্ন স্বাস্থ্যসেবা পাওয়ার জন্য মেডিসেবাতে যোগ দিন",
-    "register.fullName": "পুরো নাম",
-    "register.email": "ইমেইল",
-    "register.phone": "ফোন নম্বর",
-    "register.password": "পাসওয়ার্ড",
-    "register.confirmPassword": "পাসওয়ার্ড নিশ্চিত করুন",
-    "register.terms": "আমি সম্মত",
-    "register.termsLink": "পরিষেবার শর্তাবলী",
-    "register.and": "এবং",
-    "register.privacyLink": "গোপনীয়তা নীতি",
-    "register.createAccount": "অ্যাকাউন্ট তৈরি করুন",
-    "register.creatingAccount": "অ্যাকাউন্ট তৈরি হচ্ছে...",
-    "register.haveAccount": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
-    "register.signIn": "সাইন ইন",
-    "register.backToHome": "হোম পেজে ফিরে যান",
-    
-    // Languages
-    "language.en": "English",
-    "language.hi": "हिन्दी (Hindi)",
-    "language.mr": "मराठी (Marathi)",
-    "language.gu": "ગુજરાતી (Gujarati)",
-    "language.ra": "राजस्थानी (Rajasthani)",
-    "language.bn": "বাংলা (Bengali)",
-  }
-};
+export const useLanguage = () => useContext(LanguageContext);
 
-export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('en');
-  
-  // Load language from localStorage on initial render
+interface LanguageProviderProps {
+  children: ReactNode;
+}
+
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+  const [language, setLanguage] = useState(() => {
+    const savedLang = localStorage.getItem("mediseva_language");
+    return savedLang || "en";
+  });
+
+  const [translations, setTranslations] = useState<Record<string, Record<string, string>>>({
+    en: {},
+    hi: {},
+    mr: {},
+    gu: {},
+    ra: {},
+    bn: {},
+  });
+
+  // Update localStorage when language changes
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('mediseva_language') as Language;
-    if (savedLanguage && Object.keys(translations).includes(savedLanguage)) {
-      setLanguage(savedLanguage);
-    }
-  }, []);
-  
-  // Save language preference to localStorage
-  useEffect(() => {
-    localStorage.setItem('mediseva_language', language);
+    localStorage.setItem("mediseva_language", language);
   }, [language]);
-  
+
+  // Basic translations
+  useEffect(() => {
+    setTranslations({
+      en: {
+        // App general
+        "app.title": "MediSeva",
+        "common.loading": "Loading",
+        "common.error": "Error",
+        "common.success": "Success",
+
+        // Navigation
+        "nav.home": "Home",
+        "nav.findDoctors": "Find Doctors",
+        "nav.appointments": "Appointments",
+        "nav.emergency": "Emergency",
+        "nav.clinicalExposure": "Clinical Exposure",
+        "nav.about": "About",
+        "nav.login": "Login",
+        "nav.register": "Register",
+        "nav.profile": "Profile",
+        "nav.settings": "Settings",
+
+        // Auth
+        "auth.logout": "Logout",
+        "auth.logoutSuccess": "You have been logged out successfully",
+        "auth.profile": "Profile",
+        "auth.myAppointments": "My Appointments",
+        "auth.settings": "Settings",
+        "auth.checking": "Checking authentication status",
+        "auth.requiresLogin": "This page requires you to be logged in",
+        "auth.redirecting": "Redirecting to login page",
+        "auth.loginSuccess": "Login successful",
+
+        // Login page
+        "login.title": "Log In",
+        "login.subtitle": "Welcome back! Please enter your details.",
+        "login.email": "Email",
+        "login.password": "Password",
+        "login.forgotPassword": "Forgot password?",
+        "login.signIn": "Sign In",
+        "login.signingIn": "Signing In...",
+        "login.noAccount": "Don't have an account?",
+        "login.register": "Register",
+        "login.backToHome": "Back to Home",
+
+        // Hero section
+        "hero.tagline": "Your Health, Our Priority",
+        "hero.title": "Find the Right Doctor,",
+        "hero.titleHighlight": "Right Now",
+        "hero.subtitle": "Connect with specialized doctors, book appointments effortlessly, and receive quality healthcare tailored to your needs.",
+        "hero.easyBooking": "Easy Booking",
+        "hero.fastConvenient": "Fast & convenient",
+        "hero.qualityDoctors": "Quality Doctors",
+        "hero.verifiedSpecialists": "Verified specialists",
+        "hero.service24_7": "24/7 Service",
+        "hero.alwaysAvailable": "Always available",
+        "hero.findDoctor": "Find Your Doctor Now",
+        "hero.selectSpecialty": "Select specialty",
+        "hero.doctorNameOrLocation": "Doctor name or location",
+        "hero.search": "Search",
+        "hero.emergencyAssistance": "Need Emergency Assistance?",
+        "hero.trustedBy": "Trusted by",
+        "hero.patients": "patients",
+        "hero.availableDoctors": "Available doctors",
+
+        // Clinical exposure section
+        "clinicalExposure.title": "Clinical Exposure",
+        "clinicalExposure.heading": "Launch Your Medical Career with Valuable Clinical Experience",
+        "clinicalExposure.description": "Mediseva connects medical students with experienced doctors for clinical exposure opportunities. Gain practical experience, build your network, and advance your healthcare career.",
+        "clinicalExposure.handsOnLearning": "Hands-on Learning",
+        "clinicalExposure.handsOnDescription": "Gain practical experience working alongside experienced medical professionals.",
+        "clinicalExposure.flexibleSchedules": "Flexible Schedules",
+        "clinicalExposure.flexibleDescription": "Clinical exposure opportunities with schedules that accommodate your academic commitments.",
+        "clinicalExposure.certification": "Certification",
+        "clinicalExposure.certificationDescription": "Receive official certification upon completion to enhance your medical career.",
+        "clinicalExposure.browsePrograms": "Browse Programs",
+        "clinicalExposure.applyViaEmail": "Apply via Email",
+        "clinicalExposure.availablePrograms": "Available Programs",
+        "clinicalExposure.specialties": "Specialties",
+
+        // Profile page
+        "profile.title": "User Profile",
+        "profile.patient": "Patient",
+        "profile.doctor": "Doctor",
+        "profile.editProfile": "Edit Profile",
+        "profile.appointments": "Appointments",
+        "profile.history": "History",
+        "profile.upcomingAppointments": "Upcoming Appointments",
+        "profile.manageAppointments": "View and manage your scheduled appointments",
+        "profile.noUpcomingAppointments": "You don't have any upcoming appointments",
+        "profile.findDoctors": "Find Doctors",
+        "profile.medicalHistory": "Medical History",
+        "profile.pastAppointments": "Your past appointments and medical records",
+        "profile.noAppointmentHistory": "No appointment history found",
+        "profile.notLoggedIn": "You are not logged in",
+        "profile.loginNow": "Login Now",
+
+        // Settings page
+        "settings.title": "Settings",
+        "settings.profile": "Profile",
+        "settings.account": "Account",
+        "settings.appearance": "Appearance",
+        "settings.profileSettings": "Profile Settings",
+        "settings.updateProfileInfo": "Update your profile information",
+        "settings.fullName": "Full Name",
+        "settings.email": "Email",
+        "settings.phone": "Phone Number",
+        "settings.updateProfile": "Update Profile",
+        "settings.accountSettings": "Account Settings",
+        "settings.manageAccount": "Manage your account settings",
+        "settings.changePassword": "Change Password",
+        "settings.passwordDescription": "Update your password for enhanced security",
+        "settings.dangerZone": "Danger Zone",
+        "settings.deleteAccountWarning": "Once you delete your account, there is no going back. Please be certain.",
+        "settings.deleteAccount": "Delete Account",
+        "settings.profileUpdated": "Profile Updated",
+        "settings.profileUpdateSuccess": "Your profile has been updated successfully",
+        "settings.language": "Language",
+        "settings.languageDescription": "Choose your preferred language for the application",
+        "settings.theme": "Theme",
+        "settings.themeDescription": "Choose between light and dark mode",
+      },
+      hi: {
+        // App general
+        "app.title": "मेडिसेवा",
+        "common.loading": "लोड हो रहा है",
+        "common.error": "त्रुटि",
+        "common.success": "सफलता",
+
+        // Navigation
+        "nav.home": "होम",
+        "nav.findDoctors": "डॉक्टर खोजें",
+        "nav.appointments": "अपॉइंटमेंट",
+        "nav.emergency": "आपातकालीन",
+        "nav.clinicalExposure": "क्लिनिकल एक्सपोजर",
+        "nav.about": "हमारे बारे में",
+        "nav.login": "लॉगिन",
+        "nav.register": "रजिस्टर",
+        "nav.profile": "प्रोफाइल",
+        "nav.settings": "सेटिंग्स",
+
+        // Auth
+        "auth.logout": "लॉगआउट",
+        "auth.logoutSuccess": "आप सफलतापूर्वक लॉग आउट हो गए हैं",
+        "auth.profile": "प्रोफाइल",
+        "auth.myAppointments": "मेरे अपॉइंटमेंट",
+        "auth.settings": "सेटिंग्स",
+        "auth.checking": "प्रमाणीकरण की स्थिति की जांच",
+        "auth.requiresLogin": "इस पेज के लिए आपको लॉग इन करना होगा",
+        "auth.redirecting": "लॉगिन पेज पर रीडायरेक्ट किया जा रहा है",
+        "auth.loginSuccess": "लॉगिन सफल",
+
+        // Login page
+        "login.title": "लॉग इन",
+        "login.subtitle": "वापस आने पर स्वागत है! कृपया अपना विवरण दर्ज करें।",
+        "login.email": "ईमेल",
+        "login.password": "पासवर्ड",
+        "login.forgotPassword": "पासवर्ड भूल गए?",
+        "login.signIn": "साइन इन",
+        "login.signingIn": "साइन इन हो रहा है...",
+        "login.noAccount": "अकाउंट नहीं है?",
+        "login.register": "रजिस्टर",
+        "login.backToHome": "होम पेज पर वापस",
+
+        // Hero section
+        "hero.tagline": "आपका स्वास्थ्य, हमारी प्राथमिकता",
+        "hero.title": "सही डॉक्टर खोजें,",
+        "hero.titleHighlight": "अभी",
+        "hero.subtitle": "विशेषज्ञ डॉक्टरों से जुड़ें, आसानी से अपॉइंटमेंट बुक करें, और अपनी आवश्यकताओं के अनुसार गुणवत्तापूर्ण स्वास्थ्य देखभाल प्राप्त करें।",
+        "hero.easyBooking": "आसान बुकिंग",
+        "hero.fastConvenient": "तेज और सुविधाजनक",
+        "hero.qualityDoctors": "गुणवत्तापूर्ण डॉक्टर",
+        "hero.verifiedSpecialists": "सत्यापित विशेषज्ञ",
+        "hero.service24_7": "24/7 सेवा",
+        "hero.alwaysAvailable": "हमेशा उपलब्ध",
+        "hero.findDoctor": "अपना डॉक्टर अभी खोजें",
+        "hero.selectSpecialty": "विशेषज्ञता चुनें",
+        "hero.doctorNameOrLocation": "डॉक्टर का नाम या स्थान",
+        "hero.search": "खोजें",
+        "hero.emergencyAssistance": "आपातकालीन सहायता चाहिए?",
+        "hero.trustedBy": "इनका विश्वास",
+        "hero.patients": "रोगी",
+        "hero.availableDoctors": "उपलब्ध डॉक्टर",
+
+        // Clinical exposure section
+        "clinicalExposure.title": "क्लिनिकल एक्सपोजर",
+        "clinicalExposure.heading": "मूल्यवान क्लिनिकल अनुभव के साथ अपना चिकित्सा करियर शुरू करें",
+        "clinicalExposure.description": "मेडिसेवा मेडिकल छात्रों को अनुभवी डॉक्टरों के साथ क्लिनिकल एक्सपोजर के अवसर प्रदान करता है। व्यावहारिक अनुभव प्राप्त करें, अपना नेटवर्क बनाएं, और अपने स्वास्थ्य देखभाल करियर को आगे बढ़ाएं।",
+        "clinicalExposure.handsOnLearning": "व्यावहारिक सीखना",
+        "clinicalExposure.handsOnDescription": "अनुभवी चिकित्सा पेशेवरों के साथ काम करके व्यावहारिक अनुभव प्राप्त करें।",
+        "clinicalExposure.flexibleSchedules": "लचीली समय-सारणी",
+        "clinicalExposure.flexibleDescription": "आपकी शैक्षणिक प्रतिबद्धताओं के अनुकूल क्लिनिकल एक्सपोजर के अवसर।",
+        "clinicalExposure.certification": "प्रमाणन",
+        "clinicalExposure.certificationDescription": "पूरा होने पर आधिकारिक प्रमाणपत्र प्राप्त करें जो आपके चिकित्सा करियर को बढ़ावा देगा।",
+        "clinicalExposure.browsePrograms": "प्रोग्राम ब्राउज़ करें",
+        "clinicalExposure.applyViaEmail": "ईमेल के माध्यम से आवेदन करें",
+        "clinicalExposure.availablePrograms": "उपलब्ध प्रोग्राम",
+        "clinicalExposure.specialties": "विशेषज्ञताएं",
+
+        // Profile page
+        "profile.title": "उपयोगकर्ता प्रोफाइल",
+        "profile.patient": "मरीज़",
+        "profile.doctor": "डॉक्टर",
+        "profile.editProfile": "प्रोफाइल संपादित करें",
+        "profile.appointments": "अपॉइंटमेंट",
+        "profile.history": "इतिहास",
+        "profile.upcomingAppointments": "आगामी अपॉइंटमेंट",
+        "profile.manageAppointments": "अपने निर्धारित अपॉइंटमेंट देखें और प्रबंधित करें",
+        "profile.noUpcomingAppointments": "आपके पास कोई आगामी अपॉइंटमेंट नहीं है",
+        "profile.findDoctors": "डॉक्टर खोजें",
+        "profile.medicalHistory": "चिकित्सा इतिहास",
+        "profile.pastAppointments": "आपके पिछले अपॉइंटमेंट और चिकित्सा रिकॉर्ड",
+        "profile.noAppointmentHistory": "कोई अपॉइंटमेंट इतिहास नहीं मिला",
+        "profile.notLoggedIn": "आप लॉग इन नहीं हैं",
+        "profile.loginNow": "अभी लॉगिन करें",
+
+        // Settings page
+        "settings.title": "सेटिंग्स",
+        "settings.profile": "प्रोफाइल",
+        "settings.account": "अकाउंट",
+        "settings.appearance": "दिखावट",
+        "settings.profileSettings": "प्रोफाइल सेटिंग्स",
+        "settings.updateProfileInfo": "अपनी प्रोफाइल जानकारी अपडेट करें",
+        "settings.fullName": "पूरा नाम",
+        "settings.email": "ईमेल",
+        "settings.phone": "फोन नंबर",
+        "settings.updateProfile": "प्रोफाइल अपडेट करें",
+        "settings.accountSettings": "अकाउंट सेटिंग्स",
+        "settings.manageAccount": "अपने अकाउंट सेटिंग्स प्रबंधित करें",
+        "settings.changePassword": "पासवर्ड बदलें",
+        "settings.passwordDescription": "बेहतर सुरक्षा के लिए अपना पासवर्ड अपडेट करें",
+        "settings.dangerZone": "खतरे का क्षेत्र",
+        "settings.deleteAccountWarning": "एक बार जब आप अपना अकाउंट हटा देते हैं, तो वापस जाने का कोई रास्ता नहीं है। कृपया सुनिश्चित करें।",
+        "settings.deleteAccount": "अकाउंट हटाएं",
+        "settings.profileUpdated": "प्रोफाइल अपडेट की गई",
+        "settings.profileUpdateSuccess": "आपका प्रोफाइल सफलतापूर्वक अपडेट किया गया है",
+        "settings.language": "भाषा",
+        "settings.languageDescription": "एप्लिकेशन के लिए अपनी पसंदीदा भाषा चुनें",
+        "settings.theme": "थीम",
+        "settings.themeDescription": "लाइट और डार्क मोड के बीच चयन करें",
+      },
+      mr: {
+        "app.title": "मेडिसेवा",
+        // ... similar translations for Marathi
+        "nav.home": "मुख्यपृष्ठ",
+        "nav.findDoctors": "डॉक्टर शोधा",
+        "nav.appointments": "अपॉइंटमेंट",
+        "nav.emergency": "आपत्कालीन",
+        "nav.clinicalExposure": "क्लिनिकल एक्सपोजर",
+        "nav.about": "आमच्याबद्दल",
+        "nav.login": "लॉगिन",
+        "nav.register": "नोंदणी",
+      },
+      gu: {
+        "app.title": "મેડિસેવા",
+        // ... similar translations for Gujarati
+        "nav.home": "હોમ",
+        "nav.findDoctors": "ડૉક્ટર શોધો",
+        "nav.appointments": "એપોઇન્ટમેન્ટ",
+        "nav.emergency": "ઇમરજન્સી",
+        "nav.clinicalExposure": "ક્લિનિકલ એક્સપોઝર",
+        "nav.about": "અમારા વિશે",
+        "nav.login": "લૉગિન",
+        "nav.register": "રજિસ્ટર",
+      },
+      ra: {
+        "app.title": "मेडिसेवा",
+        // ... similar translations for Rajasthani
+        "nav.home": "घर",
+        "nav.findDoctors": "डॉक्टर खोजो",
+        "nav.appointments": "अपॉइंटमेंट",
+        "nav.emergency": "आपातकाल",
+        "nav.clinicalExposure": "क्लिनिकल एक्सपोजर",
+        "nav.about": "हमारे बारे में",
+        "nav.login": "लॉगिन",
+        "nav.register": "रजिस्टर",
+      },
+      bn: {
+        "app.title": "মেডিসেবা",
+        // ... similar translations for Bengali
+        "nav.home": "হোম",
+        "nav.findDoctors": "ডাক্তার খুঁজুন",
+        "nav.appointments": "অ্যাপয়েন্টমেন্ট",
+        "nav.emergency": "জরুরী",
+        "nav.clinicalExposure": "ক্লিনিকাল এক্সপোজার",
+        "nav.about": "আমাদের সম্পর্কে",
+        "nav.login": "লগইন",
+        "nav.register": "নিবন্ধন",
+      },
+    });
+  }, []);
+
   const t = (key: string): string => {
-    return translations[language][key] || key;
+    const keys = key.split(".");
+    let value = "";
+
+    try {
+      // First try to get the translation in the current language
+      value = keys.reduce((obj, k) => obj[k], translations[language] as any);
+      
+      // If translation doesn't exist, fall back to English
+      if (!value && language !== "en") {
+        value = keys.reduce((obj, k) => obj[k], translations["en"] as any);
+      }
+      
+      // If still no translation, return the key itself
+      return value || key;
+    } catch (error) {
+      // If any error in accessing nested keys, return the key itself
+      return key;
+    }
   };
-  
+
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
-};
-
-export const useLanguage = (): LanguageContextType => {
-  const context = useContext(LanguageContext);
-  if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
-  }
-  return context;
 };

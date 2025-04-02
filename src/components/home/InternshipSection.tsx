@@ -3,23 +3,26 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Laptop, Mail, GraduationCap, BookOpen, CalendarDays, FileCheck } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function InternshipSection() {
+  const { t } = useLanguage();
+
   const benefits = [
     {
       icon: BookOpen,
-      title: "Hands-on Learning",
-      description: "Gain practical experience working alongside experienced medical professionals."
+      title: t("clinicalExposure.handsOnLearning"),
+      description: t("clinicalExposure.handsOnDescription")
     },
     {
       icon: CalendarDays,
-      title: "Flexible Schedules",
-      description: "Internship opportunities with schedules that accommodate your academic commitments."
+      title: t("clinicalExposure.flexibleSchedules"),
+      description: t("clinicalExposure.flexibleDescription")
     },
     {
       icon: FileCheck,
-      title: "Certification",
-      description: "Receive official certification upon completion to enhance your medical career."
+      title: t("clinicalExposure.certification"),
+      description: t("clinicalExposure.certificationDescription")
     }
   ];
 
@@ -30,16 +33,15 @@ export default function InternshipSection() {
           <div className="space-y-6">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded-full">
               <GraduationCap className="h-4 w-4" />
-              <span className="text-sm font-medium">Medical Internships</span>
+              <span className="text-sm font-medium">{t("clinicalExposure.title")}</span>
             </div>
             
             <h2 className="text-3xl md:text-4xl font-display font-bold dark:text-white">
-              Launch Your Medical Career with Valuable Internships
+              {t("clinicalExposure.heading")}
             </h2>
             
             <p className="text-muted-foreground dark:text-gray-300">
-              Mediseva connects medical students with experienced doctors for internship opportunities. 
-              Gain practical experience, build your network, and advance your healthcare career.
+              {t("clinicalExposure.description")}
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
@@ -59,16 +61,16 @@ export default function InternshipSection() {
             </div>
             
             <div className="pt-4 flex flex-col sm:flex-row gap-3">
-              <Link to="/internships">
+              <Link to="/clinical-exposure">
                 <Button className="space-x-2 w-full sm:w-auto dark:bg-primary dark:text-white">
                   <Laptop className="h-4 w-4" />
-                  <span>Browse Internships</span>
+                  <span>{t("clinicalExposure.browsePrograms")}</span>
                 </Button>
               </Link>
-              <Link to="/internship-application">
+              <Link to="/clinical-exposure-application">
                 <Button variant="outline" className="space-x-2 w-full sm:w-auto dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
                   <Mail className="h-4 w-4" />
-                  <span>Apply via Email</span>
+                  <span>{t("clinicalExposure.applyViaEmail")}</span>
                 </Button>
               </Link>
             </div>
@@ -87,8 +89,8 @@ export default function InternshipSection() {
               
               <div className="absolute -bottom-6 -right-6 glass p-4 rounded-xl shadow-lg animate-float dark:bg-black/50">
                 <div className="text-center">
-                  <p className="text-sm font-medium dark:text-gray-300">Available Programs</p>
-                  <p className="text-xl font-bold dark:text-white">20+ Specialties</p>
+                  <p className="text-sm font-medium dark:text-gray-300">{t("clinicalExposure.availablePrograms")}</p>
+                  <p className="text-xl font-bold dark:text-white">20+ {t("clinicalExposure.specialties")}</p>
                 </div>
               </div>
             </div>

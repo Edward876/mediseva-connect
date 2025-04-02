@@ -50,15 +50,21 @@ export default function Header() {
   
   const isActive = (path: string) => location.pathname === path;
   
-  // Navigation items
-  const navItems = [
+  // Navigation items - public and private
+  const publicNavItems = [
     { path: "/", label: t("nav.home") },
     { path: "/find-doctors", label: t("nav.findDoctors") },
-    { path: "/appointments", label: t("nav.appointments") },
-    { path: "/emergency", label: t("nav.emergency") },
-    { path: "/internships", label: t("nav.internships") },
     { path: "/about", label: t("nav.about") }
   ];
+
+  const privateNavItems = [
+    { path: "/appointments", label: t("nav.appointments") },
+    { path: "/emergency", label: t("nav.emergency") },
+    { path: "/clinical-exposure", label: t("nav.clinicalExposure") }
+  ];
+
+  // Get the navigation items based on auth status
+  const navItems = [...publicNavItems, ...(userLoggedIn ? privateNavItems : [])];
 
   return (
     <header

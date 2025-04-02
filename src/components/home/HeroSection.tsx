@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Search, PhoneCall, Stethoscope, Award } from "lucide-react";
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { loadUsers } from "@/utils/localStorageService";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const specialties = [
   "Cardiology",
@@ -29,7 +31,20 @@ const specialties = [
 export default function HeroSection() {
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("");
+  const [doctorCount, setDoctorCount] = useState(0);
+  const [userCount, setUserCount] = useState(0);
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    // Load user and doctor counts from localStorage
+    const users = loadUsers();
+    const totalUsers = users.length;
+    const totalDoctors = users.filter(user => user.role === 'doctor').length;
+    
+    setUserCount(totalUsers);
+    setDoctorCount(totalDoctors);
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,13 +72,13 @@ export default function HeroSection() {
           <div className="space-y-8 max-w-xl">
             <div className="space-y-2">
               <div className="inline-block px-3 py-1 rounded-full bg-mediseva-100 text-mediseva-800 text-sm font-medium animate-fade-in">
-                Your Health, Our Priority
+                {t("hero.tagline")}
               </div>
               <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight animate-slide-up" style={{ animationDelay: "0.2s" }}>
-                Find the Right Doctor, <span className="text-mediseva-600">Right Now</span>
+                {t("hero.title")} <span className="text-mediseva-600">{t("hero.titleHighlight")}</span>
               </h1>
               <p className="text-lg text-muted-foreground animate-slide-up" style={{ animationDelay: "0.4s" }}>
-                Connect with specialized doctors, book appointments effortlessly, and receive quality healthcare tailored to your needs.
+                {t("hero.subtitle")}
               </p>
             </div>
             
@@ -73,8 +88,8 @@ export default function HeroSection() {
                   <Calendar className="h-5 w-5 text-mediseva-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Easy Booking</p>
-                  <p className="text-xs text-muted-foreground">Fast & convenient</p>
+                  <p className="text-sm font-medium">{t("hero.easyBooking")}</p>
+                  <p className="text-xs text-muted-foreground">{t("hero.fastConvenient")}</p>
                 </div>
               </div>
               
@@ -83,8 +98,8 @@ export default function HeroSection() {
                   <Stethoscope className="h-5 w-5 text-mediseva-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium">Quality Doctors</p>
-                  <p className="text-xs text-muted-foreground">Verified specialists</p>
+                  <p className="text-sm font-medium">{t("hero.qualityDoctors")}</p>
+                  <p className="text-xs text-muted-foreground">{t("hero.verifiedSpecialists")}</p>
                 </div>
               </div>
               
@@ -93,21 +108,21 @@ export default function HeroSection() {
                   <Clock className="h-5 w-5 text-mediseva-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium">24/7 Service</p>
-                  <p className="text-xs text-muted-foreground">Always available</p>
+                  <p className="text-sm font-medium">{t("hero.service24_7")}</p>
+                  <p className="text-xs text-muted-foreground">{t("hero.alwaysAvailable")}</p>
                 </div>
               </div>
             </div>
             
             <div className="space-y-4 animate-slide-up" style={{ animationDelay: "0.8s" }}>
-              <h2 className="text-lg font-semibold">Find Your Doctor Now</h2>
+              <h2 className="text-lg font-semibold">{t("hero.findDoctor")}</h2>
               <Card className="shadow-lg border-0">
                 <CardContent className="p-4">
                   <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-7 gap-3">
                     <div className="md:col-span-3">
                       <Select value={specialty} onValueChange={setSpecialty}>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select specialty" />
+                          <SelectValue placeholder={t("hero.selectSpecialty")} />
                         </SelectTrigger>
                         <SelectContent>
                           {specialties.map(specialty => (
@@ -121,7 +136,7 @@ export default function HeroSection() {
                     <div className="md:col-span-3">
                       <Input 
                         type="text" 
-                        placeholder="Doctor name or location" 
+                        placeholder={t("hero.doctorNameOrLocation")} 
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -129,7 +144,7 @@ export default function HeroSection() {
                     <div className="md:col-span-1">
                       <Button type="submit" className="w-full">
                         <Search className="mr-1 h-4 w-4" />
-                        Search
+                        {t("hero.search")}
                       </Button>
                     </div>
                   </form>
@@ -141,7 +156,7 @@ export default function HeroSection() {
               <Link to="/emergency-service">
                 <Button variant="outline" className="border-danger text-danger hover:bg-danger/10 hover:text-danger space-x-2">
                   <PhoneCall className="h-4 w-4" />
-                  <span>Need Emergency Assistance?</span>
+                  <span>{t("hero.emergencyAssistance")}</span>
                 </Button>
               </Link>
             </div>
@@ -162,16 +177,18 @@ export default function HeroSection() {
                     <Award className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-sm">Trusted by</p>
-                    <p className="text-xl font-bold">10,000+ patients</p>
+                    <p className="font-medium text-sm">{t("hero.trustedBy")}</p>
+                    <p className="text-xl font-bold">
+                      {userCount > 0 ? userCount : "..."} {t("hero.patients")}
+                    </p>
                   </div>
                 </div>
               </div>
               
               <div className="absolute -top-6 -right-6 glass p-4 rounded-xl shadow-lg animate-float" style={{ animationDelay: "0.3s" }}>
                 <div className="text-center">
-                  <p className="font-medium text-sm">Available doctors</p>
-                  <p className="text-xl font-bold">500+</p>
+                  <p className="font-medium text-sm">{t("hero.availableDoctors")}</p>
+                  <p className="text-xl font-bold">{doctorCount > 0 ? doctorCount : "..."}</p>
                 </div>
               </div>
             </div>

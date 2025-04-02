@@ -11,13 +11,16 @@ import NotFound from "./pages/NotFound";
 import FindDoctors from "./pages/FindDoctors";
 import Appointments from "./pages/Appointments";
 import Emergency from "./pages/EmergencyService";
-import Internships from "./pages/Internships";
+import ClinicalExposure from "./pages/Internships";
 import About from "./pages/About";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DoctorLogin from "./pages/DoctorLogin";
 import DoctorRegister from "./pages/DoctorRegister";
-import InternshipApplication from "./pages/InternshipApplication";
+import ClinicalExposureApplication from "./pages/InternshipApplication";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 // Add typography styles for markdown
 import './styles/markdown.css';
@@ -34,23 +37,43 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Public Routes */}
               <Route path="/" element={<Index />} />
-              {/* Main Routes */}
               <Route path="/find-doctors" element={<FindDoctors />} />
-              <Route path="/appointments" element={<Appointments />} />
-              <Route path="/emergency" element={<Emergency />} />
-              <Route path="/emergency-service" element={<Emergency />} />
-              <Route path="/internships" element={<Internships />} />
               <Route path="/about" element={<About />} />
-              
-              {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/doctor-login" element={<DoctorLogin />} />
               <Route path="/doctor-register" element={<DoctorRegister />} />
               
-              {/* Application Routes */}
-              <Route path="/internship-application" element={<InternshipApplication />} />
+              {/* Protected Routes */}
+              <Route path="/appointments" element={
+                <ProtectedRoute>
+                  <Appointments />
+                </ProtectedRoute>
+              } />
+              <Route path="/emergency" element={
+                <ProtectedRoute>
+                  <Emergency />
+                </ProtectedRoute>
+              } />
+              <Route path="/emergency-service" element={
+                <ProtectedRoute>
+                  <Emergency />
+                </ProtectedRoute>
+              } />
+              <Route path="/clinical-exposure" element={
+                <ProtectedRoute>
+                  <ClinicalExposure />
+                </ProtectedRoute>
+              } />
+              <Route path="/clinical-exposure-application" element={
+                <ProtectedRoute>
+                  <ClinicalExposureApplication />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
               
               {/* Catch-all Route */}
               <Route path="*" element={<NotFound />} />
