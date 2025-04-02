@@ -35,13 +35,13 @@ export default function About() {
                 <h2 className="text-3xl font-bold mb-6">Our Story</h2>
                 <div className="space-y-4 text-muted-foreground">
                   <p>
-                    Mediseva was founded in 2020 with a clear mission: to bridge the gap between patients and quality healthcare. Born out of the recognition that accessing healthcare should be simple, efficient, and patient-centered, our platform connects individuals with the right medical professionals when they need them most.
+                   MediSeva emerged from an unexpected source—a second-year Digital Thinking and Innovation course assignment that pushed friends Supratim Saha and Vishank Jain beyond classroom thinking. Their conversation about healthcare disparities, particularly Vishank's grandmother struggling to access medications in her village, transformed academic theory into practical purpose. What began as meeting course requirements quickly became a mission to bridge the rural-urban healthcare divide.
                   </p>
                   <p>
-                    What started as a small team of healthcare enthusiasts and technology experts has grown into a comprehensive healthcare platform serving thousands of patients across the country.
+                    The two friends built MediSeva by leveraging their complementary strengths: Vishank's technical expertise paired perfectly with Supratim's deep understanding of rural healthcare challenges. They designed a platform connecting remote villages with urban pharmacies and created a network of "MediSeva Bandhu"—local youth trained to help elderly residents navigate the service and understand their medications.
                   </p>
                   <p>
-                    At Mediseva, we believe that everyone deserves access to quality healthcare, regardless of their location or circumstances. This belief drives our continuous innovation and expansion of services.
+                   Their project's evolution from classroom assignment to functioning startup demonstrates how education becomes most powerful when connected to real human needs. Through field research, prototype testing, and continuous refinement, Supratim and Vishank transformed their college course project into a meaningful innovation serving multiple villages and creating both healthcare access and local employment opportunities.
                   </p>
                 </div>
               </div>
@@ -133,16 +133,16 @@ export default function About() {
               <div className="bg-card rounded-lg border border-border overflow-hidden group">
                 <div className="aspect-square relative overflow-hidden">
                   <img 
-                    src="https://randomuser.me/api/portraits/men/32.jpg" 
-                    alt="Dr. Robert Chen" 
+                    src="https://i.postimg.cc/FsFGGqwF/IMG20240317222334-EDIT-EDIT.jpg" 
+                    alt="Supratim Saha" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-1">Dr. Robert Chen</h3>
-                  <p className="text-primary mb-3">Founder & CEO</p>
+                  <h3 className="text-xl font-semibold mb-1">Supratim Saha</h3>
+                  <p className="text-primary mb-3">Team Lead</p>
                   <p className="text-muted-foreground mb-4">
-                    Former cardiac surgeon with a passion for healthcare innovation and accessibility.
+                    AIML DEV, WEB DEV.
                   </p>
                   <div className="flex space-x-3">
                     <Button variant="outline" size="icon" className="rounded-full">
@@ -158,16 +158,16 @@ export default function About() {
               <div className="bg-card rounded-lg border border-border overflow-hidden group">
                 <div className="aspect-square relative overflow-hidden">
                   <img 
-                    src="https://randomuser.me/api/portraits/women/44.jpg" 
-                    alt="Dr. Sarah Johnson" 
+                    src="https://i.postimg.cc/9MpZ7Xmd/Whats-App-Image-2025-04-02-at-2-31-13-PM.jpg" 
+                    alt="Vishank Jain" 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-1">Dr. Sarah Johnson</h3>
-                  <p className="text-primary mb-3">Chief Medical Officer</p>
+                  <h3 className="text-xl font-semibold mb-1">Vishank Jain</h3>
+                  <p className="text-primary mb-3">Research Expert, Finance</p>
                   <p className="text-muted-foreground mb-4">
-                    Experienced physician dedicated to ensuring medical excellence across our platform.
+                    AIML dev, R & D.
                   </p>
                   <div className="flex space-x-3">
                     <Button variant="outline" size="icon" className="rounded-full">
@@ -180,30 +180,7 @@ export default function About() {
                 </div>
               </div>
 
-              <div className="bg-card rounded-lg border border-border overflow-hidden group">
-                <div className="aspect-square relative overflow-hidden">
-                  <img 
-                    src="https://randomuser.me/api/portraits/men/46.jpg" 
-                    alt="Michael Davis" 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-1">Michael Davis</h3>
-                  <p className="text-primary mb-3">Chief Technology Officer</p>
-                  <p className="text-muted-foreground mb-4">
-                    Tech innovator with extensive experience in healthcare technology and data security.
-                  </p>
-                  <div className="flex space-x-3">
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <User className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </section>
