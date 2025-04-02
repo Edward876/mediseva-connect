@@ -55,7 +55,7 @@ export default function About() {
                   <div className="flex items-center text-primary">
                     <ShieldCheck className="h-8 w-8 mr-2" />
                     <div>
-                      <p className="font-bold text-2xl">2020</p>
+                      <p className="font-bold text-2xl">2025</p>
                       <p className="text-sm">Founded</p>
                     </div>
                   </div>
