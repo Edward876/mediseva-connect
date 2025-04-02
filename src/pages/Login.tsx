@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Form,
   FormControl,
@@ -20,6 +19,7 @@ import { Mail, KeyRound, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { findUserByCredentials, setCurrentUser } from "@/utils/localStorageService";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -29,10 +29,11 @@ const formSchema = z.object({
 export default function Login() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
-    document.title = "Patient Login - Mediseva";
-  }, []);
+    document.title = t("login.title") + " - Mediseva";
+  }, [t]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,8 +58,8 @@ export default function Login() {
           setCurrentUser(user);
           
           toast({
-            title: "Login successful",
-            description: `Welcome back, ${user.name}`,
+            title: t("auth.loginSuccess"),
+            description: `${t("auth.loginSuccess")}, ${user.name}`,
           });
           navigate("/"); // Redirect to home after login
         } else if (user && user.role !== 'patient') {
@@ -94,9 +95,9 @@ export default function Login() {
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold">Patient Login</h1>
+            <h1 className="text-3xl font-bold">{t("login.title")}</h1>
             <p className="mt-2 text-muted-foreground">
-              Welcome back! Please sign in to your account
+              {t("login.subtitle")}
             </p>
           </div>
 
@@ -108,7 +109,7 @@ export default function Login() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("login.email")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -130,7 +131,7 @@ export default function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("login.password")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -152,19 +153,19 @@ export default function Login() {
                     to="/forgot-password"
                     className="text-sm text-primary hover:underline"
                   >
-                    Forgot password?
+                    {t("login.forgotPassword")}
                   </Link>
                 </div>
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign in"}
+                  {isLoading ? t("login.signingIn") : t("login.signIn")}
                 </Button>
 
                 <div className="text-center mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Don't have an account?{" "}
+                    {t("login.noAccount")}{" "}
                     <Link to="/register" className="text-primary hover:underline">
-                      Register now
+                      {t("login.register")}
                     </Link>
                   </p>
                 </div>
@@ -176,7 +177,7 @@ export default function Login() {
             <Button variant="ghost" size="sm" asChild>
               <Link to="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
+                {t("login.backToHome")}
               </Link>
             </Button>
           </div>

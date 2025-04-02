@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "@/components/ui/use-toast";
 import { LogOut, User as UserIcon, CalendarDays, Settings } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function UserInfo() {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
   
   useEffect(() => {
     const checkUser = () => {
@@ -37,8 +39,8 @@ export default function UserInfo() {
     logout();
     setUser(null);
     toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
+      title: t("auth.logout"),
+      description: t("auth.logoutSuccess"),
     });
     navigate('/');
     
@@ -80,20 +82,20 @@ export default function UserInfo() {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate('/profile')}>
           <UserIcon className="mr-2 h-4 w-4" />
-          <span>Profile</span>
+          <span>{t("auth.profile")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/appointments')}>
           <CalendarDays className="mr-2 h-4 w-4" />
-          <span>My Appointments</span>
+          <span>{t("auth.myAppointments")}</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => navigate('/settings')}>
           <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
+          <span>{t("auth.settings")}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+          <span>{t("auth.logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

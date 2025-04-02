@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import UserInfo from "@/components/auth/UserInfo";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, UserPlus } from "lucide-react";
 import LanguageSelector from "./LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { isAuthenticated } from "@/utils/auth";
 
 export default function Header() {
   const location = useLocation();
@@ -16,6 +17,21 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  
+  // Check if user is logged in
+  useEffect(() => {
+    const checkAuth = () => {
+      setUserLoggedIn(isAuthenticated());
+    };
+    
+    checkAuth();
+    
+    // Listen for storage events to update the UI when the user logs in/out
+    window.addEventListener('storage', checkAuth);
+    
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
   
   // Track scroll position for styling header
   useEffect(() => {
@@ -82,7 +98,26 @@ export default function Header() {
           <div className="flex items-center space-x-2">
             <LanguageSelector />
             <ThemeToggle />
-            <UserInfo />
+            
+            {/* Show either login buttons or user profile */}
+            {userLoggedIn ? (
+              <UserInfo />
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login" className="flex items-center">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    {!isMobile && t("nav.login")}
+                  </Link>
+                </Button>
+                <Button variant="default" size="sm" asChild>
+                  <Link to="/register" className="flex items-center">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    {!isMobile && t("nav.register")}
+                  </Link>
+                </Button>
+              </>
+            )}
             
             {/* Mobile menu button */}
             {isMobile && (
@@ -121,6 +156,26 @@ export default function Header() {
                   {item.label}
                 </Link>
               ))}
+              
+              {/* Show login/register links in mobile menu when not logged in */}
+              {!userLoggedIn && (
+                <>
+                  <Link
+                    to="/login"
+                    className="flex items-center p-2 text-sm font-medium hover:bg-muted/50 text-muted-foreground rounded-md"
+                  >
+                    <LogIn className="mr-2 h-4 w-4" />
+                    {t("nav.login")}
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="flex items-center p-2 text-sm font-medium hover:bg-muted/50 text-muted-foreground rounded-md"
+                  >
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    {t("nav.register")}
+                  </Link>
+                </>
+              )}
             </nav>
           </div>
         )}

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -18,6 +19,7 @@ import { Mail, KeyRound, ArrowLeft, ShieldCheck } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { findUserByCredentials, setCurrentUser } from "@/utils/localStorageService";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,6 +29,7 @@ const formSchema = z.object({
 export default function DoctorLogin() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     document.title = "Doctor Login - Mediseva";
@@ -55,8 +58,8 @@ export default function DoctorLogin() {
           setCurrentUser(user);
           
           toast({
-            title: "Login successful",
-            description: `Welcome back, ${user.name}`,
+            title: t("auth.loginSuccess"),
+            description: `${t("auth.loginSuccess")}, ${user.name}`,
           });
           navigate("/"); // Redirect to home after login
         } else if (user && user.role !== 'doctor') {
@@ -97,9 +100,9 @@ export default function DoctorLogin() {
                 <ShieldCheck className="h-8 w-8 text-primary" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold">Doctor Login</h1>
+            <h1 className="text-3xl font-bold">{t("login.title")}</h1>
             <p className="mt-2 text-muted-foreground">
-              Access your doctor dashboard
+              {t("login.subtitle")}
             </p>
           </div>
 
@@ -111,7 +114,7 @@ export default function DoctorLogin() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("login.email")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -133,7 +136,7 @@ export default function DoctorLogin() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("login.password")}</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <KeyRound className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -155,19 +158,19 @@ export default function DoctorLogin() {
                     to="/doctor-forgot-password"
                     className="text-sm text-primary hover:underline"
                   >
-                    Forgot password?
+                    {t("login.forgotPassword")}
                   </Link>
                 </div>
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign in"}
+                  {isLoading ? t("login.signingIn") : t("login.signIn")}
                 </Button>
 
                 <div className="text-center mt-4">
                   <p className="text-sm text-muted-foreground">
-                    New to Mediseva?{" "}
+                    {t("login.noAccount")}{" "}
                     <Link to="/doctor-register" className="text-primary hover:underline">
-                      Register as a doctor
+                      {t("login.register")}
                     </Link>
                   </p>
                 </div>
@@ -179,7 +182,7 @@ export default function DoctorLogin() {
             <Button variant="ghost" size="sm" asChild>
               <Link to="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
+                {t("login.backToHome")}
               </Link>
             </Button>
           </div>
