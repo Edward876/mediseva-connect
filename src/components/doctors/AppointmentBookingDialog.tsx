@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Clock, CalendarDays } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AppointmentBookingDialogProps {
   open: boolean;
@@ -32,6 +33,7 @@ export default function AppointmentBookingDialog({
   const navigate = useNavigate();
   const [appointmentDate, setAppointmentDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const { t, isLoaded } = useLanguage();
   
   // Time slots available for booking
   const timeSlots = [
@@ -45,7 +47,7 @@ export default function AppointmentBookingDialog({
     onConfirmBooking(appointmentDate, selectedSlot);
   };
 
-  if (!doctor) return null;
+  if (!doctor || !isLoaded) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -53,9 +55,9 @@ export default function AppointmentBookingDialog({
         {!bookingSuccess ? (
           <>
             <DialogHeader>
-              <DialogTitle>Book an Appointment</DialogTitle>
+              <DialogTitle>{t("doctors.bookAppointment")}</DialogTitle>
               <DialogDescription>
-                Schedule an appointment with {doctor.name}
+                {t("doctors.scheduleWith")} {doctor.name}
               </DialogDescription>
             </DialogHeader>
             
@@ -74,7 +76,7 @@ export default function AppointmentBookingDialog({
                 </div>
                 
                 <div className="pt-2">
-                  <h5 className="text-sm font-semibold mb-2">Select Date</h5>
+                  <h5 className="text-sm font-semibold mb-2">{t("doctors.selectDate")}</h5>
                   <Calendar
                     mode="single"
                     selected={appointmentDate}
@@ -90,7 +92,7 @@ export default function AppointmentBookingDialog({
               </div>
               
               <div>
-                <h5 className="text-sm font-semibold mb-4">Select Time Slot</h5>
+                <h5 className="text-sm font-semibold mb-4">{t("doctors.selectTimeSlot")}</h5>
                 {appointmentDate ? (
                   <div className="grid grid-cols-2 gap-2">
                     {timeSlots.map((slot) => (
@@ -108,7 +110,7 @@ export default function AppointmentBookingDialog({
                 ) : (
                   <div className="flex items-center justify-center h-60 border rounded-lg bg-muted/20">
                     <p className="text-muted-foreground text-center">
-                      Please select a date first
+                      {t("doctors.selectDateFirst")}
                     </p>
                   </div>
                 )}
@@ -117,10 +119,10 @@ export default function AppointmentBookingDialog({
             
             <DialogFooter className="mt-6">
               <Button variant="outline" onClick={() => onOpenChange(false)}>
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button disabled={!appointmentDate || !selectedSlot} onClick={handleConfirmBooking}>
-                Confirm Booking
+                {t("doctors.confirmBooking")}
               </Button>
             </DialogFooter>
           </>
@@ -130,10 +132,10 @@ export default function AppointmentBookingDialog({
               <CalendarDays className="h-10 w-10 text-green-600" />
             </div>
             
-            <h2 className="text-2xl font-bold mb-2">Booking Confirmed!</h2>
+            <h2 className="text-2xl font-bold mb-2">{t("doctors.bookingConfirmed")}</h2>
             <p className="text-muted-foreground mb-6">
-              Your appointment with {doctor.name} has been scheduled for{" "}
-              {appointmentDate && format(appointmentDate, "PPPP")} at {selectedSlot}.
+              {t("doctors.appointmentScheduled")} {doctor.name} {t("doctors.scheduledFor")}{" "}
+              {appointmentDate && format(appointmentDate, "PPPP")} {t("doctors.at")} {selectedSlot}.
             </p>
             
             <div className="bg-muted/20 rounded-lg p-4 mb-6 max-w-md mx-auto">
@@ -153,13 +155,13 @@ export default function AppointmentBookingDialog({
             
             <div className="flex justify-center space-x-3">
               <Button variant="outline" onClick={() => onOpenChange(false)}>
-                Close
+                {t("common.close")}
               </Button>
               <Button variant="outline" onClick={() => {
                 onOpenChange(false);
                 navigate("/appointments");
               }}>
-                View All Appointments
+                {t("doctors.viewAllAppointments")}
               </Button>
             </div>
           </div>

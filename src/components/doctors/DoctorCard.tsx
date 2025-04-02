@@ -32,7 +32,28 @@ interface DoctorCardProps {
 }
 
 export default function DoctorCard({ doctor, onViewProfile, onBookAppointment }: DoctorCardProps) {
-  const { t } = useLanguage();
+  const { t, isLoaded } = useLanguage();
+  
+  if (!isLoaded) {
+    return (
+      <Card className="animate-pulse">
+        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+          <div className="h-16 w-16 rounded-full bg-muted"></div>
+          <div className="space-y-2">
+            <div className="h-4 w-24 bg-muted rounded"></div>
+            <div className="h-3 w-20 bg-muted rounded"></div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <div className="h-4 w-full bg-muted rounded mb-2"></div>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <div className="h-8 w-24 bg-muted rounded"></div>
+          <div className="h-8 w-24 bg-muted rounded"></div>
+        </CardFooter>
+      </Card>
+    );
+  }
   
   return (
     <Card className="hover-elevate">

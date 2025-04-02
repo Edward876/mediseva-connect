@@ -1,8 +1,7 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Define available languages
-export type Language = 'en' | 'hi' | 'bn' | 'ta' | 'te';
+export type Language = 'en' | 'hi' | 'mr' | 'gu' | 'ra' | 'bn' | 'ta' | 'te';
 
 // Create interface for context value
 interface LanguageContextType {
@@ -75,7 +74,15 @@ const enTranslations = {
   "doctors.found": "Found",
   "doctors.filters": "Filters",
   "doctors.noResults": "No doctors found matching your criteria",
-  "doctors.clearFilters": "Clear Filters"
+  "doctors.clearFilters": "Clear Filters",
+  "doctors.viewProfile": "View Profile",
+  "doctors.bookAppointment": "Book Appointment",
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
 };
 
 // Hindi translations
@@ -121,16 +128,107 @@ const hiTranslations = {
   "doctors.found": "मिले",
   "doctors.filters": "फिल्टर",
   "doctors.noResults": "आपके मापदंडों से मेल खाने वाले कोई डॉक्टर नहीं मिले",
-  "doctors.clearFilters": "फिल्टर साफ़ करें"
+  "doctors.clearFilters": "फिल्टर साफ़ करें",
+  "doctors.viewProfile": "प्रोफाइल देखें",
+  "doctors.bookAppointment": "अपॉइंटमेंट बुक करें",
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
+};
+
+// Marathi translations
+const mrTranslations = {
+  // Copy from English for now
+  ...enTranslations,
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
+};
+
+// Gujarati translations
+const guTranslations = {
+  // Copy from English for now
+  ...enTranslations,
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
+};
+
+// Rajasthani translations
+const raTranslations = {
+  // Copy from English for now
+  ...enTranslations,
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
+};
+
+// Bengali translations
+const bnTranslations = {
+  // Copy from English for now
+  ...enTranslations,
+  "language.en": "English",
+  "language.hi": "हिंदी",
+  "language.mr": "मराठी",
+  "language.gu": "ગુજરાતી",
+  "language.ra": "राजस्थानी",
+  "language.bn": "বাংলা"
+};
+
+// Add these keys to the enTranslations and other translations objects
+const additionalTranslations = {
+  "doctors.about": "About",
+  "doctors.education": "Education",
+  "doctors.languages": "Languages",
+  "doctors.languagesSpoken": "Languages Spoken",
+  "doctors.profile": "Doctor Profile",
+  "doctors.scheduleWith": "Schedule an appointment with",
+  "doctors.selectDate": "Select Date",
+  "doctors.selectTimeSlot": "Select Time Slot",
+  "doctors.selectDateFirst": "Please select a date first",
+  "common.cancel": "Cancel",
+  "doctors.confirmBooking": "Confirm Booking",
+  "doctors.bookingConfirmed": "Booking Confirmed!",
+  "doctors.appointmentScheduled": "Your appointment with",
+  "doctors.scheduledFor": "has been scheduled for",
+  "doctors.at": "at",
+  "common.close": "Close",
+  "doctors.viewAllAppointments": "View All Appointments"
+};
+
+// Update the translations objects with the new keys
+const updatedEnTranslations = {
+  ...enTranslations,
+  ...additionalTranslations
+};
+
+const updatedHiTranslations = {
+  ...hiTranslations,
+  ...additionalTranslations
 };
 
 // All translations
 const translations: Translations = {
-  en: enTranslations,
-  hi: hiTranslations,
-  bn: { ...enTranslations }, // Placeholder for Bengali
-  ta: { ...enTranslations }, // Placeholder for Tamil
-  te: { ...enTranslations }  // Placeholder for Telugu
+  en: updatedEnTranslations,
+  hi: updatedHiTranslations,
+  mr: { ...updatedEnTranslations }, // Placeholder for Marathi
+  gu: { ...updatedEnTranslations }, // Placeholder for Gujarati
+  ra: { ...updatedEnTranslations }, // Placeholder for Rajasthani
+  bn: { ...updatedEnTranslations }, // Placeholder for Bengali
+  ta: { ...updatedEnTranslations }, // Placeholder for Tamil
+  te: { ...updatedEnTranslations }  // Placeholder for Telugu
 };
 
 // Create provider component

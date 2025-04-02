@@ -10,7 +10,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Globe } from "lucide-react";
 
 export default function LanguageSelector() {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, setLanguage, t, isLoaded } = useLanguage();
+  
+  if (!isLoaded) {
+    return (
+      <Button variant="outline" size="sm" disabled>
+        <Globe className="h-4 w-4" />
+      </Button>
+    );
+  }
   
   return (
     <DropdownMenu>
