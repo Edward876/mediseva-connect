@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, User, Calendar as CalendarIcon, MapPin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DoctorCardProps {
   doctor: {
@@ -31,6 +32,8 @@ interface DoctorCardProps {
 }
 
 export default function DoctorCard({ doctor, onViewProfile, onBookAppointment }: DoctorCardProps) {
+  const { t } = useLanguage();
+  
   return (
     <Card className="hover-elevate">
       <CardHeader className="flex flex-row items-center gap-4 pb-2">
@@ -57,11 +60,11 @@ export default function DoctorCard({ doctor, onViewProfile, onBookAppointment }:
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button variant="outline" size="sm" onClick={() => onViewProfile(doctor)}>
-          <User className="mr-2 h-4 w-4" /> View Profile
+          <User className="mr-2 h-4 w-4" /> {t("doctors.viewProfile")}
         </Button>
         <Button size="sm" onClick={() => onBookAppointment(doctor)}>
           <CalendarIcon className="mr-2 h-4 w-4" />
-          Book Appointment
+          {t("doctors.bookAppointment")}
         </Button>
       </CardFooter>
     </Card>

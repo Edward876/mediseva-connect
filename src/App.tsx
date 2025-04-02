@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import FindDoctors from "./pages/FindDoctors";
@@ -26,36 +27,38 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <ThemeProvider defaultTheme="light" storageKey="mediseva-theme">
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            {/* Main Routes */}
-            <Route path="/find-doctors" element={<FindDoctors />} />
-            <Route path="/appointments" element={<Appointments />} />
-            <Route path="/emergency" element={<Emergency />} />
-            <Route path="/emergency-service" element={<Emergency />} />
-            <Route path="/internships" element={<Internships />} />
-            <Route path="/about" element={<About />} />
-            
-            {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/doctor-login" element={<DoctorLogin />} />
-            <Route path="/doctor-register" element={<DoctorRegister />} />
-            
-            {/* Application Routes */}
-            <Route path="/internship-application" element={<InternshipApplication />} />
-            
-            {/* Catch-all Route */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <LanguageProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              {/* Main Routes */}
+              <Route path="/find-doctors" element={<FindDoctors />} />
+              <Route path="/appointments" element={<Appointments />} />
+              <Route path="/emergency" element={<Emergency />} />
+              <Route path="/emergency-service" element={<Emergency />} />
+              <Route path="/internships" element={<Internships />} />
+              <Route path="/about" element={<About />} />
+              
+              {/* Authentication Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/doctor-login" element={<DoctorLogin />} />
+              <Route path="/doctor-register" element={<DoctorRegister />} />
+              
+              {/* Application Routes */}
+              <Route path="/internship-application" element={<InternshipApplication />} />
+              
+              {/* Catch-all Route */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </LanguageProvider>
   </ThemeProvider>
 );
 

@@ -8,30 +8,35 @@ import SearchSection from "@/components/doctors/SearchSection";
 import ResultsSection from "@/components/doctors/ResultsSection";
 import DoctorProfileDialog from "@/components/doctors/DoctorProfileDialog";
 import AppointmentBookingDialog from "@/components/doctors/AppointmentBookingDialog";
-import { doctors, specialties, locations } from "@/components/doctors/DoctorData";
+import { doctors, specialties } from "@/components/doctors/DoctorData";
 import { format } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { indianStates } from "@/utils/indianLocations";
 
 export default function FindDoctors() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState("All Specialties");
-  const [selectedLocation, setSelectedLocation] = useState("All Locations");
+  const [selectedState, setSelectedState] = useState("All States");
+  const [selectedCity, setSelectedCity] = useState("All Cities");
   const [filteredDoctors, setFilteredDoctors] = useState(doctors);
   const [selectedDoctor, setSelectedDoctor] = useState<any>(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const [appointmentOpen, setAppointmentOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
-    document.title = "Find Doctors - Mediseva";
+    document.title = `${t("doctors.title")} - ${t("app.title")}`;
     
     // Get URL parameters for initial filtering
     const specialty = searchParams.get("specialty");
+    const state = searchParams.get("state");
+    const city = searchParams.get("city");
     const query = searchParams.get("query");
     
     if (specialty) {
-      // Handle specialty parameter
       const formattedSpecialty = specialty.charAt(0).toUpperCase() + specialty.slice(1);
       const matchingSpecialty = specialties.find(s => 
         s.toLowerCase() === formattedSpecialty.toLowerCase() ||
@@ -39,6 +44,19 @@ export default function FindDoctors() {
       ) || "All Specialties";
       
       setSelectedSpecialty(matchingSpecialty);
+    }
+    
+    if (state) {
+      const matchingState = indianStates.find(s => 
+        s.name.toLowerCase() === state.toLowerCase() ||
+        s.name === "All States"
+      )?.name || "All States";
+      
+      setSelectedState(matchingState);
+    }
+    
+    if (city) {
+      setSelectedCity(city);
     }
     
     if (query) {
@@ -52,7 +70,7 @@ export default function FindDoctors() {
   useEffect(() => {
     // Filter doctors based on search and filters whenever filters change
     filterDoctors();
-  }, [searchTerm, selectedSpecialty, selectedLocation]);
+  }, [searchTerm, selectedSpecialty, selectedState, selectedCity]);
 
   const filterDoctors = () => {
     const results = doctors.filter((doctor) => {
@@ -63,10 +81,17 @@ export default function FindDoctors() {
       const matchesSpecialty = selectedSpecialty === "All Specialties" || 
                              doctor.specialty === selectedSpecialty;
                              
-      const matchesLocation = selectedLocation === "All Locations" || 
-                            doctor.location === selectedLocation;
+      // Extract state from doctor.location (format: "City, State")
+      const doctorState = doctor.location.split(", ")[1];
+      const doctorCity = doctor.location.split(", ")[0];
       
-      return matchesSearch && matchesSpecialty && matchesLocation;
+      const matchesState = selectedState === "All States" || 
+                         doctorState === selectedState;
+                         
+      const matchesCity = selectedCity === "All Cities" || 
+                        doctorCity === selectedCity;
+      
+      return matchesSearch && matchesSpecialty && matchesState && matchesCity;
     });
     
     setFilteredDoctors(results);
@@ -77,6 +102,12 @@ export default function FindDoctors() {
     const params = new URLSearchParams();
     if (selectedSpecialty !== "All Specialties") {
       params.set("specialty", selectedSpecialty.toLowerCase());
+    }
+    if (selectedState !== "All States") {
+      params.set("state", selectedState.toLowerCase());
+    }
+    if (selectedCity !== "All Cities") {
+      params.set("city", selectedCity);
     }
     if (searchTerm) {
       params.set("query", searchTerm);
@@ -125,7 +156,8 @@ export default function FindDoctors() {
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedSpecialty("All Specialties");
-    setSelectedLocation("All Locations");
+    setSelectedState("All States");
+    setSelectedCity("All Cities");
     setSearchParams(new URLSearchParams());
     setFilteredDoctors(doctors);
   };
@@ -139,11 +171,12 @@ export default function FindDoctors() {
           setSearchTerm={setSearchTerm}
           selectedSpecialty={selectedSpecialty}
           setSelectedSpecialty={setSelectedSpecialty}
-          selectedLocation={selectedLocation}
-          setSelectedLocation={setSelectedLocation}
+          selectedState={selectedState}
+          setSelectedState={setSelectedState}
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
           handleSearch={handleSearch}
           specialties={specialties}
-          locations={locations}
         />
         
         <ResultsSection 

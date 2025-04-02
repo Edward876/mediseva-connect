@@ -10,6 +10,8 @@ export interface User {
   isLoggedIn: boolean;
   specialty?: string;
   hospital?: string;
+  location?: string;  // Added location for Indian doctors
+  languages?: string[]; // Added languages for multilingual support
 }
 
 export const isAuthenticated = (): boolean => {
