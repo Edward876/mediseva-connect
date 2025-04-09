@@ -5,7 +5,7 @@ import { getTranslation } from '@/translations';
 
 // Create context with default value
 const LanguageContext = createContext<LanguageContextType>({
-  language: 'hi',
+  language: 'en',
   setLanguage: () => {},
   t: (key) => key,
   isLoaded: false,
@@ -18,16 +18,16 @@ interface LanguageProviderProps {
 
 // Create provider component
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
-  // Get initial language from localStorage or default to Hindi
+  // Get initial language from localStorage or default to English
   const getInitialLanguage = (): Language => {
     if (typeof window !== 'undefined') {
       const storedLanguage = localStorage.getItem('language') as Language;
       // Validate that the stored language is one of our supported languages
-      if (storedLanguage && ['hi', 'bn'].includes(storedLanguage)) {
+      if (storedLanguage && ['en', 'hi', 'bn'].includes(storedLanguage)) {
         return storedLanguage;
       }
     }
-    return 'hi';
+    return 'en';
   };
 
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
@@ -50,8 +50,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   // Translation function using the utility
   const t = (key: string): string => {
-    const translation = getTranslation(key, language);
-    return translation;
+    return getTranslation(key, language);
   };
 
   return (

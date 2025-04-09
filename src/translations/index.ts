@@ -1,10 +1,12 @@
 
 import { Translations } from '@/types/language';
+import { enTranslations } from './english';
 import { hiTranslations } from './hindi';
 import { bnTranslations } from './bengali';
 
 // Compile all translations
 export const translations: Translations = {
+  en: enTranslations,
   hi: hiTranslations,
   bn: bnTranslations
 };
@@ -16,9 +18,9 @@ export const getTranslation = (key: string, language: string): string => {
     const translation = translations[language][key];
     if (translation) return translation;
     
-    // If not found, fall back to Hindi
-    if (language !== 'hi') {
-      const fallback = translations['hi'][key];
+    // If not found, fall back to English
+    if (language !== 'en') {
+      const fallback = translations['en'][key];
       if (fallback) return fallback;
     }
     
