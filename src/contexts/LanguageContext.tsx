@@ -31,6 +31,27 @@ interface LanguageProviderProps {
   children: ReactNode;
 }
 
+// Common translations for all languages
+const commonTranslations = {
+  // Login related
+  "login.title": "Sign In",
+  "login.subtitle": "Welcome back to Mediseva",
+  "login.email": "Email",
+  "login.password": "Password",
+  "login.forgotPassword": "Forgot password?",
+  "login.signIn": "Sign In",
+  "login.signingIn": "Signing In...",
+  "login.noAccount": "Don't have an account?",
+  "login.register": "Register",
+  "login.backToHome": "Back to Home",
+  "auth.loginSuccess": "Login successful",
+  
+  // Common elements
+  "common.loading": "Loading",
+  "common.pageLoading": "Loading page",
+  "auth.checking": "Checking authentication",
+};
+
 // English translations
 const enTranslations = {
   "app.title": "Mediseva",
@@ -60,8 +81,6 @@ const enTranslations = {
   "hero.trustedBy": "Trusted by",
   "hero.patients": "patients",
   "hero.availableDoctors": "Available Doctors",
-  "common.loading": "Loading",
-  "auth.checking": "Checking authentication",
   "doctors.title": "Find the Best Doctors",
   "doctors.subtitle": "Search for specialists in your area and book appointments instantly",
   "doctors.searchPlaceholder": "Search by doctor name or keyword",
@@ -77,12 +96,33 @@ const enTranslations = {
   "doctors.clearFilters": "Clear Filters",
   "doctors.viewProfile": "View Profile",
   "doctors.bookAppointment": "Book Appointment",
+  "doctors.about": "About",
+  "doctors.education": "Education",
+  "doctors.languages": "Languages",
+  "doctors.languagesSpoken": "Languages Spoken",
+  "doctors.profile": "Doctor Profile",
+  "doctors.scheduleWith": "Schedule an appointment with",
+  "doctors.selectDate": "Select Date",
+  "doctors.selectTimeSlot": "Select Time Slot",
+  "doctors.selectDateFirst": "Please select a date first",
+  "common.cancel": "Cancel",
+  "doctors.confirmBooking": "Confirm Booking",
+  "doctors.bookingConfirmed": "Booking Confirmed!",
+  "doctors.appointmentScheduled": "Your appointment with",
+  "doctors.scheduledFor": "has been scheduled for",
+  "doctors.at": "at",
+  "common.close": "Close",
+  "doctors.viewAllAppointments": "View All Appointments",
+  ...commonTranslations,
+  // Language names in native script
   "language.en": "English",
   "language.hi": "हिंदी",
   "language.mr": "मराठी",
   "language.gu": "ગુજરાતી",
   "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
+  "language.bn": "বাংলা",
+  "language.ta": "தமிழ்",
+  "language.te": "తెలుగు"
 };
 
 // Hindi translations
@@ -114,8 +154,6 @@ const hiTranslations = {
   "hero.trustedBy": "इन पर विश्वास",
   "hero.patients": "मरीज़",
   "hero.availableDoctors": "उपलब्ध डॉक्टर",
-  "common.loading": "लोड हो रहा है",
-  "auth.checking": "प्रमाणीकरण जांच",
   "doctors.title": "सर्वश्रेष्ठ डॉक्टरों को खोजें",
   "doctors.subtitle": "अपने क्षेत्र में विशेषज्ञों की खोज करें और तुरंत अपॉइंटमेंट बुक करें",
   "doctors.searchPlaceholder": "डॉक्टर के नाम या कीवर्ड से खोजें",
@@ -131,104 +169,65 @@ const hiTranslations = {
   "doctors.clearFilters": "फिल्टर साफ़ करें",
   "doctors.viewProfile": "प्रोफाइल देखें",
   "doctors.bookAppointment": "अपॉइंटमेंट बुक करें",
+  "login.title": "साइन इन",
+  "login.subtitle": "मेडिसेवा में आपका स्वागत है",
+  "login.email": "ईमेल",
+  "login.password": "पासवर्ड",
+  "login.forgotPassword": "पासवर्ड भूल गए?",
+  "login.signIn": "साइन इन",
+  "login.signingIn": "साइन इन हो रहा है...",
+  "login.noAccount": "खाता नहीं है?",
+  "login.register": "रजिस्टर",
+  "login.backToHome": "होम पेज पर वापस जाएं",
+  "auth.loginSuccess": "लॉगिन सफल",
+  "common.loading": "लोड हो रहा है",
+  "common.pageLoading": "पेज लोड हो रहा है",
+  "auth.checking": "प्रमाणीकरण की जांच हो रही है",
+  // Language names in native script - reuse these across translations
   "language.en": "English",
   "language.hi": "हिंदी",
   "language.mr": "मराठी",
   "language.gu": "ગુજરાતી",
   "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
+  "language.bn": "বাংলা",
+  "language.ta": "தமிழ்",
+  "language.te": "తెలుగు"
 };
 
-// Marathi translations
-const mrTranslations = {
-  // Copy from English for now
-  ...enTranslations,
-  "language.en": "English",
-  "language.hi": "हिंदी",
-  "language.mr": "मराठी",
-  "language.gu": "ગુજરાતી",
-  "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
+// Base for other Indic language translations (using English as fallback with native language names)
+const createBaseTranslation = () => {
+  return {
+    ...enTranslations,
+    // Keep language names in native script the same across all translations
+    "language.en": "English",
+    "language.hi": "हिंदी",
+    "language.mr": "मराठी",
+    "language.gu": "ગુજરાતી",
+    "language.ra": "राजस्थानी",
+    "language.bn": "বাংলা",
+    "language.ta": "தமிழ்",
+    "language.te": "తెలుగు"
+  };
 };
 
-// Gujarati translations
-const guTranslations = {
-  // Copy from English for now
-  ...enTranslations,
-  "language.en": "English",
-  "language.hi": "हिंदी",
-  "language.mr": "मराठी",
-  "language.gu": "ગુજરાતી",
-  "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
-};
-
-// Rajasthani translations
-const raTranslations = {
-  // Copy from English for now
-  ...enTranslations,
-  "language.en": "English",
-  "language.hi": "हिंदी",
-  "language.mr": "मराठी",
-  "language.gu": "ગુજરાતી",
-  "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
-};
-
-// Bengali translations
-const bnTranslations = {
-  // Copy from English for now
-  ...enTranslations,
-  "language.en": "English",
-  "language.hi": "हिंदी",
-  "language.mr": "मराठी",
-  "language.gu": "ગુજરાતી",
-  "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা"
-};
-
-// Add these keys to the enTranslations and other translations objects
-const additionalTranslations = {
-  "doctors.about": "About",
-  "doctors.education": "Education",
-  "doctors.languages": "Languages",
-  "doctors.languagesSpoken": "Languages Spoken",
-  "doctors.profile": "Doctor Profile",
-  "doctors.scheduleWith": "Schedule an appointment with",
-  "doctors.selectDate": "Select Date",
-  "doctors.selectTimeSlot": "Select Time Slot",
-  "doctors.selectDateFirst": "Please select a date first",
-  "common.cancel": "Cancel",
-  "doctors.confirmBooking": "Confirm Booking",
-  "doctors.bookingConfirmed": "Booking Confirmed!",
-  "doctors.appointmentScheduled": "Your appointment with",
-  "doctors.scheduledFor": "has been scheduled for",
-  "doctors.at": "at",
-  "common.close": "Close",
-  "doctors.viewAllAppointments": "View All Appointments"
-};
-
-// Update the translations objects with the new keys
-const updatedEnTranslations = {
-  ...enTranslations,
-  ...additionalTranslations
-};
-
-const updatedHiTranslations = {
-  ...hiTranslations,
-  ...additionalTranslations
-};
+// Create base translations for each language
+const mrTranslations = createBaseTranslation(); // Marathi
+const guTranslations = createBaseTranslation(); // Gujarati
+const raTranslations = createBaseTranslation(); // Rajasthani
+const bnTranslations = createBaseTranslation(); // Bengali
+const taTranslations = createBaseTranslation(); // Tamil
+const teTranslations = createBaseTranslation(); // Telugu
 
 // All translations
 const translations: Translations = {
-  en: updatedEnTranslations,
-  hi: updatedHiTranslations,
-  mr: { ...updatedEnTranslations }, // Placeholder for Marathi
-  gu: { ...updatedEnTranslations }, // Placeholder for Gujarati
-  ra: { ...updatedEnTranslations }, // Placeholder for Rajasthani
-  bn: { ...updatedEnTranslations }, // Placeholder for Bengali
-  ta: { ...updatedEnTranslations }, // Placeholder for Tamil
-  te: { ...updatedEnTranslations }  // Placeholder for Telugu
+  en: enTranslations,
+  hi: hiTranslations,
+  mr: mrTranslations,
+  gu: guTranslations,
+  ra: raTranslations,
+  bn: bnTranslations,
+  ta: taTranslations,
+  te: teTranslations
 };
 
 // Create provider component
@@ -248,16 +247,32 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   // Update localStorage when language changes
   useEffect(() => {
     localStorage.setItem('language', language);
-    setIsLoaded(true);
     
-    // Dispatch storage event for other components to detect language change
-    window.dispatchEvent(new Event('storage'));
+    // Short timeout to simulate language loading
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+      // Dispatch storage event for other components to detect language change
+      window.dispatchEvent(new Event('storage'));
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [language]);
 
   // Translation function
   const t = (key: string): string => {
     try {
-      return translations[language][key] || key;
+      // First try to get the translation for the current language
+      const translation = translations[language][key];
+      if (translation) return translation;
+      
+      // If not found, fall back to English
+      if (language !== 'en') {
+        const fallback = translations['en'][key];
+        if (fallback) return fallback;
+      }
+      
+      // If still not found, return the key itself
+      return key;
     } catch (error) {
       console.error(`Translation missing for key: ${key} in language: ${language}`);
       return key;

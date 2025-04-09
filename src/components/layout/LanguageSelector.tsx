@@ -25,27 +25,33 @@ export default function LanguageSelector() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <Globe className="h-4 w-4 mr-2" />
-          {t(`language.${language}`)}
+          {language.toUpperCase()}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-background border border-border">
         <DropdownMenuItem onClick={() => setLanguage('en')}>
-          {t('language.en')}
+          English
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('hi')}>
-          {t('language.hi')}
+          हिंदी
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('mr')}>
-          {t('language.mr')}
+          मराठी
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('gu')}>
-          {t('language.gu')}
+          ગુજરાતી
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('ra')}>
-          {t('language.ra')}
+          राजस्थानी
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('bn')}>
-          {t('language.bn')}
+          বাংলা
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage('ta')}>
+          தமிழ்
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage('te')}>
+          తెలుగు
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

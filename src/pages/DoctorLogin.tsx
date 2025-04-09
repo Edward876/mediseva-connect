@@ -29,11 +29,13 @@ const formSchema = z.object({
 export default function DoctorLogin() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { t } = useLanguage();
+  const { t, isLoaded } = useLanguage();
 
   useEffect(() => {
-    document.title = "Doctor Login - Mediseva";
-  }, []);
+    if (isLoaded) {
+      document.title = "Doctor Login - Mediseva";
+    }
+  }, [t, isLoaded]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -87,6 +89,20 @@ export default function DoctorLogin() {
         setIsLoading(false);
       }
     }, 1000);
+  }
+
+  if (!isLoaded) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="text-center">
+            <p className="text-lg">Loading...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   return (
