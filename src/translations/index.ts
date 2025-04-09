@@ -2,25 +2,13 @@
 import { Translations } from '@/types/language';
 import { enTranslations } from './english';
 import { hiTranslations } from './hindi';
-import { 
-  mrTranslations, 
-  guTranslations, 
-  raTranslations, 
-  bnTranslations, 
-  taTranslations, 
-  teTranslations 
-} from './other-languages';
+import { bnTranslations } from './other-languages';
 
 // Compile all translations
 export const translations: Translations = {
   en: enTranslations,
   hi: hiTranslations,
-  mr: mrTranslations,
-  gu: guTranslations,
-  ra: raTranslations,
-  bn: bnTranslations,
-  ta: taTranslations,
-  te: teTranslations
+  bn: bnTranslations
 };
 
 // Translation utility function

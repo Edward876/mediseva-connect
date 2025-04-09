@@ -22,7 +22,10 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const getInitialLanguage = (): Language => {
     if (typeof window !== 'undefined') {
       const storedLanguage = localStorage.getItem('language') as Language;
-      return storedLanguage || 'en';
+      // Validate that the stored language is one of our supported languages
+      if (storedLanguage && ['en', 'hi', 'bn'].includes(storedLanguage)) {
+        return storedLanguage;
+      }
     }
     return 'en';
   };

@@ -24,10 +24,5 @@ export const commonTranslations = {
 export const languageNames = {
   "language.en": "English",
   "language.hi": "हिंदी",
-  "language.mr": "मराठी",
-  "language.gu": "ગુજરાતી",
-  "language.ra": "राजस्थानी",
-  "language.bn": "বাংলা",
-  "language.ta": "தமிழ்",
-  "language.te": "తెలుగు"
+  "language.bn": "বাংলা"
 };

@@ -35,23 +35,8 @@ export default function LanguageSelector() {
         <DropdownMenuItem onClick={() => setLanguage('hi')}>
           हिंदी
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('mr')}>
-          मराठी
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('gu')}>
-          ગુજરાતી
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('ra')}>
-          राजस्थानी
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('bn')}>
           বাংলা
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('ta')}>
-          தமிழ்
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('te')}>
-          తెలుగు
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
