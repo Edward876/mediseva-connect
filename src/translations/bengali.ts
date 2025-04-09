@@ -17,6 +17,21 @@ export const bnTranslations = {
   "nav.login": "লগইন",
   "nav.register": "রেজিস্টার",
   
+  // Clinical Exposure / Internship Section
+  "clinicalExposure.title": "ক্লিনিকাল এক্সপোজার",
+  "clinicalExposure.heading": "বাস্তব মেডিকেল ট্রেনিং মাধ্যমে দক্ষতা বৃদ্ধি করুন",
+  "clinicalExposure.description": "আমাদের ক্লিনিকাল এক্সপোজার প্রোগ্রামগুলি আপনাকে বাস্তব চিকিৎসা পরিবেশে অভিজ্ঞতা অর্জন করতে সাহায্য করবে। বিভিন্ন বিশেষজ্ঞতায় শিক্ষানবিশি সুযোগ পাবেন।",
+  "clinicalExposure.handsOnLearning": "বাস্তব শিক্ষা",
+  "clinicalExposure.handsOnDescription": "সরাসরি রোগীদের সাথে কাজ করার মাধ্যমে অভিজ্ঞতা অর্জন করুন",
+  "clinicalExposure.flexibleSchedules": "নমনীয় সময়সূচী",
+  "clinicalExposure.flexibleDescription": "আপনার পড়াশোনার সাথে মানিয়ে নিতে পারেন এমন সময়সূচী",
+  "clinicalExposure.certification": "সার্টিফিকেশন",
+  "clinicalExposure.certificationDescription": "আপনার রেজ্যুমে যোগ করার জন্য সম্পূর্ণতার প্রমাণপত্র",
+  "clinicalExposure.browsePrograms": "প্রোগ্রাম দেখুন",
+  "clinicalExposure.applyViaEmail": "ইমেইলের মাধ্যমে আবেদন করুন",
+  "clinicalExposure.availablePrograms": "উপলব্ধ প্রোগ্রাম",
+  "clinicalExposure.specialties": "বিশেষজ্ঞতা",
+  
   // Doctor search page
   "doctors.search": "ডাক্তার খুঁজুন",
   "doctors.searchPlaceholder": "বিশেষজ্ঞতা, নাম, বা অবস্থান দ্বারা অনুসন্ধান করুন",
