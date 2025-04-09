@@ -12,6 +12,15 @@ import { Globe } from "lucide-react";
 export default function LanguageSelector() {
   const { language, setLanguage, t, isLoaded } = useLanguage();
   
+  const getLanguageName = (lang: string) => {
+    switch(lang) {
+      case 'en': return 'English';
+      case 'hi': return 'हिंदी';
+      case 'bn': return 'বাংলা';
+      default: return lang.toUpperCase();
+    }
+  };
+  
   if (!isLoaded) {
     return (
       <Button variant="outline" size="sm" disabled>
@@ -25,17 +34,17 @@ export default function LanguageSelector() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <Globe className="h-4 w-4 mr-2" />
-          {language.toUpperCase()}
+          {getLanguageName(language)}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border border-border">
-        <DropdownMenuItem onClick={() => setLanguage('en')}>
+        <DropdownMenuItem onClick={() => setLanguage('en')} className="cursor-pointer">
           English
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('hi')}>
+        <DropdownMenuItem onClick={() => setLanguage('hi')} className="cursor-pointer">
           हिंदी
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage('bn')}>
+        <DropdownMenuItem onClick={() => setLanguage('bn')} className="cursor-pointer">
           বাংলা
         </DropdownMenuItem>
       </DropdownMenuContent>

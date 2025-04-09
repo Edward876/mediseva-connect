@@ -2,7 +2,7 @@
 import { Translations } from '@/types/language';
 import { enTranslations } from './english';
 import { hiTranslations } from './hindi';
-import { bnTranslations } from './other-languages';
+import { bnTranslations } from './bengali';
 
 // Compile all translations
 export const translations: Translations = {

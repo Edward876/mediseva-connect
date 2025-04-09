@@ -33,11 +33,12 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const [language, setLanguage] = useState<Language>(getInitialLanguage);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Update localStorage when language changes
+  // Update localStorage and handle language change effects
   useEffect(() => {
+    setIsLoaded(false); // Set loading state when language changes
     localStorage.setItem('language', language);
     
-    // Short timeout to simulate language loading
+    // Short timeout to simulate language loading and trigger UI updates
     const timer = setTimeout(() => {
       setIsLoaded(true);
       // Dispatch storage event for other components to detect language change
