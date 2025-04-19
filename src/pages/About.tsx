@@ -239,8 +239,8 @@ export default function About() {
                     <div>
                       <h3 className="font-semibold text-lg">Our Headquarters</h3>
                       <p className="text-muted-foreground">
-                        123 Healthcare Plaza, Suite 300<br />
-                        New York, NY 10001, USA
+                        Bennett Univesity<br />
+                        Greater Noida, Uttar Pradesh, INDIA
                       </p>
                     </div>
                   </div>
@@ -266,9 +266,9 @@ export default function About() {
                     <div>
                       <h3 className="font-semibold text-lg">Call Us</h3>
                       <p className="text-muted-foreground">
-                        General: +1 (800) MEDISEVA<br />
-                        Patient Support: +1 (800) 633-4738<br />
-                        Doctor Support: +1 (800) 633-4739
+                        General: +91 8509511195<br />
+                        Patient Support: 1800 633-4738<br />
+                        Doctor Support: 1800 633-4739
                       </p>
                     </div>
                   </div>
