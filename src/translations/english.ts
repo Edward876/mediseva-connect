@@ -11,6 +11,8 @@ export const enTranslations = {
   "nav.clinicalExposure": "Clinical Exposure",
   "nav.login": "Login",
   "nav.register": "Register",
+  
+  // Hero section
   "hero.tagline": "Healthcare at your fingertips",
   "hero.title": "Your Health, Our",
   "hero.titleHighlight": "Priority",
@@ -29,6 +31,23 @@ export const enTranslations = {
   "hero.trustedBy": "Trusted by",
   "hero.patients": "patients",
   "hero.availableDoctors": "Available Doctors",
+  
+  // Clinical Exposure / Internship Section
+  "clinicalExposure.title": "Clinical Exposure",
+  "clinicalExposure.heading": "Medical Internship Programs",
+  "clinicalExposure.description": "Gain practical experience in various medical fields through our comprehensive internship programs designed for medical students and recent graduates.",
+  "clinicalExposure.handsOnLearning": "Hands-on Learning",
+  "clinicalExposure.handsOnDescription": "Get real-world experience under supervision of experts",
+  "clinicalExposure.flexibleSchedules": "Flexible Schedules",
+  "clinicalExposure.flexibleDescription": "Programs designed to fit your academic schedule",
+  "clinicalExposure.certification": "Certification",
+  "clinicalExposure.certificationDescription": "Receive official certificates upon completion",
+  "clinicalExposure.browsePrograms": "Browse Programs",
+  "clinicalExposure.applyViaEmail": "Apply via Email",
+  "clinicalExposure.availablePrograms": "Available Programs",
+  "clinicalExposure.specialties": "specialties",
+  
+  // Doctor search page
   "doctors.title": "Find the Best Doctors",
   "doctors.subtitle": "Search for specialists in your area and book appointments instantly",
   "doctors.searchPlaceholder": "Search by doctor name or keyword",

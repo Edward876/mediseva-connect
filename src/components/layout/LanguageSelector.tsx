@@ -14,9 +14,9 @@ export default function LanguageSelector() {
   
   const getLanguageName = (lang: string) => {
     switch(lang) {
-      case 'en': return 'English';
-      case 'hi': return 'हिंदी';
-      case 'bn': return 'বাংলা';
+      case 'en': return t('language.en');
+      case 'hi': return t('language.hi');
+      case 'bn': return t('language.bn');
       default: return lang.toUpperCase();
     }
   };
@@ -39,13 +39,13 @@ export default function LanguageSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border border-border">
         <DropdownMenuItem onClick={() => setLanguage('en')} className="cursor-pointer">
-          English
+          {t('language.en')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('hi')} className="cursor-pointer">
-          हिंदी
+          {t('language.hi')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('bn')} className="cursor-pointer">
-          বাংলা
+          {t('language.bn')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

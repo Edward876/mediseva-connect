@@ -17,6 +17,21 @@ export const hiTranslations = {
   "nav.login": "लॉगिन",
   "nav.register": "रजिस्टर",
   
+  // Clinical Exposure / Internship Section
+  "clinicalExposure.title": "क्लिनिकल एक्सपोज़र",
+  "clinicalExposure.heading": "मेडिकल इंटर्नशिप प्रोग्राम",
+  "clinicalExposure.description": "हमारे व्यापक इंटर्नशिप प्रोग्राम के माध्यम से मेडिकल छात्रों और हाल के स्नातकों के लिए विभिन्न चिकित्सा क्षेत्रों में व्यावहारिक अनुभव प्राप्त करें।",
+  "clinicalExposure.handsOnLearning": "प्रैक्टिकल लर्निंग",
+  "clinicalExposure.handsOnDescription": "विशेषज्ञों की देखरेख में वास्तविक अनुभव प्राप्त करें",
+  "clinicalExposure.flexibleSchedules": "फ्लेक्सिबल शेड्यूल",
+  "clinicalExposure.flexibleDescription": "आपके अकादमिक शेड्यूल के अनुरूप डिज़ाइन किए गए प्रोग्राम",
+  "clinicalExposure.certification": "सर्टिफिकेशन",
+  "clinicalExposure.certificationDescription": "पूरा होने पर आधिकारिक प्रमाण पत्र प्राप्त करें",
+  "clinicalExposure.browsePrograms": "प्रोग्राम देखें",
+  "clinicalExposure.applyViaEmail": "ईमेल के माध्यम से आवेदन करें",
+  "clinicalExposure.availablePrograms": "उपलब्ध प्रोग्राम",
+  "clinicalExposure.specialties": "विशेषज्ञताएं",
+  
   // Doctor search page
   "doctors.search": "डॉक्टर ढूंढें",
   "doctors.searchPlaceholder": "विशेषज्ञता, नाम, या स्थान द्वारा खोजें",
