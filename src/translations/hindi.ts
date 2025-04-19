@@ -66,5 +66,14 @@ export const hiTranslations = {
   "footer.yourEmail": "आपका ईमेल",
   "footer.privacyPolicy": "गोपनीयता नीति",
   "footer.termsOfService": "सेवा की शर्तें",
-  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित"
+  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित",
+
+  // Hindi Footer
+"footer.quickLinks": "त्वरित पहुंच",
+"footer.contactUs": "संपर्क करें",
+"footer.subscribe": "सदस्यता लें",
+"footer.allRightsReserved": "सर्वाधिकार सुरक्षित।",
+"footer.privacyPolicy": "गोपनीयता नीति",
+"footer.termsOfService": "सेवा की शर्तें",
+"footer.forDoctors": "डॉक्टरों के लिए",
 };
