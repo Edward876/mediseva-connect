@@ -12,7 +12,7 @@ export const translations: Translations = {
 // Translation utility function
 export const getTranslation = (key: string, language: string): string => {
   try {
-    // Try to get the translation for the current language
+    // First try to get the translation for the current language
     const translation = translations[language][key];
     if (translation) return translation;
     

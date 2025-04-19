@@ -17,6 +17,21 @@ export const bnTranslations = {
   "nav.login": "লগইন",
   "nav.register": "রেজিস্টার",
   
+  // Clinical Exposure / Internship Section
+  "clinicalExposure.title": "ক্লিনিকাল এক্সপোজার",
+  "clinicalExposure.heading": "বাস্তব মেডিকেল ট্রেনিং মাধ্যমে দক্ষতা বৃদ্ধি করুন",
+  "clinicalExposure.description": "আমাদের ক্লিনিকাল এক্সপোজার প্রোগ্রামগুলি আপনাকে বাস্তব চিকিৎসা পরিবেশে অভিজ্ঞতা অর্জন করতে সাহায্য করবে। বিভিন্ন বিশেষজ্ঞতায় শিক্ষানবিশি সুযোগ পাবেন।",
+  "clinicalExposure.handsOnLearning": "বাস্তব শিক্ষা",
+  "clinicalExposure.handsOnDescription": "সরাসরি রোগীদের সাথে কাজ করার মাধ্যমে অভিজ্ঞতা অর্জন করুন",
+  "clinicalExposure.flexibleSchedules": "নমনীয় সময়সূচী",
+  "clinicalExposure.flexibleDescription": "আপনার পড়াশোনার সাথে মানিয়ে নিতে পারেন এমন সময়সূচী",
+  "clinicalExposure.certification": "সার্টিফিকেশন",
+  "clinicalExposure.certificationDescription": "আপনার রেজ্যুমে যোগ করার জন্য সম্পূর্ণতার প্রমাণপত্র",
+  "clinicalExposure.browsePrograms": "প্রোগ্রাম দেখুন",
+  "clinicalExposure.applyViaEmail": "ইমেইলের মাধ্যমে আবেদন করুন",
+  "clinicalExposure.availablePrograms": "উপলব্ধ প্রোগ্রাম",
+  "clinicalExposure.specialties": "বিশেষজ্ঞতা",
+  
   // Doctor search page
   "doctors.search": "ডাক্তার খুঁজুন",
   "doctors.searchPlaceholder": "বিশেষজ্ঞতা, নাম, বা অবস্থান দ্বারা অনুসন্ধান করুন",
@@ -51,21 +66,5 @@ export const bnTranslations = {
   "footer.yourEmail": "আপনার ইমেল",
   "footer.privacyPolicy": "গোপনীয়তা নীতি",
   "footer.termsOfService": "সেবার শর্তাবলী",
-  "footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত",
-  
-  // Clinical Exposure / Internship Section
-  "clinicalExposure.title": "ক্লিনিকাল এক্সপোজার",
-  "clinicalExposure.heading": "মেডিকেল ছাত্রদের জন্য ক্লিনিকাল অভিজ্ঞতা",
-  "clinicalExposure.description": "আমরা মেডিকেল ছাত্রদের বাস্তব চিকিৎসা পরিবেশে ব্যবহারিক অভিজ্ঞতা দিতে প্রতিশ্রুতিবদ্ধ। আমাদের প্রশিক্ষণ প্রোগ্রামগুলি আপনাকে পেশাদার চিকিৎসক হতে প্রস্তুত করবে।",
-  "clinicalExposure.handsOnLearning": "ব্যবহারিক শিক্ষা",
-  "clinicalExposure.handsOnDescription": "বিশেষজ্ঞদের সাথে সরাসরি অভিজ্ঞতা অর্জন করুন",
-  "clinicalExposure.flexibleSchedules": "নমনীয় সময়সূচী",
-  "clinicalExposure.flexibleDescription": "আপনার শিক্ষাগত প্রয়োজনীয়তা অনুযায়ী সময়সূচী",
-  "clinicalExposure.certification": "সার্টিফিকেশন",
-  "clinicalExposure.certificationDescription": "সমাপ্তিতে স্বীকৃত সার্টিফিকেট",
-  "clinicalExposure.browsePrograms": "প্রোগ্রাম দেখুন",
-  "clinicalExposure.applyViaEmail": "ইমেল দিয়ে আবেদন করুন",
-  "clinicalExposure.availablePrograms": "উপলব্ধ প্রোগ্রাম",
-  "clinicalExposure.specialties": "বিশেষত্ব"
+  "footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত"
 };
-

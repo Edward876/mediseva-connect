@@ -16,7 +16,7 @@ export default function LanguageSelector() {
     switch(lang) {
       case 'hi': return 'हिंदी';
       case 'bn': return 'বাংলা';
-      default: return 'हिंदी';
+      default: return lang.toUpperCase();
     }
   };
   

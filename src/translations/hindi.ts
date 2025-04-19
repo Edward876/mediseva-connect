@@ -17,6 +17,21 @@ export const hiTranslations = {
   "nav.login": "लॉगिन",
   "nav.register": "रजिस्टर",
   
+  // Clinical Exposure / Internship Section
+  "clinicalExposure.title": "क्लिनिकल एक्सपोज़र",
+  "clinicalExposure.heading": "प्रैक्टिकल मेडिकल ट्रेनिंग से अपने कौशल को बढ़ाएं",
+  "clinicalExposure.description": "हमारे क्लिनिकल एक्सपोज़र प्रोग्राम आपको वास्तविक चिकित्सा वातावरण में अनुभव प्राप्त करने में मदद करेंगे। विभिन्न विशेषज्ञताओं में इंटर्नशिप के अवसर।",
+  "clinicalExposure.handsOnLearning": "प्रैक्टिकल लर्निंग",
+  "clinicalExposure.handsOnDescription": "रोगियों के साथ सीधे काम करके अनुभव प्राप्त करें",
+  "clinicalExposure.flexibleSchedules": "लचीली समय-सारिणी",
+  "clinicalExposure.flexibleDescription": "अपनी पढ़ाई के साथ फिट होने वाली समय-सारिणी",
+  "clinicalExposure.certification": "प्रमाणीकरण",
+  "clinicalExposure.certificationDescription": "अपने रेज्यूमे में जोड़ने के लिए पूर्णता का प्रमाणपत्र",
+  "clinicalExposure.browsePrograms": "प्रोग्राम ब्राउज़ करें",
+  "clinicalExposure.applyViaEmail": "ईमेल के माध्यम से आवेदन करें",
+  "clinicalExposure.availablePrograms": "उपलब्ध प्रोग्राम",
+  "clinicalExposure.specialties": "विशेषज्ञताएं",
+  
   // Doctor search page
   "doctors.search": "डॉक्टर ढूंढें",
   "doctors.searchPlaceholder": "विशेषज्ञता, नाम, या स्थान द्वारा खोजें",
@@ -51,21 +66,5 @@ export const hiTranslations = {
   "footer.yourEmail": "आपका ईमेल",
   "footer.privacyPolicy": "गोपनीयता नीति",
   "footer.termsOfService": "सेवा की शर्तें",
-  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित",
-  
-  // Clinical Exposure / Internship Section
-  "clinicalExposure.title": "क्लिनिकल एक्सपोज़र",
-  "clinicalExposure.heading": "मेडिकल छात्रों के लिए क्लिनिकल अनुभव",
-  "clinicalExposure.description": "हम मेडिकल छात्रों को वास्तविक चिकित्सा वातावरण में व्यावहारिक अनुभव प्रदान करने के लिए समर्पित हैं। हमारे प्रशिक्षण कार्यक्रम आपको पेशेवर चिकित्सक बनने के लिए तैयार करेंगे।",
-  "clinicalExposure.handsOnLearning": "व्यावहारिक शिक्षा",
-  "clinicalExposure.handsOnDescription": "विशेषज्ञों के साथ सीधे अनुभव प्राप्त करें",
-  "clinicalExposure.flexibleSchedules": "लचीला समय",
-  "clinicalExposure.flexibleDescription": "अपनी शैक्षिक आवश्यकताओं के अनुरूप शेड्यूल",
-  "clinicalExposure.certification": "प्रमाणीकरण",
-  "clinicalExposure.certificationDescription": "पूर्णता पर मान्यता प्राप्त प्रमाणपत्र",
-  "clinicalExposure.browsePrograms": "कार्यक्रम देखें",
-  "clinicalExposure.applyViaEmail": "ईमेल से आवेदन करें",
-  "clinicalExposure.availablePrograms": "उपलब्ध प्रोग्राम",
-  "clinicalExposure.specialties": "विशेषज्ञताएँ"
+  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित"
 };
-
