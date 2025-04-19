@@ -91,15 +91,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-primary mr-2 mt-0.5 shrink-0" />
-                <span className="text-muted-foreground">123 Medical Plaza, Healthcare District, City, Country - 123456</span>
+                <span className="text-muted-foreground">Bennett University, Plot Nos 8, 11, TechZone 2, Greater Noida, Uttar Pradesh 201310</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-primary mr-2 shrink-0" />
-                <span className="text-muted-foreground">+1 (800) MEDISEVA</span>
+                <span className="text-muted-foreground">+91 8509511195</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-primary mr-2 shrink-0" />
-                <span className="text-muted-foreground">contact@mediseva.com</span>
+                <span className="text-muted-foreground">e23cseu0525@bennett.edu.in</span>
               </li>
             </ul>
             
