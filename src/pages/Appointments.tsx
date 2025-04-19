@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,86 +24,44 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-// Sample appointment data
-const appointments = {
-  upcoming: [
-    {
-      id: 1,
-      doctor: {
-        name: "Dr. Sarah Johnson",
-        specialty: "Cardiology",
-        avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      },
-      date: "May 15, 2023",
-      time: "10:30 AM",
-      type: "In-person",
-      location: "City Heart Institute, New York",
-      status: "Confirmed",
-    },
-    {
-      id: 2,
-      doctor: {
-        name: "Dr. Michael Chen",
-        specialty: "Neurology",
-        avatar: "https://randomuser.me/api/portraits/men/46.jpg",
-      },
-      date: "May 22, 2023",
-      time: "2:00 PM",
-      type: "Virtual",
-      location: "Video consultation",
-      status: "Confirmed",
-    },
-  ],
-  past: [
-    {
-      id: 3,
-      doctor: {
-        name: "Dr. Lisa Patel",
-        specialty: "Dermatology",
-        avatar: "https://randomuser.me/api/portraits/women/37.jpg",
-      },
-      date: "April 10, 2023",
-      time: "11:15 AM",
-      type: "In-person",
-      location: "Skin & Aesthetic Center, Miami",
-      status: "Completed",
-    },
-    {
-      id: 4,
-      doctor: {
-        name: "Dr. James Wilson",
-        specialty: "Psychiatry",
-        avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-      },
-      date: "March 28, 2023",
-      time: "3:45 PM",
-      type: "Virtual",
-      location: "Video consultation",
-      status: "Completed",
-    },
-    {
-      id: 5,
-      doctor: {
-        name: "Dr. Emma Williams",
-        specialty: "Pediatrics",
-        avatar: "https://randomuser.me/api/portraits/women/65.jpg",
-      },
-      date: "March 15, 2023",
-      time: "9:00 AM",
-      type: "In-person",
-      location: "Children's Wellness Hospital, Chicago",
-      status: "Cancelled",
-    },
-  ],
-};
+import { getAppointments, updateAppointmentStatus, type Appointment } from "@/utils/appointmentService";
 
 export default function Appointments() {
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [appointments, setAppointments] = useState<{
+    upcoming: Appointment[];
+    past: Appointment[];
+  }>({ upcoming: [], past: [] });
   
   useEffect(() => {
     document.title = "My Appointments - Mediseva";
+    loadAppointments();
   }, []);
+
+  const loadAppointments = () => {
+    const allAppointments = getAppointments();
+    const now = new Date();
+    
+    const sorted = allAppointments.reduce(
+      (acc, appointment) => {
+        const appointmentDate = new Date(`${appointment.date} ${appointment.time}`);
+        if (appointmentDate > now && appointment.status === "Confirmed") {
+          acc.upcoming.push(appointment);
+        } else {
+          acc.past.push(appointment);
+        }
+        return acc;
+      },
+      { upcoming: [] as Appointment[], past: [] as Appointment[] }
+    );
+
+    setAppointments(sorted);
+  };
+
+  const handleStatusUpdate = (id: string, status: Appointment['status']) => {
+    updateAppointmentStatus(id, status);
+    loadAppointments(); // Reload appointments after update
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -149,9 +106,11 @@ export default function Appointments() {
               <h1 className="text-3xl font-bold">My Appointments</h1>
               <p className="text-muted-foreground mt-1">Manage your scheduled doctor appointments</p>
             </div>
-            <Button className="mt-4 md:mt-0">
-              <Calendar className="mr-2 h-4 w-4" />
-              Book New Appointment
+            <Button className="mt-4 md:mt-0" asChild>
+              <Link to="/find-doctors">
+                <Calendar className="mr-2 h-4 w-4" />
+                Book New Appointment
+              </Link>
             </Button>
           </div>
           
@@ -186,7 +145,12 @@ export default function Appointments() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>Reschedule</DropdownMenuItem>
                             <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">Cancel</DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-red-600"
+                              onClick={() => handleStatusUpdate(appointment.id, "Cancelled")}
+                            >
+                              Cancel
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </CardHeader>
@@ -235,7 +199,9 @@ export default function Appointments() {
                   <p className="text-muted-foreground mb-6">
                     You don't have any scheduled appointments coming up
                   </p>
-                  <Button>Book an Appointment</Button>
+                  <Button asChild>
+                    <Link to="/find-doctors">Book an Appointment</Link>
+                  </Button>
                 </div>
               )}
             </TabsContent>
@@ -304,7 +270,9 @@ export default function Appointments() {
                   <p className="text-muted-foreground mb-6">
                     You don't have any past appointment history
                   </p>
-                  <Button>Book your first appointment</Button>
+                  <Button asChild>
+                    <Link to="/find-doctors">Book your first appointment</Link>
+                  </Button>
                 </div>
               )}
             </TabsContent>

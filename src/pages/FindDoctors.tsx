@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
@@ -12,6 +11,7 @@ import { doctors, specialties } from "@/components/doctors/DoctorData";
 import { format } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { indianStates } from "@/utils/indianLocations";
+import { saveAppointment } from "@/utils/appointmentService";
 
 export default function FindDoctors() {
   const navigate = useNavigate();
@@ -30,7 +30,6 @@ export default function FindDoctors() {
   useEffect(() => {
     document.title = `${t("doctors.title")} - ${t("app.title")}`;
     
-    // Get URL parameters for initial filtering
     const specialty = searchParams.get("specialty");
     const state = searchParams.get("state");
     const city = searchParams.get("city");
@@ -63,12 +62,41 @@ export default function FindDoctors() {
       setSearchTerm(query);
     }
     
-    // Filter doctors based on search and filters
     filterDoctors();
-  }, []); // Empty dependency array for initial load
+  }, []);
 
   useEffect(() => {
-    // Filter doctors based on search and filters whenever filters change
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const response = await fetch(
+              `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=YOUR_OPENCAGE_API_KEY`
+            );
+            const data = await response.json();
+            if (data.results.length > 0) {
+              const state = data.results[0].components.state;
+              const city = data.results[0].components.city;
+              
+              const matchingState = indianStates.find(s => 
+                s.name.toLowerCase() === state?.toLowerCase()
+              )?.name || "All States";
+              
+              setSelectedState(matchingState);
+              if (city) setSelectedCity(city);
+            }
+          } catch (error) {
+            console.error("Error getting location details:", error);
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     filterDoctors();
   }, [searchTerm, selectedSpecialty, selectedState, selectedCity]);
 
@@ -81,7 +109,6 @@ export default function FindDoctors() {
       const matchesSpecialty = selectedSpecialty === "All Specialties" || 
                              doctor.specialty === selectedSpecialty;
                              
-      // Extract state from doctor.location (format: "City, State")
       const doctorState = doctor.location.split(", ")[1];
       const doctorCity = doctor.location.split(", ")[0];
       
@@ -98,7 +125,6 @@ export default function FindDoctors() {
   };
 
   const handleSearch = () => {
-    // Update URL with search parameters
     const params = new URLSearchParams();
     if (selectedSpecialty !== "All Specialties") {
       params.set("specialty", selectedSpecialty.toLowerCase());
@@ -114,7 +140,6 @@ export default function FindDoctors() {
     }
     setSearchParams(params);
     
-    // Filter doctors
     filterDoctors();
   };
 
@@ -124,7 +149,6 @@ export default function FindDoctors() {
   };
 
   const handleBookAppointment = (doctor: any) => {
-    // Check if user is logged in
     const user = localStorage.getItem("mediseva_user");
     if (!user) {
       toast({
@@ -142,15 +166,31 @@ export default function FindDoctors() {
   };
 
   const handleConfirmBooking = (date: Date, slot: string) => {
-    // Simulate booking process
-    setTimeout(() => {
-      setBookingSuccess(true);
-      
-      toast({
-        title: "Appointment Booked",
-        description: `Your appointment with ${selectedDoctor.name} is confirmed for ${format(date, "PPP")} at ${slot}`,
-      });
-    }, 1000);
+    if (!selectedDoctor) return;
+
+    const newAppointment = {
+      id: Math.random().toString(36).substr(2, 9),
+      doctor: {
+        id: selectedDoctor.id,
+        name: selectedDoctor.name,
+        specialty: selectedDoctor.specialty,
+        avatar: selectedDoctor.avatar,
+        hospital: selectedDoctor.hospital
+      },
+      date: format(date, "PP"),
+      time: slot,
+      type: "In-person",
+      location: selectedDoctor.hospital,
+      status: "Confirmed" as const
+    };
+
+    saveAppointment(newAppointment);
+    setBookingSuccess(true);
+    
+    toast({
+      title: "Appointment Booked",
+      description: `Your appointment with ${selectedDoctor.name} is confirmed for ${format(date, "PPP")} at ${slot}`,
+    });
   };
 
   const clearFilters = () => {
@@ -186,7 +226,6 @@ export default function FindDoctors() {
           clearFilters={clearFilters}
         />
 
-        {/* Doctor Profile Dialog */}
         <DoctorProfileDialog 
           open={profileOpen}
           onOpenChange={setProfileOpen}
@@ -194,7 +233,6 @@ export default function FindDoctors() {
           onBookAppointment={handleBookAppointment}
         />
 
-        {/* Book Appointment Dialog */}
         <AppointmentBookingDialog 
           open={appointmentOpen}
           onOpenChange={setAppointmentOpen}

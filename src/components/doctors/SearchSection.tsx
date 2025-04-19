@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import { useState, useEffect } from "react";
 import { indianStates, getCitiesForState } from "@/utils/indianLocations";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -40,13 +40,48 @@ export default function SearchSection({
 }: SearchSectionProps) {
   const [availableCities, setAvailableCities] = useState(["All Cities"]);
   const { t } = useLanguage();
+  const [isLocating, setIsLocating] = useState(false);
 
   useEffect(() => {
-    // When the selected state changes, update the cities dropdown
     setAvailableCities(getCitiesForState(selectedState));
-    // Reset city selection to "All Cities" when state changes
     setSelectedCity("All Cities");
   }, [selectedState, setSelectedCity]);
+
+  const handleLocationAccess = () => {
+    setIsLocating(true);
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const response = await fetch(
+              `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=YOUR_OPENCAGE_API_KEY`
+            );
+            const data = await response.json();
+            if (data.results.length > 0) {
+              const state = data.results[0].components.state;
+              const city = data.results[0].components.city;
+              
+              // Find matching state in our Indian states list
+              const matchingState = indianStates.find(s => 
+                s.name.toLowerCase() === state?.toLowerCase()
+              )?.name || "All States";
+              
+              setSelectedState(matchingState);
+              if (city) setSelectedCity(city);
+            }
+          } catch (error) {
+            console.error("Error getting location details:", error);
+          } finally {
+            setIsLocating(false);
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setIsLocating(false);
+        }
+      );
+    }
+  };
 
   return (
     <section className="bg-gradient-to-b from-primary/10 to-background py-12">
@@ -68,7 +103,7 @@ export default function SearchSection({
             />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
             <div>
               <Select 
                 value={selectedSpecialty} 
@@ -122,6 +157,16 @@ export default function SearchSection({
                 </SelectContent>
               </Select>
             </div>
+
+            <Button 
+              variant="outline" 
+              className="h-12"
+              onClick={handleLocationAccess}
+              disabled={isLocating}
+            >
+              <MapPin className="mr-2 h-4 w-4" />
+              {isLocating ? "Detecting Location..." : "Use My Location"}
+            </Button>
           </div>
           
           <Button className="mt-4" onClick={handleSearch}>
