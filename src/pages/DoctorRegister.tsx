@@ -26,6 +26,7 @@ import { Mail, User, KeyRound, Phone, ArrowLeft, FileText, Building } from "luci
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { addUser } from "@/utils/localStorageService";
+import { useLanguage } from "@/hooks/useLanguage";
 
 const specialties = [
   "Cardiology",
@@ -65,10 +66,13 @@ const formSchema = z
 export default function DoctorRegister() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { t, isLoaded } = useLanguage();
 
   useEffect(() => {
-    document.title = "Doctor Registration - Mediseva";
-  }, []);
+    if (isLoaded) {
+      document.title = t("register.doctorTitle") + " - Mediseva";
+    }
+  }, [t, isLoaded]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -138,9 +142,9 @@ export default function DoctorRegister() {
       <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold">Doctor Registration</h1>
+            <h1 className="text-3xl font-bold">{t("register.doctorTitle")}</h1>
             <p className="mt-2 text-muted-foreground">
-              Join Mediseva's network of healthcare professionals
+              {t("register.doctorSubtitle")}
             </p>
           </div>
 
@@ -365,9 +369,14 @@ export default function DoctorRegister() {
 
             <div className="mt-4 text-center">
               <p className="text-sm text-muted-foreground">
-                Already registered?{" "}
+                {t("register.alreadyHaveAccount")}{" "}
                 <Link to="/doctor-login" className="text-primary hover:underline">
-                  Sign in
+                  {t("register.signInAsDoctor")}
+                </Link>
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                <Link to="/register" className="text-primary hover:underline">
+                  {t("register.patientTitle")}
                 </Link>
               </p>
             </div>

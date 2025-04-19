@@ -1,4 +1,3 @@
-
 import { commonTranslations, languageNames } from './common';
 
 export const enTranslations = {
@@ -80,6 +79,45 @@ export const enTranslations = {
   "doctors.at": "at",
   "common.close": "Close",
   "doctors.viewAllAppointments": "View All Appointments",
+  
+  // Auth translations
+  "auth.loginSuccess": "Login successful",
+  "auth.welcomeBack": "Welcome back",
+  
+  // Login translations
+  "login.title": "Login",
+  "login.patientTitle": "Patient Login",
+  "login.doctorTitle": "Doctor Login",
+  "login.subtitle": "Access your account",
+  "login.patientSubtitle": "Access your patient account",
+  "login.doctorSubtitle": "Access your doctor account",
+  "login.email": "Email",
+  "login.password": "Password",
+  "login.forgotPassword": "Forgot Password?",
+  "login.signIn": "Sign In",
+  "login.signingIn": "Signing In...",
+  "login.noAccount": "Don't have an account?",
+  "login.register": "Register",
+  "login.registerAsPatient": "Register as Patient",
+  "login.registerAsDoctor": "Register as Doctor",
+  "login.backToHome": "Back to Home",
+
+  // Registration translations
+  "register.title": "Register",
+  "register.patientTitle": "Create Patient Account",
+  "register.doctorTitle": "Doctor Registration",
+  "register.subtitle": "Join Mediseva",
+  "register.patientSubtitle": "Join Mediseva to access quality healthcare services",
+  "register.doctorSubtitle": "Join Mediseva's network of healthcare professionals",
+  "register.createAccount": "Create Account",
+  "register.doctorCreateAccount": "Submit Application",
+  "register.creatingAccount": "Creating Account...",
+  "register.submittingApplication": "Submitting Application...",
+  "register.alreadyHaveAccount": "Already have an account?",
+  "register.signIn": "Sign in",
+  "register.signInAsPatient": "Sign in as Patient",
+  "register.signInAsDoctor": "Sign in as Doctor",
+  
   ...commonTranslations,
   ...languageNames
 };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -33,7 +32,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoaded) {
-      document.title = t("login.title") + " - Mediseva";
+      document.title = t("login.patientTitle") + " - Mediseva";
     }
   }, [t, isLoaded]);
 
@@ -111,9 +110,9 @@ export default function Login() {
       <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold">{t("login.title")}</h1>
+            <h1 className="text-3xl font-bold">{t("login.patientTitle")}</h1>
             <p className="mt-2 text-muted-foreground">
-              {t("login.subtitle")}
+              {t("login.patientSubtitle")}
             </p>
           </div>
 
@@ -181,7 +180,12 @@ export default function Login() {
                   <p className="text-sm text-muted-foreground">
                     {t("login.noAccount")}{" "}
                     <Link to="/register" className="text-primary hover:underline">
-                      {t("login.register")}
+                      {t("login.registerAsPatient")}
+                    </Link>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    <Link to="/doctor-login" className="text-primary hover:underline">
+                      {t("login.doctorTitle")}
                     </Link>
                   </p>
                 </div>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -33,7 +32,7 @@ export default function DoctorLogin() {
 
   useEffect(() => {
     if (isLoaded) {
-      document.title = "Doctor Login - Mediseva";
+      document.title = t("login.doctorTitle") + " - Mediseva";
     }
   }, [t, isLoaded]);
 
@@ -116,9 +115,9 @@ export default function DoctorLogin() {
                 <ShieldCheck className="h-8 w-8 text-primary" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold">{t("login.title")}</h1>
+            <h1 className="text-3xl font-bold">{t("login.doctorTitle")}</h1>
             <p className="mt-2 text-muted-foreground">
-              {t("login.subtitle")}
+              {t("login.doctorSubtitle")}
             </p>
           </div>
 
@@ -186,7 +185,12 @@ export default function DoctorLogin() {
                   <p className="text-sm text-muted-foreground">
                     {t("login.noAccount")}{" "}
                     <Link to="/doctor-register" className="text-primary hover:underline">
-                      {t("login.register")}
+                      {t("login.registerAsDoctor")}
+                    </Link>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    <Link to="/login" className="text-primary hover:underline">
+                      {t("login.patientTitle")}
                     </Link>
                   </p>
                 </div>

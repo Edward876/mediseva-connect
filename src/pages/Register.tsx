@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -20,6 +19,7 @@ import { Mail, User, KeyRound, Phone, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { addUser } from "@/utils/localStorageService";
+import { useLanguage } from "@/context/LanguageContext";
 
 const formSchema = z
   .object({
@@ -40,10 +40,13 @@ const formSchema = z
 export default function Register() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { t, isLoaded } = useLanguage();
 
   useEffect(() => {
-    document.title = "Patient Registration - Mediseva";
-  }, []);
+    if (isLoaded) {
+      document.title = t("register.patientTitle") + " - Mediseva";
+    }
+  }, [t, isLoaded]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -107,9 +110,9 @@ export default function Register() {
       <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold">Create Patient Account</h1>
+            <h1 className="text-3xl font-bold">{t("register.patientTitle")}</h1>
             <p className="mt-2 text-muted-foreground">
-              Join Mediseva to access quality healthcare services
+              {t("register.patientSubtitle")}
             </p>
           </div>
 
@@ -262,9 +265,14 @@ export default function Register() {
 
             <div className="mt-4 text-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t("register.alreadyHaveAccount")}{" "}
                 <Link to="/login" className="text-primary hover:underline">
-                  Sign in
+                  {t("register.signInAsPatient")}
+                </Link>
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                <Link to="/doctor-register" className="text-primary hover:underline">
+                  {t("register.doctorTitle")}
                 </Link>
               </p>
             </div>
