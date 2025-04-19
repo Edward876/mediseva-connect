@@ -68,11 +68,11 @@ export const bnTranslations = {
   "footer.termsOfService": "সেবার শর্তাবলী",
   "footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত",
 
-  quickLinks: "দ্রুত অ্যাক্সেস",
-    contactUs: "যোগাযোগ করুন",
-    subscribe: "সাবস্ক্রাইব করুন",
-    allRightsReserved: "সর্বস্বত্ব সংরক্ষিত।",
-    privacyPolicy: "গোপনীয়তা নীতি",
-    termsOfService: "পরিষেবার শর্তাবলী",
-    forDoctors: "ডাক্তারদের জন্য"
+  "footer.quickLinks": "দ্রুত অ্যাক্সেস",
+"footer.contactUs": "যোগাযোগ করুন",
+"footer.subscribe": "সাবস্ক্রাইব করুন",
+"footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত।",
+"footer.privacyPolicy": "গোপনীয়তা নীতি",
+"footer.termsOfService": "পরিষেবার শর্তাবলী",
+"footer.forDoctors": "ডাক্তারদের জন্য",
 };
