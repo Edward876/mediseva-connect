@@ -125,6 +125,7 @@ export const enTranslations = {
   "footer.allRightsReserved": "All right reserved.",
   "footer.privacyPolicy": "Privacy Policy",
   "footer.termsOfService": "Terms of Service",
+  "footer.forDoctors": "For Doctors",
   
   ...commonTranslations,
   ...languageNames
