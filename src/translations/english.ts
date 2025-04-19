@@ -124,7 +124,7 @@ export const enTranslations = {
   "footer.subscribe": "Subscribe Us",
   "footer.allRightsReserved": "All right reserved.",
   "footer.privacyPolicy": "Privacy Policy",
-  "footer.termsOfService": "Terms of Service"
+  "footer.termsOfService": "Terms of Service",
   
   ...commonTranslations,
   ...languageNames
