@@ -25,6 +25,7 @@ export default function FindDoctors() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [appointmentOpen, setAppointmentOpen] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function FindDoctors() {
         async (position) => {
           try {
             const response = await fetch(
-              `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=YOUR_OPENCAGE_API_KEY`
+              `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=0ebc0aea16b342aa9ba5cb9750e15d07`
             );
             const data = await response.json();
             if (data.results.length > 0) {
@@ -87,10 +88,13 @@ export default function FindDoctors() {
             }
           } catch (error) {
             console.error("Error getting location details:", error);
+          } finally {
+            setIsLocating(false);
           }
         },
         (error) => {
           console.error("Error getting location:", error);
+          setIsLocating(false);
         }
       );
     }
@@ -179,7 +183,7 @@ export default function FindDoctors() {
       },
       date: format(date, "PP"),
       time: slot,
-      type: "In-person",
+      type: "In-person" as const,
       location: selectedDoctor.hospital,
       status: "Confirmed" as const
     };
