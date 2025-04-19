@@ -117,6 +117,14 @@ export const enTranslations = {
   "register.signIn": "Sign in",
   "register.signInAsPatient": "Sign in as Patient",
   "register.signInAsDoctor": "Sign in as Doctor",
+
+  //footer
+  "footer.quickLinks": "Quick Access",
+  "footer.contactUs": "Contact Us",
+  "footer.subscribe": "Subscribe Us",
+  "footer.allRightsReserved": "All right reserved.",
+  "footer.privacyPolicy": "Privacy Policy",
+  "footer.termsOfService": "Terms of Service"
   
   ...commonTranslations,
   ...languageNames
