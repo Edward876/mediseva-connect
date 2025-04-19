@@ -1,6 +1,6 @@
 
 // Define available languages
-export type Language = 'hi' | 'bn';
+export type Language = 'en' | 'hi' | 'bn';
 
 // Define translations structure
 export interface Translations {

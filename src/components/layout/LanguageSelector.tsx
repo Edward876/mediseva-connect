@@ -14,6 +14,7 @@ export default function LanguageSelector() {
   
   const getLanguageName = (lang: string) => {
     switch(lang) {
+      case 'en': return 'English';
       case 'hi': return 'हिंदी';
       case 'bn': return 'বাংলা';
       default: return lang.toUpperCase();
@@ -37,6 +38,9 @@ export default function LanguageSelector() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background border border-border">
+        <DropdownMenuItem onClick={() => setLanguage('en')} className="cursor-pointer">
+          English
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage('hi')} className="cursor-pointer">
           हिंदी
         </DropdownMenuItem>
