@@ -26,7 +26,7 @@ import { Mail, User, KeyRound, Phone, ArrowLeft, FileText, Building } from "luci
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { addUser } from "@/utils/localStorageService";
-import { useLanguage } from "@/hooks/useLanguage";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const specialties = [
   "Cardiology",

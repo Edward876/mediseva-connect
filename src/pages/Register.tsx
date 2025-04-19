@@ -19,7 +19,7 @@ import { Mail, User, KeyRound, Phone, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { addUser } from "@/utils/localStorageService";
-import { useLanguage } from "@/context/LanguageContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const formSchema = z
   .object({
