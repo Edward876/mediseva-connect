@@ -67,11 +67,13 @@ export const hiTranslations = {
   "footer.privacyPolicy": "गोपनीयता नीति",
   "footer.termsOfService": "सेवा की शर्तें",
   "footer.allRightsReserved": "सर्वाधिकार सुरक्षित।",
+  "footer.yourEmail": "आपका ईमेल",
   
   // Auth translations
   "auth.profile": "प्रोफ़ाइल",
   "auth.myAppointments": "मेरी अपॉइंटमेंट",
   "auth.settings": "सेटिंग्स",
+  "auth.logout": "लॉग आउट करें",
   
   // Profile translations
   "profile.title": "प्रोफ़ाइल",
@@ -79,8 +81,27 @@ export const hiTranslations = {
   "profile.upcomingAppointments": "आगामी अपॉइंटमेंट",
   "profile.findDoctors": "डॉक्टर ढूंढें",
   "profile.noUpcomingAppointments": "कोई आगामी अपॉइंटमेंट नहीं है",
+  "profile.patient": "मरीज़",
+"profile.doctor": "डॉक्टर",
+"profile.appointments": "अपॉइंटमेंट",
+"profile.history": "इतिहास",
+"profile.manageAppointments": "अपॉइंटमेंट प्रबंधित करें",
   
   // Settings translations
   "settings.title": "सेटिंग्स",
-  "settings.profileSettings": "प्रोफ़ाइल सेटिंग्स"
+  "settings.profileSettings": "प्रोफ़ाइल सेटिंग्स",
+  "settings.title": "सेटिंग्स",
+"settings.profileSettings": "प्रोफ़ाइल सेटिंग्स",
+"settings.profile": "प्रोफ़ाइल",
+"settings.account": "अकाउंट",
+"settings.appearance": "दिखावट",
+"settings.updateProfileInfo": "प्रोफ़ाइल जानकारी अपडेट करें",
+"settings.fullName": "पूरा नाम",
+"settings.email": "ईमेल आईडी",
+"settings.phone": "फोन नंबर", 
+"settings.updateProfile": "प्रोफ़ाइल अपडेट करें", 
+"settings.accountSettings": "अकाउंट सेटिंग्स",
+"settings.manageAccount": "अकाउंट प्रबंधित करें",
+"settings.changePassword": "पासवर्ड बदलें",
+"settings.passwordDescription": "विवरण"
 };
