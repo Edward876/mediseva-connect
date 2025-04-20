@@ -1,4 +1,3 @@
-
 import { commonTranslations, languageNames } from './common';
 
 // Hindi translations for the application
@@ -76,4 +75,23 @@ export const hiTranslations = {
 "footer.privacyPolicy": "गोपनीयता नीति",
 "footer.termsOfService": "सेवा की शर्तें",
 "footer.forDoctors": "डॉक्टरों के लिए",
+  
+  // Auth translations
+  "auth.profile": "प्रोफ़ाइल",
+  "auth.myAppointments": "मेरी अपॉइंटमेंट",
+  "auth.settings": "सेटिंग्स",
+  
+  // Profile translations
+  "profile.title": "प्रोफ़ाइल",
+  "profile.editProfile": "प्रोफ़ाइल संपादित करें",
+  "profile.upcomingAppointments": "आगामी अपॉइंटमेंट",
+  "profile.findDoctors": "डॉक्टर ढूंढें",
+  "profile.noUpcomingAppointments": "कोई आगामी अपॉइंटमेंट नहीं है",
+  
+  // Settings translations
+  "settings.title": "सेटिंग्स",
+  "settings.profileSettings": "प्रोफ़ाइल सेटिंग्स",
+  
+  ...commonTranslations,
+  ...languageNames
 };

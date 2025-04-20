@@ -128,5 +128,20 @@ export const enTranslations = {
   "footer.forDoctors": "For Doctors",
   
   ...commonTranslations,
-  ...languageNames
+  ...languageNames,
+  // Auth translations
+  "auth.profile": "Profile",
+  "auth.myAppointments": "My Appointments",
+  "auth.settings": "Settings",
+  
+  // Profile translations
+  "profile.title": "Profile",
+  "profile.editProfile": "Edit Profile",
+  "profile.upcomingAppointments": "Upcoming Appointments",
+  "profile.findDoctors": "Find Doctors",
+  "profile.noUpcomingAppointments": "No upcoming appointments",
+  
+  // Settings translations
+  "settings.title": "Settings",
+  "settings.profileSettings": "Profile Settings",
 };

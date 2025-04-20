@@ -1,4 +1,3 @@
-
 import { commonTranslations, languageNames } from './common';
 
 // Bengali translations for the application
@@ -75,4 +74,23 @@ export const bnTranslations = {
 "footer.privacyPolicy": "গোপনীয়তা নীতি",
 "footer.termsOfService": "পরিষেবার শর্তাবলী",
 "footer.forDoctors": "ডাক্তারদের জন্য",
+
+  // Auth translations
+  "auth.profile": "প্রোফাইল",
+  "auth.myAppointments": "আমার অ্যাপয়েন্টমেন্ট",
+  "auth.settings": "সেটিংস",
+  
+  // Profile translations
+  "profile.title": "প্রোফাইল",
+  "profile.editProfile": "প্রোফাইল সম্পাদনা করুন",
+  "profile.upcomingAppointments": "আসন্ন অ্যাপয়েন্টমেন্ট",
+  "profile.findDoctors": "ডাক্তার খুঁজুন",
+  "profile.noUpcomingAppointments": "কোনো আসন্ন অ্যাপয়েন্টমেন্ট নেই",
+  
+  // Settings translations
+  "settings.title": "সেটিংস",
+  "settings.profileSettings": "প্রোফাইল সেটিংস",
+  
+  ...commonTranslations,
+  ...languageNames
 };
