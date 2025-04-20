@@ -126,6 +126,7 @@ export const enTranslations = {
   "footer.privacyPolicy": "Privacy Policy",
   "footer.termsOfService": "Terms of Service",
   "footer.forDoctors": "For Doctors",
+  "footer.yourEmail": "Your Email",
   
   ...commonTranslations,
   ...languageNames,
@@ -133,6 +134,7 @@ export const enTranslations = {
   "auth.profile": "Profile",
   "auth.myAppointments": "My Appointments",
   "auth.settings": "Settings",
+  "auth.logout": "Log out",
   
   // Profile translations
   "profile.title": "Profile",
@@ -140,8 +142,27 @@ export const enTranslations = {
   "profile.upcomingAppointments": "Upcoming Appointments",
   "profile.findDoctors": "Find Doctors",
   "profile.noUpcomingAppointments": "No upcoming appointments",
+  "profile.patient": "patient",
+  "profile.doctor": "Doctor",
+  "profile.appointments": "Appointments",
+  "profile.history": "History",
+  "profile.manageAppointments": "Manage appointments",
+  
+ 
   
   // Settings translations
   "settings.title": "Settings",
   "settings.profileSettings": "Profile Settings",
+  "settings.profile": "Profile",
+  "settings.account": "Account",
+  "settings.appearance": "Appearance",
+  "settings.updateProfileInfo": "Update profile info",
+  "settings.fullName" : "Full name",
+  "settings.email": "Email ID",
+  "settings.phone": "Phone number", 
+  "settings.updateProfile": "Update profile", 
+  "settings.accountSettings": "Account settings",
+  "settings.manageAccount": "Manage Account",
+  "settings.changePassword": "Change Password",
+  "settings.passwordDescription": "Description"
 };
