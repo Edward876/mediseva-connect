@@ -1,3 +1,4 @@
+
 import { commonTranslations, languageNames } from './common';
 
 // Bengali translations for the application
@@ -58,22 +59,14 @@ export const bnTranslations = {
   "login.backToHome": "হোমে ফিরে যান",
   
   // Footer links
-  "footer.quickLinks": "দ্রুত লিঙ্ক",
+  "footer.quickLinks": "দ্রুত অ্যাক্সেস",
   "footer.forDoctors": "ডাক্তারদের জন্য",
   "footer.contactUs": "যোগাযোগ করুন",
-  "footer.subscribe": "আমাদের নিউজলেটারে সাবস্ক্রাইব করুন",
+  "footer.subscribe": "সাবস্ক্রাইব করুন",
   "footer.yourEmail": "আপনার ইমেল",
   "footer.privacyPolicy": "গোপনীয়তা নীতি",
-  "footer.termsOfService": "সেবার শর্তাবলী",
-  "footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত",
-
-  "footer.quickLinks": "দ্রুত অ্যাক্সেস",
-"footer.contactUs": "যোগাযোগ করুন",
-"footer.subscribe": "সাবস্ক্রাইব করুন",
-"footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত।",
-"footer.privacyPolicy": "গোপনীয়তা নীতি",
-"footer.termsOfService": "পরিষেবার শর্তাবলী",
-"footer.forDoctors": "ডাক্তারদের জন্য",
+  "footer.termsOfService": "পরিষেবার শর্তাবলী",
+  "footer.allRightsReserved": "সর্বস্বত্ব সংরক্ষিত।",
 
   // Auth translations
   "auth.profile": "প্রোফাইল",
@@ -89,8 +82,5 @@ export const bnTranslations = {
   
   // Settings translations
   "settings.title": "সেটিংস",
-  "settings.profileSettings": "প্রোফাইল সেটিংস",
-  
-  ...commonTranslations,
-  ...languageNames
+  "settings.profileSettings": "প্রোফাইল সেটিংস"
 };

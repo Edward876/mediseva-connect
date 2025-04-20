@@ -1,3 +1,4 @@
+
 import { commonTranslations, languageNames } from './common';
 
 // Hindi translations for the application
@@ -58,23 +59,14 @@ export const hiTranslations = {
   "login.backToHome": "होम पर वापस जाएं",
   
   // Footer links
-  "footer.quickLinks": "त्वरित लिंक",
+  "footer.quickLinks": "त्वरित पहुंच",
   "footer.forDoctors": "डॉक्टरों के लिए",
   "footer.contactUs": "संपर्क करें",
-  "footer.subscribe": "हमारे न्यूज़लेटर की सदस्यता लें",
+  "footer.subscribe": "सदस्यता लें",
   "footer.yourEmail": "आपका ईमेल",
   "footer.privacyPolicy": "गोपनीयता नीति",
   "footer.termsOfService": "सेवा की शर्तें",
-  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित",
-
-  // Hindi Footer
-"footer.quickLinks": "त्वरित पहुंच",
-"footer.contactUs": "संपर्क करें",
-"footer.subscribe": "सदस्यता लें",
-"footer.allRightsReserved": "सर्वाधिकार सुरक्षित।",
-"footer.privacyPolicy": "गोपनीयता नीति",
-"footer.termsOfService": "सेवा की शर्तें",
-"footer.forDoctors": "डॉक्टरों के लिए",
+  "footer.allRightsReserved": "सर्वाधिकार सुरक्षित।",
   
   // Auth translations
   "auth.profile": "प्रोफ़ाइल",
@@ -90,8 +82,5 @@ export const hiTranslations = {
   
   // Settings translations
   "settings.title": "सेटिंग्स",
-  "settings.profileSettings": "प्रोफ़ाइल सेटिंग्स",
-  
-  ...commonTranslations,
-  ...languageNames
+  "settings.profileSettings": "प्रोफ़ाइल सेटिंग्स"
 };
