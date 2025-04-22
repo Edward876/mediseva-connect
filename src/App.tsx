@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,21 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { PageTransition } from "@/components/ui/page-transition";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import FindDoctors from "./pages/FindDoctors";
-import Appointments from "./pages/Appointments";
-import Emergency from "./pages/EmergencyService";
-import ClinicalExposure from "./pages/Internships";
-import About from "./pages/About";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import DoctorLogin from "./pages/DoctorLogin";
-import DoctorRegister from "./pages/DoctorRegister";
-import ClinicalExposureApplication from "./pages/InternshipApplication";
-import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
-import ProtectedRoute from "@/components/layout/ProtectedRoute";
 
 // Add typography styles for markdown
 import './styles/markdown.css';
@@ -47,21 +31,14 @@ const App = () => (
                 <Route path="/register" element={<Register />} />
                 <Route path="/doctor-login" element={<DoctorLogin />} />
                 <Route path="/doctor-register" element={<DoctorRegister />} />
+                {/* Making Emergency routes public */}
+                <Route path="/emergency" element={<Emergency />} />
+                <Route path="/emergency-service" element={<Emergency />} />
                 
                 {/* Protected Routes */}
                 <Route path="/appointments" element={
                   <ProtectedRoute>
                     <Appointments />
-                  </ProtectedRoute>
-                } />
-                <Route path="/emergency" element={
-                  <ProtectedRoute>
-                    <Emergency />
-                  </ProtectedRoute>
-                } />
-                <Route path="/emergency-service" element={
-                  <ProtectedRoute>
-                    <Emergency />
                   </ProtectedRoute>
                 } />
                 <Route path="/clinical-exposure" element={
