@@ -17,7 +17,7 @@ import Footer from "@/components/layout/Footer";
 const internships = [
   {
     id: 1,
-    title: "Medical Research Internship",
+    title: "Medical Research",
     department: "Cardiology Research",
     location: "New York, NY",
     duration: "6 months",
@@ -33,7 +33,7 @@ const internships = [
   },
   {
     id: 2,
-    title: "Clinical Practice Internship",
+    title: "Clinical Practice",
     department: "General Medicine",
     location: "Boston, MA",
     duration: "3 months",
@@ -49,7 +49,7 @@ const internships = [
   },
   {
     id: 3,
-    title: "Healthcare Administration Internship",
+    title: "Healthcare Administration",
     department: "Hospital Management",
     location: "Chicago, IL",
     duration: "4 months",
@@ -65,7 +65,7 @@ const internships = [
   },
   {
     id: 4,
-    title: "Public Health Internship",
+    title: "Public Health",
     department: "Community Health",
     location: "Los Angeles, CA",
     duration: "6 months",
@@ -81,7 +81,7 @@ const internships = [
   },
   {
     id: 5,
-    title: "Telemedicine Technology Internship",
+    title: "Telemedicine Technology",
     department: "Digital Health",
     location: "Remote",
     duration: "3 months",
@@ -97,7 +97,7 @@ const internships = [
   },
   {
     id: 6,
-    title: "Medical Technology Innovation Internship",
+    title: "Medical Technology Innovation",
     department: "MedTech Research",
     location: "San Francisco, CA",
     duration: "6 months",
@@ -115,7 +115,7 @@ const internships = [
 
 export default function Internships() {
   useEffect(() => {
-    document.title = "Medical Internships - Mediseva";
+    document.title = "Medical Exposure - Mediseva";
   }, []);
 
   return (
@@ -127,11 +127,11 @@ export default function Internships() {
           <div className="max-container text-center">
             <div className="inline-flex items-center bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
               <GraduationCap className="h-5 w-5 mr-2" />
-              <span className="font-medium">Medical Internships</span>
+              <span className="font-medium">Medical Exposures</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Start Your Medical Career with Us</h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Gain valuable experience and knowledge through our comprehensive medical internship programs
+              Gain valuable experience and knowledge through our comprehensive medical programs
             </p>
             <Button size="lg" asChild>
               <Link to="/internship-application">
@@ -146,7 +146,7 @@ export default function Internships() {
         <section className="py-16">
           <div className="max-container">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">Why Choose Our Internships</h2>
+              <h2 className="text-3xl font-bold mb-4">Why Choose Our Opportunities</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Our carefully designed programs offer unique opportunities for growth and learning
               </p>
@@ -159,7 +159,7 @@ export default function Internships() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Mentorship</h3>
                 <p className="text-muted-foreground">
-                  Work directly with experienced medical professionals who will guide you throughout your internship journey.
+                  Work directly with experienced medical professionals who will guide you throughout your journey.
                 </p>
               </div>
 
@@ -190,7 +190,7 @@ export default function Internships() {
         <section className="py-16 bg-muted/30">
           <div className="max-container">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">Available Internship Programs</h2>
+              <h2 className="text-3xl font-bold mb-4">Available Medical Programs</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Explore our current internship opportunities across various medical disciplines
               </p>
@@ -300,7 +300,7 @@ export default function Internships() {
                     <div>
                       <h3 className="text-lg font-semibold mb-1">Selection & Onboarding</h3>
                       <p className="text-muted-foreground">
-                        Successful applicants will receive an offer letter and begin the onboarding process for their internship.
+                        Successful applicants will receive an offer letter and begin the onboarding process for their program.
                       </p>
                     </div>
                   </div>
