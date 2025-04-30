@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const testimonials = [
   {
     id: 1,
-    name: "Emma Thompson",
+    name: "Sraboni Mukherjee",
     avatar: "https://randomuser.me/api/portraits/women/67.jpg",
     role: "Patient",
     content: "Mediseva made finding the right cardiologist incredibly easy. The booking process was seamless, and I received excellent care. Highly recommend their service for anyone looking for quality healthcare.",
@@ -16,7 +16,7 @@ const testimonials = [
   },
   {
     id: 2,
-    name: "Michael Chen",
+    name: "Ajay Agarwal",
     avatar: "https://randomuser.me/api/portraits/men/54.jpg",
     role: "Patient",
     content: "In an emergency situation, Mediseva's quick response system was a lifesaver. I was connected to emergency services within minutes without needing to log in. Their emergency feature is truly valuable.",
@@ -24,7 +24,7 @@ const testimonials = [
   },
   {
     id: 3,
-    name: "Dr. Sarah Williams",
+    name: "Dr. Manisha Singh",
     avatar: "https://randomuser.me/api/portraits/women/45.jpg",
     role: "Neurologist",
     content: "As a doctor on Mediseva, I've been able to connect with patients who truly need my expertise. The platform makes scheduling and appointment management effortless, allowing me to focus on providing care.",
@@ -32,7 +32,7 @@ const testimonials = [
   },
   {
     id: 4,
-    name: "James Rodriguez",
+    name: "Sagar Sen",
     avatar: "https://randomuser.me/api/portraits/men/22.jpg",
     role: "Medical Student",
     content: "The internship opportunities through Mediseva opened doors for my medical career. I was matched with a mentor in my field of interest, and the experience has been invaluable for my professional development.",
